@@ -1,4 +1,4 @@
-INSERT INTO category_tbl (name, description, color, created_at, updated_at) 
+INSERT INTO category_tbl (name, description, color, created_at, updated_at)
 VALUES ('Technology', 'All about tech and gadgets', '#FF5733', NOW(), NOW());
 
 INSERT INTO category_tbl (name, description, color, created_at, updated_at) 
