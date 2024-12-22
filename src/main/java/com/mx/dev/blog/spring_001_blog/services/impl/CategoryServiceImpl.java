@@ -111,14 +111,11 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryResponseDTO updateCategroy(CategoryRequestDTO categoryRequestDTO, Long categoryId)
 			throws ServiceException {
 
-		// 1. first we check if category exists
 		CategoryEntity existingCategory = getCategoryByIdOrThrow(categoryId);
 
-		// 2. check if there were changes in name
-		if (!existingCategory.getName().equals(categoryRequestDTO.getName())) {
-			Optional<CategoryEntity> categoryByName = categoryRepository
-					.findCategoryByName(categoryRequestDTO.getName());
-			if (categoryByName.isPresent()) {
+		if (!existingCategory.getName().equalsIgnoreCase(categoryRequestDTO.getName())) {
+			boolean nameInUse = categoryRepository.existsByName(categoryRequestDTO.getName());
+			if (nameInUse) {
 				throw new ServiceException("Category name is already in use.",
 						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/category", MethodEnum.PUT);
 			}
