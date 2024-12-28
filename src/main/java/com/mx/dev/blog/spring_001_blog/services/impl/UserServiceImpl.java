@@ -113,9 +113,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserInfoDTO getOneUserWithInfo(Long id) throws SecurityException {
+	public UserInfoDTO getOneUserWithInfo(Long id) throws ServiceException {
 
-		return null;
+		return userRepository.findUserInfoById(id).orElseThrow(() -> new ServiceException("There was a problem",
+				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user", MethodEnum.GET));
 	}
 
 	@Override

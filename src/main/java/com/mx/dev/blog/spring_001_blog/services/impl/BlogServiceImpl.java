@@ -18,7 +18,6 @@ import com.mx.dev.blog.spring_001_blog.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponsePageDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
@@ -169,7 +168,8 @@ public class BlogServiceImpl implements BlogService {
 		BlogEntity blogEntity = getBlogByIdOrThrow(blogId);
 
 		// 2. then we unit user info
-		UserInfoDTO userInfoDTO = userRepository.findUserInfoDTO(blogEntity.getUserId());
+		// UserInfoDTO userInfoDTO =
+		// userRepository.findUserInfoDTO(blogEntity.getUserId());
 
 		BlogResponsePageDTO blogResponsePageDTO = new BlogResponsePageDTO();
 		blogResponsePageDTO.setBlogId(blogEntity.getBlogId());
@@ -179,7 +179,7 @@ public class BlogServiceImpl implements BlogService {
 		blogResponsePageDTO.setSlug(blogEntity.getSlug());
 		blogResponsePageDTO.setStatus(blogEntity.getStatus());
 		blogResponsePageDTO.setTitle(blogEntity.getTitle());
-		blogResponsePageDTO.setUserInfoDTO(userInfoDTO);
+		// blogResponsePageDTO.setUserInfoDTO(userInfoDTO);
 
 		return blogResponsePageDTO;
 

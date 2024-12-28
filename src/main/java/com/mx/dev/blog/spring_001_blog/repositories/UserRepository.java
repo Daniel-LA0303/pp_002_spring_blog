@@ -23,9 +23,30 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	@Query("select ue from UserEntity ue where ue.username = :username")
 	Optional<UserEntity> findUserByUsername(@Param("username") String username);
 
-	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO(u.userId, u.username, u.email, u.createdAt, u.updatedAt, "
-			+ "ui.profilePicture, ui.bio, ui.lastLogin, ui.isActive, ui.phone, ui.direction) "
-			+ "FROM UserEntity u JOIN UserInfoEntity ui ON u.userId = ui.userId WHERE u.userId = :userId")
-	UserInfoDTO findUserInfoDTO(@Param("userId") Long userId);
+	@Query("""
+			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO(
+			        u.userId,
+			        u.username,
+			        u.email,
+			        ui.bio,
+			        ui.work,
+			        ui.education,
+			        ui.profilePicture,
+			        ui.skills,
+			        ui.city,
+			        COUNT(DISTINCT b.blogId) AS blogsNumber,
+			        COUNT(DISTINCT bul.id.blogId) AS likesNumber,
+			        COUNT(DISTINCT uf.id.followerId) AS followers,
+			        u.createdAt
+			    )
+			    FROM UserEntity u
+			    LEFT JOIN UserInfoEntity ui ON u.userId = ui.userId
+			    LEFT JOIN BlogEntity b ON u.userId = b.userId
+			    LEFT JOIN BlogUserLikeEntity bul ON u.userId = bul.id.userId
+			    LEFT JOIN UserFollowsEntity uf ON u.userId = uf.id.followedId
+			    WHERE u.userId = :userId
+			    GROUP BY u.userId, ui.bio, ui.work, ui.education, ui.profilePicture, ui.skills, ui.city
+			""")
+	Optional<UserInfoDTO> findUserInfoById(@Param("userId") Long userId);
 
 }

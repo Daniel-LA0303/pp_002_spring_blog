@@ -38,6 +38,30 @@ public class UserInfoEntity {
 	@Column(name = "user_id")
 	private Long userId;
 
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "lastname")
+	private String lastName;
+
+	@Column(name = "work")
+	private String work;
+
+	@Column(name = "education")
+	private String education;
+
+	@Column(name = "pronouns")
+	private String pronouns;
+
+	@Column(name = "website")
+	private String website;
+
+	@Column(name = "city")
+	private String city;
+
+	@Column(name = "skills")
+	private String skills;
+
 	/**
 	 * 
 	 */
@@ -53,9 +77,18 @@ public class UserInfoEntity {
 	 * @param phone
 	 * @param direction
 	 * @param userId
+	 * @param name
+	 * @param lastName
+	 * @param work
+	 * @param education
+	 * @param pronouns
+	 * @param website
+	 * @param city
+	 * @param skills
 	 */
 	public UserInfoEntity(Long userInfoId, String profilePicture, String bio, LocalDateTime lastLogin, Boolean isActive,
-			String phone, String direction, Long userId) {
+			String phone, String direction, Long userId, String name, String lastName, String work, String education,
+			String pronouns, String website, String city, String skills) {
 		this.userInfoId = userInfoId;
 		this.profilePicture = profilePicture;
 		this.bio = bio;
@@ -64,6 +97,14 @@ public class UserInfoEntity {
 		this.phone = phone;
 		this.direction = direction;
 		this.userId = userId;
+		this.name = name;
+		this.lastName = lastName;
+		this.work = work;
+		this.education = education;
+		this.pronouns = pronouns;
+		this.website = website;
+		this.city = city;
+		this.skills = skills;
 	}
 
 	/**
@@ -76,12 +117,30 @@ public class UserInfoEntity {
 	}
 
 	/**
+	 * return the value of the property city
+	 *
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
 	 * return the value of the property direction
 	 *
 	 * @return the direction
 	 */
 	public String getDirection() {
 		return direction;
+	}
+
+	/**
+	 * return the value of the property education
+	 *
+	 * @return the education
+	 */
+	public String getEducation() {
+		return education;
 	}
 
 	/**
@@ -103,6 +162,24 @@ public class UserInfoEntity {
 	}
 
 	/**
+	 * return the value of the property lastName
+	 *
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return lastName;
+	}
+
+	/**
+	 * return the value of the property name
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
 	 * return the value of the property phone
 	 *
 	 * @return the phone
@@ -118,6 +195,24 @@ public class UserInfoEntity {
 	 */
 	public String getProfilePicture() {
 		return profilePicture;
+	}
+
+	/**
+	 * return the value of the property pronouns
+	 *
+	 * @return the pronouns
+	 */
+	public String getPronouns() {
+		return pronouns;
+	}
+
+	/**
+	 * return the value of the property skills
+	 *
+	 * @return the skills
+	 */
+	public String getSkills() {
+		return skills;
 	}
 
 	/**
@@ -139,6 +234,24 @@ public class UserInfoEntity {
 	}
 
 	/**
+	 * return the value of the property website
+	 *
+	 * @return the website
+	 */
+	public String getWebsite() {
+		return website;
+	}
+
+	/**
+	 * return the value of the property work
+	 *
+	 * @return the work
+	 */
+	public String getWork() {
+		return work;
+	}
+
+	/**
 	 * set the value of the property bio
 	 *
 	 * @param bio the bio to set
@@ -148,12 +261,30 @@ public class UserInfoEntity {
 	}
 
 	/**
+	 * set the value of the property city
+	 *
+	 * @param city the city to set
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	/**
 	 * set the value of the property direction
 	 *
 	 * @param direction the direction to set
 	 */
 	public void setDirection(String direction) {
 		this.direction = direction;
+	}
+
+	/**
+	 * set the value of the property education
+	 *
+	 * @param education the education to set
+	 */
+	public void setEducation(String education) {
+		this.education = education;
 	}
 
 	/**
@@ -175,6 +306,24 @@ public class UserInfoEntity {
 	}
 
 	/**
+	 * set the value of the property lastName
+	 *
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	/**
+	 * set the value of the property name
+	 *
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
 	 * set the value of the property phone
 	 *
 	 * @param phone the phone to set
@@ -193,6 +342,24 @@ public class UserInfoEntity {
 	}
 
 	/**
+	 * set the value of the property pronouns
+	 *
+	 * @param pronouns the pronouns to set
+	 */
+	public void setPronouns(String pronouns) {
+		this.pronouns = pronouns;
+	}
+
+	/**
+	 * set the value of the property skills
+	 *
+	 * @param skills the skills to set
+	 */
+	public void setSkills(String skills) {
+		this.skills = skills;
+	}
+
+	/**
 	 * set the value of the property userId
 	 *
 	 * @param userId the userId to set
@@ -208,6 +375,24 @@ public class UserInfoEntity {
 	 */
 	public void setUserInfoId(Long userInfoId) {
 		this.userInfoId = userInfoId;
+	}
+
+	/**
+	 * set the value of the property website
+	 *
+	 * @param website the website to set
+	 */
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	/**
+	 * set the value of the property work
+	 *
+	 * @param work the work to set
+	 */
+	public void setWork(String work) {
+		this.work = work;
 	}
 
 }
