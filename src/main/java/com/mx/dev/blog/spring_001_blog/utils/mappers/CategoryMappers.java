@@ -18,6 +18,8 @@ public class CategoryMappers {
 		categoryResponseDTO.setColor(categoryEntity.getColor());
 		categoryResponseDTO.setCreatedAt(categoryEntity.getCreatedAt());
 		categoryResponseDTO.setDescription(categoryEntity.getDescription());
+		categoryResponseDTO.setLabel(categoryEntity.getLabel());
+		categoryResponseDTO.setValue(categoryEntity.getValue());
 		categoryResponseDTO.setName(categoryEntity.getName());
 
 		return categoryResponseDTO;

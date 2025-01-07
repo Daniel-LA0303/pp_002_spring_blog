@@ -25,6 +25,16 @@ public class CategoryResponseDTO {
 	private String color;
 
 	/**
+	 * label
+	 */
+	private String label;
+
+	/**
+	 * value
+	 */
+	private String value;
+
+	/**
 	 * created at
 	 */
 	private LocalDateTime createdAt;
@@ -40,14 +50,18 @@ public class CategoryResponseDTO {
 	 * @param name
 	 * @param description
 	 * @param color
+	 * @param label
+	 * @param value
 	 * @param createdAt
 	 */
-	public CategoryResponseDTO(Long categoryId, String name, String description, String color,
-			LocalDateTime createdAt) {
+	public CategoryResponseDTO(Long categoryId, String name, String description, String color, String label,
+			String value, LocalDateTime createdAt) {
 		this.categoryId = categoryId;
 		this.name = name;
 		this.description = description;
 		this.color = color;
+		this.label = label;
+		this.value = value;
 		this.createdAt = createdAt;
 	}
 
@@ -88,12 +102,30 @@ public class CategoryResponseDTO {
 	}
 
 	/**
+	 * return the value of the property label
+	 *
+	 * @return the label
+	 */
+	public String getLabel() {
+		return label;
+	}
+
+	/**
 	 * return the value of the property name
 	 *
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * return the value of the property value
+	 *
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
 	}
 
 	/**
@@ -133,12 +165,30 @@ public class CategoryResponseDTO {
 	}
 
 	/**
+	 * set the value of the property label
+	 *
+	 * @param label the label to set
+	 */
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	/**
 	 * set the value of the property name
 	 *
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * set the value of the property value
+	 *
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 }

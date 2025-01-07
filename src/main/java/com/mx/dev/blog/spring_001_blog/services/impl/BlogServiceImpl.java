@@ -75,7 +75,7 @@ public class BlogServiceImpl implements BlogService {
 		// 1. first check if user exists
 		UserSimpleResponseDTO user = userService.getOneUserSimpleInfo(blogCreateRequestDTO.getUserId());
 
-		// 2. check if categories exists and get it
+		// 2. check if categories exists and get them
 		List<CategoryEntity> categoryEntities = categoryService.getListCategories(blogCreateRequestDTO.getCategories());
 
 		// 3. we create a unique slug
@@ -84,23 +84,17 @@ public class BlogServiceImpl implements BlogService {
 		// 4. Check if the generated slug already exists in the database
 		int attempts = 0;
 		int maxAttempts = 5; // Max attempts to avoid infinite loop
-
 		while (blogRepository.existsBySlug(slug) && attempts < maxAttempts) {
-			// If exists, generate a new slug with a random suffix
 			slug = generateSlug(blogCreateRequestDTO.getTitle()) + "-" + generateRandomSuffix();
 			attempts++;
 		}
-
-		// If we exceeded the max attempts, you could handle the case or throw an
-		// exception
 		if (attempts >= maxAttempts) {
 			throw new ServiceException("Blog error in generate slug, please come back in a few minutes.",
-					ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
 		}
 
 		// 5. Now proceed with creating the Blog entity
 		BlogEntity blogEntity = new BlogEntity();
-		blogEntity.setCategories(categoryEntities);
 		blogEntity.setContent(blogCreateRequestDTO.getContent());
 		blogEntity.setCreatedAt(LocalDateTime.now());
 		blogEntity.setDescription(blogCreateRequestDTO.getDescription());
@@ -110,7 +104,17 @@ public class BlogServiceImpl implements BlogService {
 		blogEntity.setUpdatedAt(LocalDateTime.now());
 		blogEntity.setUserId(user.getUserId());
 
-		// 6. Save to the database
+		// Save and flush to make sure blog_id is generated before creating the relation
+		blogRepository.saveAndFlush(blogEntity);
+
+		// 6. Verificar que el blog_id está generado y asignado
+		Long blogId = blogEntity.getBlogId();
+		System.out.println("Blog ID generado: " + blogId); // Esto te asegura que el blog_id fue generado correctamente
+
+		// 7. Asignar categorías al blog
+		blogEntity.setCategories(categoryEntities);
+
+		// 8. Ahora guardamos el blog, incluyendo las relaciones de categorías
 		blogRepository.save(blogEntity);
 
 		return blogEntity;
@@ -132,7 +136,10 @@ public class BlogServiceImpl implements BlogService {
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.DELETE);
 		}
 
-		// 3. if user is same, then we delete blog
+		// 3. delete or clear categories
+		blogEntity.getCategories().clear();
+
+		// 4. if user is same, then we delete blog
 		blogRepository.delete(blogEntity);
 
 	}
@@ -162,7 +169,7 @@ public class BlogServiceImpl implements BlogService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public BlogResponsePageDTO getOneBlog(Long blogId) throws ServiceException {
+	public BlogEntity getOneBlog(Long blogId) throws ServiceException {
 
 		// 1. first search blog by id
 		BlogEntity blogEntity = getBlogByIdOrThrow(blogId);
@@ -181,7 +188,7 @@ public class BlogServiceImpl implements BlogService {
 		blogResponsePageDTO.setTitle(blogEntity.getTitle());
 		// blogResponsePageDTO.setUserInfoDTO(userInfoDTO);
 
-		return blogResponsePageDTO;
+		return blogEntity;
 
 	}
 

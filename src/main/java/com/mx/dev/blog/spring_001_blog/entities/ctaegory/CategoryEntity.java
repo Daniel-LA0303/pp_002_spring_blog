@@ -39,6 +39,18 @@ public class CategoryEntity {
 	private String color;
 
 	/**
+	 * value
+	 */
+	@Column(name = "value")
+	private String value;
+
+	/**
+	 * label
+	 */
+	@Column(name = "label")
+	private String label;
+
+	/**
 	 * created at
 	 */
 	@Column(name = "created_at")
@@ -61,15 +73,19 @@ public class CategoryEntity {
 	 * @param name
 	 * @param description
 	 * @param color
+	 * @param value
+	 * @param label
 	 * @param createdAt
 	 * @param updatedAt
 	 */
-	public CategoryEntity(Long categoryId, String name, String description, String color, LocalDateTime createdAt,
-			LocalDateTime updatedAt) {
+	public CategoryEntity(Long categoryId, String name, String description, String color, String value, String label,
+			LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.categoryId = categoryId;
 		this.name = name;
 		this.description = description;
 		this.color = color;
+		this.value = value;
+		this.label = label;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
@@ -111,6 +127,15 @@ public class CategoryEntity {
 	}
 
 	/**
+	 * return the value of the property label
+	 *
+	 * @return the label
+	 */
+	public String getLabel() {
+		return label;
+	}
+
+	/**
 	 * return the value of the property name
 	 *
 	 * @return the name
@@ -126,6 +151,15 @@ public class CategoryEntity {
 	 */
 	public LocalDateTime getUpdatedAt() {
 		return updatedAt;
+	}
+
+	/**
+	 * return the value of the property value
+	 *
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
 	}
 
 	/**
@@ -165,6 +199,15 @@ public class CategoryEntity {
 	}
 
 	/**
+	 * set the value of the property label
+	 *
+	 * @param label the label to set
+	 */
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	/**
 	 * set the value of the property name
 	 *
 	 * @param name the name to set
@@ -180,6 +223,15 @@ public class CategoryEntity {
 	 */
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	/**
+	 * set the value of the property value
+	 *
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 }
