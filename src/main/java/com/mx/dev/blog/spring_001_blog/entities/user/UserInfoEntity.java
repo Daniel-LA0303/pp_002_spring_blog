@@ -13,52 +13,100 @@ import javax.persistence.Table;
 @Table(name = "user_info_tbl")
 public class UserInfoEntity {
 
+	/**
+	 * user info id
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userInfoId;
 
+	/**
+	 * profile picture
+	 */
 	@Column(name = "profile_picture")
 	private String profilePicture;
 
+	/**
+	 * bio
+	 */
 	@Column(name = "bio")
 	private String bio;
 
+	/**
+	 * last login
+	 */
 	@Column(name = "last_login")
 	private LocalDateTime lastLogin;
 
+	/**
+	 * is active
+	 */
 	@Column(name = "is_active")
 	private Boolean isActive;
 
+	/**
+	 * phone
+	 */
 	@Column(name = "phone")
 	private String phone;
 
+	/**
+	 * direction
+	 */
 	@Column(name = "direction")
 	private String direction;
 
+	/**
+	 * user id
+	 */
 	@Column(name = "user_id")
 	private Long userId;
 
+	/**
+	 * name
+	 */
 	@Column(name = "name")
 	private String name;
 
+	/**
+	 * last name
+	 */
 	@Column(name = "lastname")
 	private String lastName;
 
+	/**
+	 * work
+	 */
 	@Column(name = "work")
 	private String work;
 
+	/**
+	 * education
+	 */
 	@Column(name = "education")
 	private String education;
 
+	/**
+	 * pronouns
+	 */
 	@Column(name = "pronouns")
 	private String pronouns;
 
+	/**
+	 * website
+	 */
 	@Column(name = "website")
 	private String website;
 
+	/**
+	 * city
+	 */
 	@Column(name = "city")
 	private String city;
 
+	/**
+	 * skills
+	 */
 	@Column(name = "skills")
 	private String skills;
 

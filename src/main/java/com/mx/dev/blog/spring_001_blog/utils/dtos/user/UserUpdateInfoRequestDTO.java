@@ -2,13 +2,59 @@ package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
 public class UserUpdateInfoRequestDTO {
 
-	private String profilePicture;
+	/**
+	 * name
+	 */
+	private String name;
 
+	/**
+	 * lastName
+	 */
+	private String lastName;
+
+	/**
+	 * work
+	 */
+	private String work;
+
+	/**
+	 * education
+	 */
+	private String education;
+
+	/**
+	 * education
+	 */
+	private String pronouns;
+
+	/**
+	 * website
+	 */
+	private String website;
+
+	/**
+	 * address
+	 */
+	private String address;
+
+	/**
+	 * city
+	 */
+	private String city;
+
+	/**
+	 * skills
+	 */
+	private String skills;
+
+	/**
+	 * bio
+	 */
 	private String bio;
 
-	private String phone;
-
-	private String direction;
+	/**
+	 * profile picture
+	 */
 
 	/**
 	 * 
@@ -17,16 +63,38 @@ public class UserUpdateInfoRequestDTO {
 	}
 
 	/**
-	 * @param profilePicture
+	 * @param name
+	 * @param lastName
+	 * @param work
+	 * @param education
+	 * @param pronouns
+	 * @param website
+	 * @param address
+	 * @param city
+	 * @param skills
 	 * @param bio
-	 * @param phone
-	 * @param direction
 	 */
-	public UserUpdateInfoRequestDTO(String profilePicture, String bio, String phone, String direction) {
-		this.profilePicture = profilePicture;
+	public UserUpdateInfoRequestDTO(String name, String lastName, String work, String education, String pronouns,
+			String website, String address, String city, String skills, String bio) {
+		this.name = name;
+		this.lastName = lastName;
+		this.work = work;
+		this.education = education;
+		this.pronouns = pronouns;
+		this.website = website;
+		this.address = address;
+		this.city = city;
+		this.skills = skills;
 		this.bio = bio;
-		this.phone = phone;
-		this.direction = direction;
+	}
+
+	/**
+	 * return the value of the property address
+	 *
+	 * @return the address
+	 */
+	public String getAddress() {
+		return address;
 	}
 
 	/**
@@ -39,30 +107,84 @@ public class UserUpdateInfoRequestDTO {
 	}
 
 	/**
-	 * return the value of the property direction
+	 * return the value of the property city
 	 *
-	 * @return the direction
+	 * @return the city
 	 */
-	public String getDirection() {
-		return direction;
+	public String getCity() {
+		return city;
 	}
 
 	/**
-	 * return the value of the property phone
+	 * return the value of the property education
 	 *
-	 * @return the phone
+	 * @return the education
 	 */
-	public String getPhone() {
-		return phone;
+	public String getEducation() {
+		return education;
 	}
 
 	/**
-	 * return the value of the property profilePicture
+	 * return the value of the property lastName
 	 *
-	 * @return the profilePicture
+	 * @return the lastName
 	 */
-	public String getProfilePicture() {
-		return profilePicture;
+	public String getLastName() {
+		return lastName;
+	}
+
+	/**
+	 * return the value of the property name
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * return the value of the property pronouns
+	 *
+	 * @return the pronouns
+	 */
+	public String getPronouns() {
+		return pronouns;
+	}
+
+	/**
+	 * return the value of the property skills
+	 *
+	 * @return the skills
+	 */
+	public String getSkills() {
+		return skills;
+	}
+
+	/**
+	 * return the value of the property website
+	 *
+	 * @return the website
+	 */
+	public String getWebsite() {
+		return website;
+	}
+
+	/**
+	 * return the value of the property work
+	 *
+	 * @return the work
+	 */
+	public String getWork() {
+		return work;
+	}
+
+	/**
+	 * set the value of the property address
+	 *
+	 * @param address the address to set
+	 */
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	/**
@@ -75,30 +197,75 @@ public class UserUpdateInfoRequestDTO {
 	}
 
 	/**
-	 * set the value of the property direction
+	 * set the value of the property city
 	 *
-	 * @param direction the direction to set
+	 * @param city the city to set
 	 */
-	public void setDirection(String direction) {
-		this.direction = direction;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	/**
-	 * set the value of the property phone
+	 * set the value of the property education
 	 *
-	 * @param phone the phone to set
+	 * @param education the education to set
 	 */
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setEducation(String education) {
+		this.education = education;
 	}
 
 	/**
-	 * set the value of the property profilePicture
+	 * set the value of the property lastName
 	 *
-	 * @param profilePicture the profilePicture to set
+	 * @param lastName the lastName to set
 	 */
-	public void setProfilePicture(String profilePicture) {
-		this.profilePicture = profilePicture;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	/**
+	 * set the value of the property name
+	 *
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * set the value of the property pronouns
+	 *
+	 * @param pronouns the pronouns to set
+	 */
+	public void setPronouns(String pronouns) {
+		this.pronouns = pronouns;
+	}
+
+	/**
+	 * set the value of the property skills
+	 *
+	 * @param skills the skills to set
+	 */
+	public void setSkills(String skills) {
+		this.skills = skills;
+	}
+
+	/**
+	 * set the value of the property website
+	 *
+	 * @param website the website to set
+	 */
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	/**
+	 * set the value of the property work
+	 *
+	 * @param work the work to set
+	 */
+	public void setWork(String work) {
+		this.work = work;
 	}
 
 }

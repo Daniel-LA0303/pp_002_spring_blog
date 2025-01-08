@@ -103,7 +103,7 @@ public class UserController {
 	public ResponseEntity<?> updateUser(@RequestBody UserUpdateInfoRequestDTO userUpdateInfoRequestDTO,
 			@PathVariable Long userId) throws ServiceException {
 
-		userInfoValidator.validate(userUpdateInfoRequestDTO);
+		// userInfoValidator.validate(userUpdateInfoRequestDTO);
 
 		UserInfoEntity userInfo = userService.updateUserInfo(userUpdateInfoRequestDTO, userId);
 

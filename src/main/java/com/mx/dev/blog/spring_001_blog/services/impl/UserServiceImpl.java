@@ -133,15 +133,12 @@ public class UserServiceImpl implements UserService {
 						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user-info", MethodEnum.PUT));
 
 		// 3. update info
-		userInfoEntity.setBio(userUpdateInfoRequestDTO.getBio());
-		userInfoEntity.setDirection(userUpdateInfoRequestDTO.getDirection());
-		userInfoEntity.setPhone(userUpdateInfoRequestDTO.getPhone());
-		userInfoEntity.setProfilePicture(userUpdateInfoRequestDTO.getProfilePicture());
+		UserInfoEntity userEntityToUpdate = UserMappers.toUserInfoEntity(userUpdateInfoRequestDTO, userInfoEntity);
 
 		userEntity.setUpdatedAt(LocalDateTime.now());
 		userRepository.save(userEntity);
 
-		return userInfoRepository.save(userInfoEntity);
+		return userInfoRepository.save(userEntityToUpdate);
 	}
 
 }
