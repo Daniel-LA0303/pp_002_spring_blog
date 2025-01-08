@@ -2,12 +2,12 @@ package com.mx.dev.blog.spring_001_blog.utils.dtos.category;
 
 import java.time.LocalDateTime;
 
-public class CategoryResponseDTO {
+public class CategorySmallInfoDTO {
 
 	/**
-	 * id
+	 * category id
 	 */
-	private Long categoryId;
+	private Long categroyId;
 
 	/**
 	 * name
@@ -25,16 +25,6 @@ public class CategoryResponseDTO {
 	private String color;
 
 	/**
-	 * label
-	 */
-	private String label;
-
-	/**
-	 * value
-	 */
-	private String value;
-
-	/**
 	 * created at
 	 */
 	private LocalDateTime createdAt;
@@ -42,36 +32,32 @@ public class CategoryResponseDTO {
 	/**
 	 * 
 	 */
-	public CategoryResponseDTO() {
+	public CategorySmallInfoDTO() {
 	}
 
 	/**
-	 * @param categoryId
+	 * @param categroyId
 	 * @param name
 	 * @param description
 	 * @param color
-	 * @param label
-	 * @param value
 	 * @param createdAt
 	 */
-	public CategoryResponseDTO(Long categoryId, String name, String description, String color, String label,
-			String value, LocalDateTime createdAt) {
-		this.categoryId = categoryId;
+	public CategorySmallInfoDTO(Long categroyId, String name, String description, String color,
+			LocalDateTime createdAt) {
+		this.categroyId = categroyId;
 		this.name = name;
 		this.description = description;
 		this.color = color;
-		this.label = label;
-		this.value = value;
 		this.createdAt = createdAt;
 	}
 
 	/**
-	 * return the value of the property categoryId
+	 * return the value of the property categroyId
 	 *
-	 * @return the categoryId
+	 * @return the categroyId
 	 */
-	public Long getCategoryId() {
-		return categoryId;
+	public Long getCategroyId() {
+		return categroyId;
 	}
 
 	/**
@@ -102,15 +88,6 @@ public class CategoryResponseDTO {
 	}
 
 	/**
-	 * return the value of the property label
-	 *
-	 * @return the label
-	 */
-	public String getLabel() {
-		return label;
-	}
-
-	/**
 	 * return the value of the property name
 	 *
 	 * @return the name
@@ -120,21 +97,12 @@ public class CategoryResponseDTO {
 	}
 
 	/**
-	 * return the value of the property value
+	 * set the value of the property categroyId
 	 *
-	 * @return the value
+	 * @param categroyId the categroyId to set
 	 */
-	public String getValue() {
-		return value;
-	}
-
-	/**
-	 * set the value of the property categoryId
-	 *
-	 * @param categoryId the categoryId to set
-	 */
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
+	public void setCategroyId(Long categroyId) {
+		this.categroyId = categroyId;
 	}
 
 	/**
@@ -165,30 +133,12 @@ public class CategoryResponseDTO {
 	}
 
 	/**
-	 * set the value of the property label
-	 *
-	 * @param label the label to set
-	 */
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	/**
 	 * set the value of the property name
 	 *
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * set the value of the property value
-	 *
-	 * @param value the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
 	}
 
 }

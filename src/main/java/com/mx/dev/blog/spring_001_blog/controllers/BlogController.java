@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.services.BlogService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponsePageDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -81,9 +81,9 @@ public class BlogController {
 	@GetMapping("/{blogId}")
 	public ResponseEntity<?> getOneBlog(@PathVariable Long blogId) throws ServiceException {
 
-		BlogResponsePageDTO blogResponsePageDTO = blogService.getOneBlog(blogId);
+		BlogPageResponseDTO blogResponsePageDTO = blogService.getOneBlog(blogId);
 
-		ApiResponse<BlogResponsePageDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+		ApiResponse<BlogPageResponseDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/blog", MethodEnum.GET, "Success method GET", blogResponsePageDTO, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);

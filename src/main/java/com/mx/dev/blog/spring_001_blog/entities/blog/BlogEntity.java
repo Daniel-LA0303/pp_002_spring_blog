@@ -3,6 +3,7 @@ package com.mx.dev.blog.spring_001_blog.entities.blog;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -78,11 +79,8 @@ public class BlogEntity {
 	@Column(name = "user_id")
 	private Long userId;
 
-	@ManyToMany
-	@JoinTable(name = "blog_category_tbl", // Nombre de la tabla intermedia
-			joinColumns = @JoinColumn(name = "blog_id"), // Llave foránea de BlogEntity
-			inverseJoinColumns = @JoinColumn(name = "category_id") // Llave foránea de CategoryEntity
-	)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+	@JoinTable(name = "blog_category_tbl", joinColumns = @JoinColumn(name = "blog_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<CategoryEntity> categories;
 
 	public BlogEntity() {

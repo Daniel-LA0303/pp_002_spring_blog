@@ -14,7 +14,7 @@ public class BlogMappers {
 		blogResponseDTO.setBlogId(blogEntity.getBlogId());
 		blogResponseDTO.setContent(blogEntity.getContent());
 		blogResponseDTO.setCreatedAt(blogEntity.getCreatedAt());
-		blogResponseDTO.setDescription(blogResponseDTO.getDescription());
+		blogResponseDTO.setDescription(blogEntity.getDescription());
 		blogResponseDTO.setSlug(blogEntity.getSlug());
 		blogResponseDTO.setStatus(blogEntity.getStatus());
 		blogResponseDTO.setTitle(blogEntity.getTitle());
