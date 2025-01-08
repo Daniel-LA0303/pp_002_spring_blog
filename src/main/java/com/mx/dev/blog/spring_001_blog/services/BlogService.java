@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
@@ -17,7 +18,7 @@ public interface BlogService {
 
 	BlogEntity getBlogByIdOrThrow(Long blogId) throws ServiceException;
 
-	BlogEntity getOneBlog(Long blogId) throws ServiceException;
+	BlogPageResponseDTO getOneBlog(Long blogId) throws ServiceException;
 
 	BlogEntity updateBlog(BlogCreateRequestDTO blogCreateRequestDTO, Long blogId) throws ServiceException;
 

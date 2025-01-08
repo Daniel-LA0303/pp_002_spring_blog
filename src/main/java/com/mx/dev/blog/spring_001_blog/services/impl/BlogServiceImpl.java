@@ -16,14 +16,18 @@ import com.mx.dev.blog.spring_001_blog.services.BlogService;
 import com.mx.dev.blog.spring_001_blog.services.CategoryService;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponsePageDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 import com.mx.dev.blog.spring_001_blog.utils.mappers.BlogMappers;
+import com.mx.dev.blog.spring_001_blog.utils.mappers.CategoryMappers;
 
 @Service
 public class BlogServiceImpl implements BlogService {
@@ -169,26 +173,33 @@ public class BlogServiceImpl implements BlogService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public BlogEntity getOneBlog(Long blogId) throws ServiceException {
+	public BlogPageResponseDTO getOneBlog(Long blogId) throws ServiceException {
 
 		// 1. first search blog by id
 		BlogEntity blogEntity = getBlogByIdOrThrow(blogId);
 
-		// 2. then we unit user info
-		// UserInfoDTO userInfoDTO =
-		// userRepository.findUserInfoDTO(blogEntity.getUserId());
+		// 2. if blog exists then we need blog engagement info
+		BlogEngagementDTO blogEngagementDTO = blogRepository.getBlogEngagementData(blogEntity.getBlogId());
 
-		BlogResponsePageDTO blogResponsePageDTO = new BlogResponsePageDTO();
+		// 3. we need some info from user
+		UserInfoCardDTO userInfoCardDTO = userRepository.getUserInfoCard(blogEntity.getUserId());
+
+		// 4. prepare info
+		List<CategorySmallInfoDTO> categories = CategoryMappers.toListCategorySmallInfo(blogEntity.getCategories());
+
+		BlogPageResponseDTO blogResponsePageDTO = new BlogPageResponseDTO();
 		blogResponsePageDTO.setBlogId(blogEntity.getBlogId());
-		blogResponsePageDTO.setContent(blogEntity.getContent());
-		blogResponsePageDTO.setCreatedAt(blogEntity.getCreatedAt());
-		blogResponsePageDTO.setDescription(blogEntity.getDescription());
-		blogResponsePageDTO.setSlug(blogEntity.getSlug());
-		blogResponsePageDTO.setStatus(blogEntity.getStatus());
 		blogResponsePageDTO.setTitle(blogEntity.getTitle());
-		// blogResponsePageDTO.setUserInfoDTO(userInfoDTO);
+		blogResponsePageDTO.setDescription(blogEntity.getDescription());
+		blogResponsePageDTO.setContent(blogEntity.getContent());
+		blogResponsePageDTO.setStatus(blogEntity.getStatus());
+		blogResponsePageDTO.setSlug(blogEntity.getSlug());
+		blogResponsePageDTO.setCreatedAt(blogEntity.getCreatedAt());
+		blogResponsePageDTO.setCategories(categories);
+		blogResponsePageDTO.setUserInfoCardDTO(userInfoCardDTO);
+		blogResponsePageDTO.setBlogEngagementDTO(blogEngagementDTO);
 
-		return blogEntity;
+		return blogResponsePageDTO;
 
 	}
 
