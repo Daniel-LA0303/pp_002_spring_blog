@@ -86,6 +86,19 @@ public class BlogController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
+	@GetMapping("/pagination-by-user")
+	public ResponseEntity<?> getBlogsPaginatedByUser(@RequestParam Long userId,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+
+		Page<BlogInfoCardDTO> blogsPage = blogService.getBlogsByUserIdPaginated(userId, page, size);
+
+		// Crear respuesta con los blogs y metadatos de éxito
+		ApiResponse<Page<BlogInfoCardDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/blog", MethodEnum.GET, "Success method GET", blogsPage, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
 	/**
 	 * get one blog
 	 * 

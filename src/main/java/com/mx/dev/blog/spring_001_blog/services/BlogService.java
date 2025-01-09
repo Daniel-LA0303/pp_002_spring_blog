@@ -21,6 +21,8 @@ public interface BlogService {
 
 	BlogEntity getBlogByIdOrThrow(Long blogId) throws ServiceException;
 
+	Page<BlogInfoCardDTO> getBlogsByUserIdPaginated(Long userId, int page, int size);
+
 	Page<BlogInfoCardDTO> getBlogsPaginated(int page, int size);
 
 	BlogPageResponseDTO getOneBlog(Long blogId) throws ServiceException;

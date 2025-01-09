@@ -176,16 +176,26 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
+	public Page<BlogInfoCardDTO> getBlogsByUserIdPaginated(Long userId, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<BlogEntity> blogEntities = blogRepository.findBlogsByUserId(userId, pageable);
+
+		List<Long> userIds = blogEntities.stream().map(BlogEntity::getUserId).distinct().collect(Collectors.toList());
+
+		Map<Long, String> usernames = userRepository.findByIds(userIds).stream()
+				.collect(Collectors.toMap(UserEntity::getUserId, UserEntity::getUsername));
+
+		return BlogMappers.toPageBlogInfoCardDTO(blogEntities, usernames);
+	}
+
+	@Override
 	public Page<BlogInfoCardDTO> getBlogsPaginated(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 
-		// Obtener la página de entidades desde el repositorio
 		Page<BlogEntity> blogEntities = blogRepository.findAll(pageable);
 
-		// Extraer los userIds únicos de los blogs
 		List<Long> userIds = blogEntities.stream().map(BlogEntity::getUserId).distinct().collect(Collectors.toList());
 
-		// Obtener los nombres de usuario por userId
 		Map<Long, String> usernames = userRepository.findByIds(userIds).stream()
 				.collect(Collectors.toMap(UserEntity::getUserId, UserEntity::getUsername));
 
