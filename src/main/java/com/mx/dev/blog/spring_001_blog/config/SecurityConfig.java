@@ -74,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // STATELESS
 
 				.and().authorizeRequests().antMatchers(HttpMethod.GET, "/api/**").permitAll()
+				.antMatchers("/css/**", "/js/**").permitAll().antMatchers(HttpMethod.GET, "/auth-ui/**").permitAll()
 				.antMatchers(HttpMethod.PUT, "/api/**").permitAll().antMatchers(HttpMethod.POST, "/api/**").permitAll()
 				.antMatchers("/api/auth/**").permitAll().antMatchers(HttpMethod.DELETE, "/api/**").permitAll()
 				.anyRequest().authenticated().and().cors().configurationSource(corsConfigurationSource());
