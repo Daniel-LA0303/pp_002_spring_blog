@@ -2,14 +2,20 @@ package com.mx.dev.blog.spring_001_blog.services.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
+import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
 import com.mx.dev.blog.spring_001_blog.repositories.BlogRepository;
 import com.mx.dev.blog.spring_001_blog.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.services.BlogService;
@@ -17,6 +23,7 @@ import com.mx.dev.blog.spring_001_blog.services.CategoryService;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
@@ -166,6 +173,24 @@ public class BlogServiceImpl implements BlogService {
 
 		return blogRepository.findById(blogId).orElseThrow(() -> new ServiceException("Blog not found",
 				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/blog", MethodEnum.GET));
+	}
+
+	@Override
+	public Page<BlogInfoCardDTO> getBlogsPaginated(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+
+		// Obtener la página de entidades desde el repositorio
+		Page<BlogEntity> blogEntities = blogRepository.findAll(pageable);
+
+		// Extraer los userIds únicos de los blogs
+		List<Long> userIds = blogEntities.stream().map(BlogEntity::getUserId).distinct().collect(Collectors.toList());
+
+		// Obtener los nombres de usuario por userId
+		Map<Long, String> usernames = userRepository.findByIds(userIds).stream()
+				.collect(Collectors.toMap(UserEntity::getUserId, UserEntity::getUsername));
+
+		// Mapear a BlogInfoCardDTO
+		return BlogMappers.toPageBlogInfoCardDTO(blogEntities, usernames);
 	}
 
 	/**
