@@ -3,14 +3,17 @@ package com.mx.dev.blog.spring_001_blog.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
@@ -25,6 +28,7 @@ import com.mx.dev.blog.spring_001_blog.utils.validators.CategoryValidator;
 
 @RestController
 @RequestMapping("/api/category")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CategoryController {
 
 	/**
@@ -56,8 +60,7 @@ public class CategoryController {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
+	 * <<<<<<< HEAD =======
 	 * 
 	 * @param ids
 	 * @return
@@ -76,9 +79,21 @@ public class CategoryController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
+	@GetMapping("/pagination")
+	public ResponseEntity<?> getCategoriesPaginated(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+
+		Page<CategoryResponseDTO> categoriesPage = categoryService.getCategoriesPaginated(page, size);
+
+		ApiResponse<Page<CategoryResponseDTO>> apiResponse = new ApiResponse<>(
+				ResponseStatus.SUCCESS.getHttpStatusCode(), "/api/category/pagination", MethodEnum.GET,
+				"Success method GET", categoriesPage, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
 	/**
->>>>>>> feature/LAZD-service-category
-	 * get a category by id
+	 * >>>>>>> feature/LAZD-service-category get a category by id
 	 * 
 	 * @param categoryId
 	 * @return
