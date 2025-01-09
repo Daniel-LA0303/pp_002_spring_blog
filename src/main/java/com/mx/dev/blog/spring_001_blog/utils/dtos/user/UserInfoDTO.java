@@ -5,16 +5,32 @@ import java.time.LocalDateTime;
 public class UserInfoDTO {
 
 	private Long userId;
+
 	private String username;
+
 	private String email;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
-	private String profilePicture;
+
 	private String bio;
-	private LocalDateTime lastLogin;
-	private Boolean isActive;
-	private String phone;
-	private String direction;
+
+	private String work;
+
+	private String education;
+
+	private String city;
+
+	private String profilePicture;
+
+	private String skills;
+
+	private long blogsNumber;
+
+	private long likesNumber;
+
+	private long followers;
+
+	private LocalDateTime createdAt;
+
+	private String webSite;
 
 	/**
 	 * 
@@ -26,29 +42,34 @@ public class UserInfoDTO {
 	 * @param userId
 	 * @param username
 	 * @param email
-	 * @param createdAt
-	 * @param updatedAt
-	 * @param profilePicture
 	 * @param bio
-	 * @param lastLogin
-	 * @param isActive
-	 * @param phone
-	 * @param direction
+	 * @param work
+	 * @param education
+	 * @param city
+	 * @param profilePicture
+	 * @param skills
+	 * @param blogsNumber
+	 * @param likesNumber
+	 * @param followers
+	 * @param createdAt
 	 */
-	public UserInfoDTO(Long userId, String username, String email, LocalDateTime createdAt, LocalDateTime updatedAt,
-			String profilePicture, String bio, LocalDateTime lastLogin, Boolean isActive, String phone,
-			String direction) {
+	public UserInfoDTO(Long userId, String username, String email, String bio, String work, String education,
+			String city, String profilePicture, String skills, long blogsNumber, long likesNumber, long followers,
+			LocalDateTime createdAt, String webSite) {
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.profilePicture = profilePicture;
 		this.bio = bio;
-		this.lastLogin = lastLogin;
-		this.isActive = isActive;
-		this.phone = phone;
-		this.direction = direction;
+		this.work = work;
+		this.education = education;
+		this.city = city;
+		this.profilePicture = profilePicture;
+		this.skills = skills;
+		this.blogsNumber = blogsNumber;
+		this.likesNumber = likesNumber;
+		this.followers = followers;
+		this.createdAt = createdAt;
+		this.webSite = webSite;
 	}
 
 	/**
@@ -61,6 +82,24 @@ public class UserInfoDTO {
 	}
 
 	/**
+	 * return the value of the property blogsNumber
+	 *
+	 * @return the blogsNumber
+	 */
+	public long getBlogsNumber() {
+		return blogsNumber;
+	}
+
+	/**
+	 * return the value of the property city
+	 *
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
 	 * return the value of the property createdAt
 	 *
 	 * @return the createdAt
@@ -70,12 +109,12 @@ public class UserInfoDTO {
 	}
 
 	/**
-	 * return the value of the property direction
+	 * return the value of the property education
 	 *
-	 * @return the direction
+	 * @return the education
 	 */
-	public String getDirection() {
-		return direction;
+	public String getEducation() {
+		return education;
 	}
 
 	/**
@@ -88,30 +127,21 @@ public class UserInfoDTO {
 	}
 
 	/**
-	 * return the value of the property isActive
+	 * return the value of the property followers
 	 *
-	 * @return the isActive
+	 * @return the followers
 	 */
-	public Boolean getIsActive() {
-		return isActive;
+	public long getFollowers() {
+		return followers;
 	}
 
 	/**
-	 * return the value of the property lastLogin
+	 * return the value of the property likesNumber
 	 *
-	 * @return the lastLogin
+	 * @return the likesNumber
 	 */
-	public LocalDateTime getLastLogin() {
-		return lastLogin;
-	}
-
-	/**
-	 * return the value of the property phone
-	 *
-	 * @return the phone
-	 */
-	public String getPhone() {
-		return phone;
+	public long getLikesNumber() {
+		return likesNumber;
 	}
 
 	/**
@@ -124,12 +154,12 @@ public class UserInfoDTO {
 	}
 
 	/**
-	 * return the value of the property updatedAt
+	 * return the value of the property skills
 	 *
-	 * @return the updatedAt
+	 * @return the skills
 	 */
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
+	public String getSkills() {
+		return skills;
 	}
 
 	/**
@@ -151,12 +181,48 @@ public class UserInfoDTO {
 	}
 
 	/**
+	 * return the value of the property webSite
+	 *
+	 * @return the webSite
+	 */
+	public String getWebSite() {
+		return webSite;
+	}
+
+	/**
+	 * return the value of the property work
+	 *
+	 * @return the work
+	 */
+	public String getWork() {
+		return work;
+	}
+
+	/**
 	 * set the value of the property bio
 	 *
 	 * @param bio the bio to set
 	 */
 	public void setBio(String bio) {
 		this.bio = bio;
+	}
+
+	/**
+	 * set the value of the property blogsNumber
+	 *
+	 * @param blogsNumber the blogsNumber to set
+	 */
+	public void setBlogsNumber(long blogsNumber) {
+		this.blogsNumber = blogsNumber;
+	}
+
+	/**
+	 * set the value of the property city
+	 *
+	 * @param city the city to set
+	 */
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	/**
@@ -169,12 +235,12 @@ public class UserInfoDTO {
 	}
 
 	/**
-	 * set the value of the property direction
+	 * set the value of the property education
 	 *
-	 * @param direction the direction to set
+	 * @param education the education to set
 	 */
-	public void setDirection(String direction) {
-		this.direction = direction;
+	public void setEducation(String education) {
+		this.education = education;
 	}
 
 	/**
@@ -187,30 +253,21 @@ public class UserInfoDTO {
 	}
 
 	/**
-	 * set the value of the property isActive
+	 * set the value of the property followers
 	 *
-	 * @param isActive the isActive to set
+	 * @param followers the followers to set
 	 */
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
+	public void setFollowers(long followers) {
+		this.followers = followers;
 	}
 
 	/**
-	 * set the value of the property lastLogin
+	 * set the value of the property likesNumber
 	 *
-	 * @param lastLogin the lastLogin to set
+	 * @param likesNumber the likesNumber to set
 	 */
-	public void setLastLogin(LocalDateTime lastLogin) {
-		this.lastLogin = lastLogin;
-	}
-
-	/**
-	 * set the value of the property phone
-	 *
-	 * @param phone the phone to set
-	 */
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setLikesNumber(long likesNumber) {
+		this.likesNumber = likesNumber;
 	}
 
 	/**
@@ -223,12 +280,12 @@ public class UserInfoDTO {
 	}
 
 	/**
-	 * set the value of the property updatedAt
+	 * set the value of the property skills
 	 *
-	 * @param updatedAt the updatedAt to set
+	 * @param skills the skills to set
 	 */
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
+	public void setSkills(String skills) {
+		this.skills = skills;
 	}
 
 	/**
@@ -247,6 +304,24 @@ public class UserInfoDTO {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * set the value of the property webSite
+	 *
+	 * @param webSite the webSite to set
+	 */
+	public void setWebSite(String webSite) {
+		this.webSite = webSite;
+	}
+
+	/**
+	 * set the value of the property work
+	 *
+	 * @param work the work to set
+	 */
+	public void setWork(String work) {
+		this.work = work;
 	}
 
 }

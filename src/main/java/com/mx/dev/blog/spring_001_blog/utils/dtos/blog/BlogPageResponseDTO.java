@@ -1,12 +1,14 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.blog;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
 
-public class BlogResponsePageDTO {
+public class BlogPageResponseDTO {
 
 	/**
 	 * id
@@ -44,15 +46,26 @@ public class BlogResponsePageDTO {
 	private LocalDateTime createdAt;
 
 	/**
+	 * list of categories
+	 */
+	private List<CategorySmallInfoDTO> categories;
+
+	/**
 	 * user id
 	 */
 	@JsonProperty("userInfo")
-	private UserInfoDTO userInfoDTO;
+	private UserInfoCardDTO userInfoCardDTO;
+
+	/**
+	 * blog engagement
+	 */
+	@JsonProperty("blogEngagement")
+	private BlogEngagementDTO blogEngagementDTO;
 
 	/**
 	 * 
 	 */
-	public BlogResponsePageDTO() {
+	public BlogPageResponseDTO() {
 	}
 
 	/**
@@ -63,10 +76,13 @@ public class BlogResponsePageDTO {
 	 * @param status
 	 * @param slug
 	 * @param createdAt
-	 * @param userInfoDTO
+	 * @param categories
+	 * @param userInfoCardDTO
+	 * @param blogEngagementDTO
 	 */
-	public BlogResponsePageDTO(Long blogId, String title, String description, String content, BlogStatusEnum status,
-			String slug, LocalDateTime createdAt, UserInfoDTO userInfoDTO) {
+	public BlogPageResponseDTO(Long blogId, String title, String description, String content, BlogStatusEnum status,
+			String slug, LocalDateTime createdAt, List<CategorySmallInfoDTO> categories,
+			UserInfoCardDTO userInfoCardDTO, BlogEngagementDTO blogEngagementDTO) {
 		this.blogId = blogId;
 		this.title = title;
 		this.description = description;
@@ -74,7 +90,18 @@ public class BlogResponsePageDTO {
 		this.status = status;
 		this.slug = slug;
 		this.createdAt = createdAt;
-		this.userInfoDTO = userInfoDTO;
+		this.categories = categories;
+		this.userInfoCardDTO = userInfoCardDTO;
+		this.blogEngagementDTO = blogEngagementDTO;
+	}
+
+	/**
+	 * return the value of the property blogEngagementDTO
+	 *
+	 * @return the blogEngagementDTO
+	 */
+	public BlogEngagementDTO getBlogEngagementDTO() {
+		return blogEngagementDTO;
 	}
 
 	/**
@@ -84,6 +111,15 @@ public class BlogResponsePageDTO {
 	 */
 	public Long getBlogId() {
 		return blogId;
+	}
+
+	/**
+	 * return the value of the property categories
+	 *
+	 * @return the categories
+	 */
+	public List<CategorySmallInfoDTO> getCategories() {
+		return categories;
 	}
 
 	/**
@@ -141,12 +177,21 @@ public class BlogResponsePageDTO {
 	}
 
 	/**
-	 * return the value of the property userInfoDTO
+	 * return the value of the property userInfoCardDTO
 	 *
-	 * @return the userInfoDTO
+	 * @return the userInfoCardDTO
 	 */
-	public UserInfoDTO getUserInfoDTO() {
-		return userInfoDTO;
+	public UserInfoCardDTO getUserInfoCardDTO() {
+		return userInfoCardDTO;
+	}
+
+	/**
+	 * set the value of the property blogEngagementDTO
+	 *
+	 * @param blogEngagementDTO the blogEngagementDTO to set
+	 */
+	public void setBlogEngagementDTO(BlogEngagementDTO blogEngagementDTO) {
+		this.blogEngagementDTO = blogEngagementDTO;
 	}
 
 	/**
@@ -156,6 +201,15 @@ public class BlogResponsePageDTO {
 	 */
 	public void setBlogId(Long blogId) {
 		this.blogId = blogId;
+	}
+
+	/**
+	 * set the value of the property categories
+	 *
+	 * @param categories the categories to set
+	 */
+	public void setCategories(List<CategorySmallInfoDTO> categories) {
+		this.categories = categories;
 	}
 
 	/**
@@ -213,12 +267,12 @@ public class BlogResponsePageDTO {
 	}
 
 	/**
-	 * set the value of the property userInfoDTO
+	 * set the value of the property userInfoCardDTO
 	 *
-	 * @param userInfoDTO the userInfoDTO to set
+	 * @param userInfoCardDTO the userInfoCardDTO to set
 	 */
-	public void setUserInfoDTO(UserInfoDTO userInfoDTO) {
-		this.userInfoDTO = userInfoDTO;
+	public void setUserInfoCardDTO(UserInfoCardDTO userInfoCardDTO) {
+		this.userInfoCardDTO = userInfoCardDTO;
 	}
 
 }

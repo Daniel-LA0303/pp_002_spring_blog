@@ -5,20 +5,23 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
-import com.mx.dev.blog.spring_001_blog.entities.user.UserInfoEntity;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -28,6 +31,7 @@ import com.mx.dev.blog.spring_001_blog.utils.validators.UserValidator;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "http://localhost:5173", methods = { RequestMethod.GET, RequestMethod.POST })
 public class UserController {
 
 	@Autowired
@@ -61,11 +65,34 @@ public class UserController {
 	 * @throws ServiceException
 	 */
 	@GetMapping("/{userId}")
-	public ResponseEntity<?> gteOneSimpleUser(@PathVariable Long userId) throws ServiceException {
+	public ResponseEntity<?> getOneSimpleUser(@PathVariable Long userId) throws ServiceException {
 
 		UserSimpleResponseDTO user = userService.getOneUserSimpleInfo(userId);
 
 		ApiResponse<UserSimpleResponseDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/user", MethodEnum.GET, "Success method GET", user, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/get-user-info-to-update/{userId}")
+	public ResponseEntity<?> getOneUpdateUserInfo(@PathVariable Long userId) throws ServiceException {
+
+		UserUpdateInfoResponseDTO userInfo = userService.getOneUserInfoToUpdate(userId);
+
+		ApiResponse<UserUpdateInfoResponseDTO> apiResponse = new ApiResponse<>(
+				ResponseStatus.SUCCESS.getHttpStatusCode(), "/api/user", MethodEnum.GET, "Success method GET", userInfo,
+				false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/get-user-info/{userId}")
+	public ResponseEntity<?> getOneUserWithInfo(@PathVariable Long userId) throws ServiceException {
+
+		UserInfoDTO user = userService.getOneUserWithInfo(userId);
+
+		ApiResponse<UserInfoDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/user", MethodEnum.GET, "Success method GET", user, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
@@ -88,12 +115,14 @@ public class UserController {
 	public ResponseEntity<?> updateUser(@RequestBody UserUpdateInfoRequestDTO userUpdateInfoRequestDTO,
 			@PathVariable Long userId) throws ServiceException {
 
-		userInfoValidator.validate(userUpdateInfoRequestDTO);
+		// userInfoValidator.validate(userUpdateInfoRequestDTO);
 
-		UserInfoEntity userInfo = userService.updateUserInfo(userUpdateInfoRequestDTO, userId);
+		System.out.println("******");
+		System.out.println(userUpdateInfoRequestDTO.getName());
+		userService.updateUserInfo(userUpdateInfoRequestDTO, userId);
 
-		ApiResponse<UserInfoEntity> apiResponse = new ApiResponse<>(ResponseStatus.UPDATED.getHttpStatusCode(),
-				"/api/user", MethodEnum.PUT, "Success method PUT", userInfo, false);
+		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.UPDATED.getHttpStatusCode(), "/api/user",
+				MethodEnum.PUT, "Success method PUT", "User info updated.", false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}

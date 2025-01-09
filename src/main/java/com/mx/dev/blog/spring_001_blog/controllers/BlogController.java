@@ -3,6 +3,7 @@ package com.mx.dev.blog.spring_001_blog.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,13 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.services.BlogService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponsePageDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -71,6 +74,31 @@ public class BlogController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
+	@GetMapping("/pagination")
+	public ResponseEntity<?> getBlogsPaginated(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+
+		Page<BlogInfoCardDTO> blogsPage = blogService.getBlogsPaginated(page, size);
+
+		ApiResponse<Page<BlogInfoCardDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/blog", MethodEnum.GET, "Success method GET", blogsPage, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/pagination-by-user")
+	public ResponseEntity<?> getBlogsPaginatedByUser(@RequestParam Long userId,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+
+		Page<BlogInfoCardDTO> blogsPage = blogService.getBlogsByUserIdPaginated(userId, page, size);
+
+		// Crear respuesta con los blogs y metadatos de éxito
+		ApiResponse<Page<BlogInfoCardDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/blog", MethodEnum.GET, "Success method GET", blogsPage, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
 	/**
 	 * get one blog
 	 * 
@@ -81,9 +109,9 @@ public class BlogController {
 	@GetMapping("/{blogId}")
 	public ResponseEntity<?> getOneBlog(@PathVariable Long blogId) throws ServiceException {
 
-		BlogResponsePageDTO blogResponsePageDTO = blogService.getOneBlog(blogId);
+		BlogPageResponseDTO blogResponsePageDTO = blogService.getOneBlog(blogId);
 
-		ApiResponse<BlogResponsePageDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+		ApiResponse<BlogPageResponseDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/blog", MethodEnum.GET, "Success method GET", blogResponsePageDTO, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);

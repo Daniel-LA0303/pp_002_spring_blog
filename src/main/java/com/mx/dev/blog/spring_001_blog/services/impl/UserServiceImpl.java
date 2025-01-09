@@ -20,6 +20,7 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -101,6 +102,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserUpdateInfoResponseDTO getOneUserInfoToUpdate(Long id) throws ServiceException {
+
+		// 1. check if user exists
+		UserEntity userEntity = getOneUserOrThrow(id);
+
+		// 2. get only info to update
+		UserUpdateInfoResponseDTO userUpdateInfoResponseDTO = userInfoRepository
+				.findUserUpdateInfoByUserId(userEntity.getUserId());
+
+		return userUpdateInfoResponseDTO;
+	}
+
+	@Override
 	public UserEntity getOneUserOrThrow(Long id) throws ServiceException {
 		return userRepository.findById(id).orElseThrow(() -> new ServiceException("User with ID " + id + " not found.",
 				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/users", MethodEnum.GET));
@@ -113,15 +127,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserInfoDTO getOneUserWithInfo(Long id) throws SecurityException {
+	public UserInfoDTO getOneUserWithInfo(Long id) throws ServiceException {
 
-		return null;
+		return userRepository.findUserInfoById(id).orElseThrow(() -> new ServiceException("There was a problem",
+				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user", MethodEnum.GET));
 	}
 
 	@Override
 	@Transactional
-	public UserInfoEntity updateUserInfo(UserUpdateInfoRequestDTO userUpdateInfoRequestDTO, Long userId)
-			throws ServiceException {
+	public void updateUserInfo(UserUpdateInfoRequestDTO userUpdateInfoRequestDTO, Long userId) throws ServiceException {
 
 		// 1. check if user exists
 		UserEntity userEntity = getOneUserOrThrow(userId);
@@ -132,15 +146,12 @@ public class UserServiceImpl implements UserService {
 						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user-info", MethodEnum.PUT));
 
 		// 3. update info
-		userInfoEntity.setBio(userUpdateInfoRequestDTO.getBio());
-		userInfoEntity.setDirection(userUpdateInfoRequestDTO.getDirection());
-		userInfoEntity.setPhone(userUpdateInfoRequestDTO.getPhone());
-		userInfoEntity.setProfilePicture(userUpdateInfoRequestDTO.getProfilePicture());
+		UserInfoEntity userEntityToUpdate = UserMappers.toUserInfoEntity(userUpdateInfoRequestDTO, userInfoEntity);
 
 		userEntity.setUpdatedAt(LocalDateTime.now());
 		userRepository.save(userEntity);
+		userInfoRepository.save(userEntityToUpdate);
 
-		return userInfoRepository.save(userInfoEntity);
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
-public class UserUpdateInfoRequestDTO {
+public class UserUpdateInfoResponseDTO {
 
 	/**
 	 * name
@@ -59,7 +59,7 @@ public class UserUpdateInfoRequestDTO {
 	/**
 	 * 
 	 */
-	public UserUpdateInfoRequestDTO() {
+	public UserUpdateInfoResponseDTO() {
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class UserUpdateInfoRequestDTO {
 	 * @param skills
 	 * @param bio
 	 */
-	public UserUpdateInfoRequestDTO(String name, String lastName, String work, String education, String pronouns,
+	public UserUpdateInfoResponseDTO(String name, String lastName, String work, String education, String pronouns,
 			String website, String address, String city, String skills, String bio) {
 		this.name = name;
 		this.lastName = lastName;
