@@ -36,13 +36,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			        ui.bio,
 			        ui.work,
 			        ui.education,
+			        ui.city,
 			        ui.profilePicture,
 			        ui.skills,
-			        ui.city,
 			        COUNT(DISTINCT b.blogId) AS blogsNumber,
 			        COUNT(DISTINCT bul.id.blogId) AS likesNumber,
 			        COUNT(DISTINCT uf.id.followerId) AS followers,
-			        u.createdAt
+			        u.createdAt,
+			        ui.website
 			    )
 			    FROM UserEntity u
 			    LEFT JOIN UserInfoEntity ui ON u.userId = ui.userId
@@ -50,7 +51,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			    LEFT JOIN BlogUserLikeEntity bul ON u.userId = bul.id.userId
 			    LEFT JOIN UserFollowsEntity uf ON u.userId = uf.id.followedId
 			    WHERE u.userId = :userId
-			    GROUP BY u.userId, ui.bio, ui.work, ui.education, ui.profilePicture, ui.skills, ui.city
+			    GROUP BY u.userId, ui.bio, ui.work, ui.education, ui.profilePicture, ui.skills, ui.city, ui.website
 			""")
 	Optional<UserInfoDTO> findUserInfoById(@Param("userId") Long userId);
 

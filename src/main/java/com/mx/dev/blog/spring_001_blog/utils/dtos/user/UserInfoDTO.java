@@ -30,6 +30,8 @@ public class UserInfoDTO {
 
 	private LocalDateTime createdAt;
 
+	private String webSite;
+
 	/**
 	 * 
 	 */
@@ -53,7 +55,7 @@ public class UserInfoDTO {
 	 */
 	public UserInfoDTO(Long userId, String username, String email, String bio, String work, String education,
 			String city, String profilePicture, String skills, long blogsNumber, long likesNumber, long followers,
-			LocalDateTime createdAt) {
+			LocalDateTime createdAt, String webSite) {
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
@@ -67,6 +69,7 @@ public class UserInfoDTO {
 		this.likesNumber = likesNumber;
 		this.followers = followers;
 		this.createdAt = createdAt;
+		this.webSite = webSite;
 	}
 
 	/**
@@ -175,6 +178,15 @@ public class UserInfoDTO {
 	 */
 	public String getUsername() {
 		return username;
+	}
+
+	/**
+	 * return the value of the property webSite
+	 *
+	 * @return the webSite
+	 */
+	public String getWebSite() {
+		return webSite;
 	}
 
 	/**
@@ -292,6 +304,15 @@ public class UserInfoDTO {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * set the value of the property webSite
+	 *
+	 * @param webSite the webSite to set
+	 */
+	public void setWebSite(String webSite) {
+		this.webSite = webSite;
 	}
 
 	/**
