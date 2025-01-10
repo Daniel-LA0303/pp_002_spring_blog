@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryTopInfoDTO;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 
@@ -25,5 +26,10 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
 	@Query("select ce from CategoryEntity ce where ce.categoryId in :ids")
 	List<CategoryEntity> findListCategories(List<Long> ids);
+
+	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryTopInfoDTO(c.categoryId, c.name, c.color, COUNT(cuf.id.userId)) "
+			+ "FROM CategoryEntity c " + "LEFT JOIN CategoryUserFollowEntity cuf ON cuf.id.categoryId = c.categoryId "
+			+ "GROUP BY c.categoryId, c.name, c.color " + "ORDER BY COUNT(cuf.id.userId) DESC")
+	List<CategoryTopInfoDTO> findTopCategories();
 
 }
