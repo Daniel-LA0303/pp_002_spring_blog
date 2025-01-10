@@ -6,6 +6,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
@@ -55,6 +59,18 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<CategoryResponseDTO> getAllCategories() {
 
 		return CategoryMappers.toListCategoryResponseDTO(categoryRepository.findAll());
+	}
+
+	@Override
+	public Page<CategoryResponseDTO> getCategoriesPaginated(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+
+		Page<CategoryEntity> categoryEntities = categoryRepository.findAll(pageable);
+
+		List<CategoryResponseDTO> categoryDTOs = categoryEntities.stream()
+				.map(CategoryMappers::fromCategoryEToCategoryEntity).collect(Collectors.toList());
+
+		return new PageImpl<>(categoryDTOs, pageable, categoryEntities.getTotalElements());
 	}
 
 	/**
@@ -111,14 +127,11 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryResponseDTO updateCategroy(CategoryRequestDTO categoryRequestDTO, Long categoryId)
 			throws ServiceException {
 
-		// 1. first we check if category exists
 		CategoryEntity existingCategory = getCategoryByIdOrThrow(categoryId);
 
-		// 2. check if there were changes in name
-		if (!existingCategory.getName().equals(categoryRequestDTO.getName())) {
-			Optional<CategoryEntity> categoryByName = categoryRepository
-					.findCategoryByName(categoryRequestDTO.getName());
-			if (categoryByName.isPresent()) {
+		if (!existingCategory.getName().equalsIgnoreCase(categoryRequestDTO.getName())) {
+			boolean nameInUse = categoryRepository.existsByName(categoryRequestDTO.getName());
+			if (nameInUse) {
 				throw new ServiceException("Category name is already in use.",
 						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/category", MethodEnum.PUT);
 			}
