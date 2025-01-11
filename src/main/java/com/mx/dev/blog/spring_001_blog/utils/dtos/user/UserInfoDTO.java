@@ -32,6 +32,8 @@ public class UserInfoDTO {
 
 	private String webSite;
 
+	private long categoryFollows;
+
 	/**
 	 * 
 	 */
@@ -55,7 +57,7 @@ public class UserInfoDTO {
 	 */
 	public UserInfoDTO(Long userId, String username, String email, String bio, String work, String education,
 			String city, String profilePicture, String skills, long blogsNumber, long likesNumber, long followers,
-			LocalDateTime createdAt, String webSite) {
+			LocalDateTime createdAt, String webSite, long categoryFollows) {
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
@@ -70,6 +72,7 @@ public class UserInfoDTO {
 		this.followers = followers;
 		this.createdAt = createdAt;
 		this.webSite = webSite;
+		this.categoryFollows = categoryFollows;
 	}
 
 	/**
@@ -88,6 +91,15 @@ public class UserInfoDTO {
 	 */
 	public long getBlogsNumber() {
 		return blogsNumber;
+	}
+
+	/**
+	 * return the value of the property categoryFollows
+	 *
+	 * @return the categoryFollows
+	 */
+	public long getCategoryFollows() {
+		return categoryFollows;
 	}
 
 	/**
@@ -214,6 +226,15 @@ public class UserInfoDTO {
 	 */
 	public void setBlogsNumber(long blogsNumber) {
 		this.blogsNumber = blogsNumber;
+	}
+
+	/**
+	 * set the value of the property categoryFollows
+	 *
+	 * @param categoryFollows the categoryFollows to set
+	 */
+	public void setCategoryFollows(long categoryFollows) {
+		this.categoryFollows = categoryFollows;
 	}
 
 	/**

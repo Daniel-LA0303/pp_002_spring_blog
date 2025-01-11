@@ -3,6 +3,7 @@ package com.mx.dev.blog.spring_001_blog.utils.dtos.blog;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
 
@@ -54,6 +55,12 @@ public class BlogInfoCardDTO {
 	private List<CategorySmallInfoDTO> categories;
 
 	/**
+	 * blog engagement
+	 */
+	@JsonProperty("blogEngagement")
+	private BlogEngagementDTO blogEngagementDTO;
+
+	/**
 	 * 
 	 */
 	public BlogInfoCardDTO() {
@@ -71,7 +78,8 @@ public class BlogInfoCardDTO {
 	 * @param categories
 	 */
 	public BlogInfoCardDTO(Long blogId, String title, String description, BlogStatusEnum status, String slug,
-			LocalDateTime createdAt, Long userId, String username, List<CategorySmallInfoDTO> categories) {
+			LocalDateTime createdAt, Long userId, String username, List<CategorySmallInfoDTO> categories,
+			BlogEngagementDTO blogEngagementDTO) {
 		this.blogId = blogId;
 		this.title = title;
 		this.description = description;
@@ -81,6 +89,16 @@ public class BlogInfoCardDTO {
 		this.userId = userId;
 		this.username = username;
 		this.categories = categories;
+		this.blogEngagementDTO = blogEngagementDTO;
+	}
+
+	/**
+	 * return the value of the property blogEngagementDTO
+	 *
+	 * @return the blogEngagementDTO
+	 */
+	public BlogEngagementDTO getBlogEngagementDTO() {
+		return blogEngagementDTO;
 	}
 
 	/**
@@ -162,6 +180,15 @@ public class BlogInfoCardDTO {
 	 */
 	public String getUsername() {
 		return username;
+	}
+
+	/**
+	 * set the value of the property blogEngagementDTO
+	 *
+	 * @param blogEngagementDTO the blogEngagementDTO to set
+	 */
+	public void setBlogEngagementDTO(BlogEngagementDTO blogEngagementDTO) {
+		this.blogEngagementDTO = blogEngagementDTO;
 	}
 
 	/**

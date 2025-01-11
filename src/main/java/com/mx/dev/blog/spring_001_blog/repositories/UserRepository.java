@@ -3,6 +3,8 @@ package com.mx.dev.blog.spring_001_blog.repositories;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,13 +46,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			        COUNT(DISTINCT bul.id.blogId) AS likesNumber,
 			        COUNT(DISTINCT uf.id.followerId) AS followers,
 			        u.createdAt,
-			        ui.website
+			        ui.website,
+			        COUNT(DISTINCT cuf.id.categoryId) AS categoryFollows
 			    )
 			    FROM UserEntity u
 			    LEFT JOIN UserInfoEntity ui ON u.userId = ui.userId
 			    LEFT JOIN BlogEntity b ON u.userId = b.userId
 			    LEFT JOIN BlogUserLikeEntity bul ON u.userId = bul.id.userId
 			    LEFT JOIN UserFollowsEntity uf ON u.userId = uf.id.followedId
+			    LEFT JOIN CategoryUserFollowEntity cuf ON u.userId = cuf.id.userId
 			    WHERE u.userId = :userId
 			    GROUP BY u.userId, ui.bio, ui.work, ui.education, ui.profilePicture, ui.skills, ui.city, ui.website
 			""")
@@ -69,7 +73,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			    GROUP BY u.userId, u.username, ui.profilePicture
 			    ORDER BY COUNT(b.blogId) DESC
 			""")
-	List<UserTopDTO> getTopUsersByPosts();
+	Page<UserTopDTO> getTopUsersByPosts(Pageable pageable);
 
 	@Query("""
 			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO(

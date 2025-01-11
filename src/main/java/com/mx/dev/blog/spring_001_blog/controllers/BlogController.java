@@ -22,6 +22,7 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.info.HomePageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -95,6 +96,17 @@ public class BlogController {
 		// Crear respuesta con los blogs y metadatos de éxito
 		ApiResponse<Page<BlogInfoCardDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/blog", MethodEnum.GET, "Success method GET", blogsPage, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/home-page-info")
+	public ResponseEntity<?> getHomePageInfo() {
+
+		HomePageResponseDTO blogs = blogService.getHomePageInfo();
+
+		ApiResponse<HomePageResponseDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/blog", MethodEnum.GET, "Success method GET", blogs, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}

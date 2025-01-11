@@ -9,6 +9,7 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.info.HomePageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 public interface BlogService {
@@ -24,6 +25,8 @@ public interface BlogService {
 	Page<BlogInfoCardDTO> getBlogsByUserIdPaginated(Long userId, int page, int size);
 
 	Page<BlogInfoCardDTO> getBlogsPaginated(int page, int size);
+
+	HomePageResponseDTO getHomePageInfo();
 
 	BlogPageResponseDTO getOneBlog(Long blogId) throws ServiceException;
 

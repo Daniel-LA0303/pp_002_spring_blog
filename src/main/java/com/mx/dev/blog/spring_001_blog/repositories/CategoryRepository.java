@@ -3,6 +3,8 @@ package com.mx.dev.blog.spring_001_blog.repositories;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,9 +29,18 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 	@Query("select ce from CategoryEntity ce where ce.categoryId in :ids")
 	List<CategoryEntity> findListCategories(List<Long> ids);
 
-	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryTopInfoDTO(c.categoryId, c.name, c.color, COUNT(cuf.id.userId)) "
-			+ "FROM CategoryEntity c " + "LEFT JOIN CategoryUserFollowEntity cuf ON cuf.id.categoryId = c.categoryId "
-			+ "GROUP BY c.categoryId, c.name, c.color " + "ORDER BY COUNT(cuf.id.userId) DESC")
-	List<CategoryTopInfoDTO> findTopCategories();
+	@Query("""
+			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryTopInfoDTO(
+			        c.categoryId,
+			        c.name,
+			        c.color,
+			        COUNT(cuf.id.userId)
+			    )
+			    FROM CategoryEntity c
+			    LEFT JOIN CategoryUserFollowEntity cuf ON cuf.id.categoryId = c.categoryId
+			    GROUP BY c.categoryId, c.name, c.color
+			    ORDER BY COUNT(cuf.id.userId) DESC
+			""")
+	Page<CategoryTopInfoDTO> findTopCategories(Pageable pageable);
 
 }
