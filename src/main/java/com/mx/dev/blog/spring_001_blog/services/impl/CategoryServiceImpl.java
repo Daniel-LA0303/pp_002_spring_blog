@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.repositories.CategoryRepository;
 import com.mx.dev.blog.spring_001_blog.services.CategoryService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
@@ -114,10 +115,13 @@ public class CategoryServiceImpl implements CategoryService {
 	 * >>>>>>> feature/LAZD-service-category get one category
 	 */
 	@Override
-	public CategoryResponseDTO getOneCategory(Long categoryId) throws ServiceException {
+	public CategoryFullInfoDTO getOneCategory(String categoryName) throws ServiceException {
 
-		CategoryEntity categoryEntity = getCategoryByIdOrThrow(categoryId);
-		return CategoryMappers.fromCategoryEToCategoryEntity(categoryEntity);
+		// CategoryEntity categoryEntity = getCategoryByIdOrThrow(categoryId);
+
+		CategoryFullInfoDTO categoryFullInfoDTO = categoryRepository.findCategoryFullInfoByName(categoryName);
+
+		return categoryFullInfoDTO;
 	}
 
 	/**

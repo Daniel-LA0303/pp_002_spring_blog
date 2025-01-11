@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryTopInfoDTO;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
@@ -25,6 +26,12 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 	 */
 	@Query("select ce from CategoryEntity ce where ce.name = :name")
 	Optional<CategoryEntity> findCategoryByName(String name);
+
+	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO( " + "c.categoryId, "
+			+ "c.name, " + "c.description, " + "c.color, " + "COUNT(cb.id.blogId), " + "c.createdAt) "
+			+ "FROM CategoryEntity c " + "LEFT JOIN CategoryBlogEntity cb ON c.categoryId = cb.id.categoryId "
+			+ "WHERE c.name = :categoryName " + "GROUP BY c.categoryId, c.name, c.description, c.color, c.createdAt")
+	CategoryFullInfoDTO findCategoryFullInfoByName(@Param("categoryName") String categoryName);
 
 	@Query("select ce from CategoryEntity ce where ce.categoryId in :ids")
 	List<CategoryEntity> findListCategories(List<Long> ids);
