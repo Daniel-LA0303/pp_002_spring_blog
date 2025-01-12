@@ -18,6 +18,12 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM CategoryEntity c WHERE c.name = :name")
 	boolean existsByName(@Param("name") String name);
 
+	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO( "
+			+ "c.categoryId, c.name, c.description, c.color, COUNT(cb.id.blogId), c.createdAt) "
+			+ "FROM CategoryEntity c " + "LEFT JOIN CategoryBlogEntity cb ON c.categoryId = cb.id.categoryId "
+			+ "GROUP BY c.categoryId, c.name, c.description, c.color, c.createdAt")
+	Page<CategoryFullInfoDTO> findAllCategoryFullInfo(Pageable pageable);
+
 	/**
 	 * query to get category by name
 	 * 

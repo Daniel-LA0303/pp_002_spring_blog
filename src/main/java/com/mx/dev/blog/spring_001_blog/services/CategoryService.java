@@ -16,12 +16,11 @@ public interface CategoryService {
 
 	List<CategoryResponseDTO> getAllCategories();
 
-	Page<CategoryResponseDTO> getCategoriesPaginated(int page, int size);
+	Page<CategoryFullInfoDTO> getCategoriesPaginated(int page, int size);
 
 	List<CategoryEntity> getListCategories(List<Long> ids) throws ServiceException;
 
 	CategoryFullInfoDTO getOneCategory(String categoryName) throws ServiceException;
 
 	CategoryResponseDTO updateCategroy(CategoryRequestDTO categoryRequestDTO, Long categoryId) throws ServiceException;
-
 }

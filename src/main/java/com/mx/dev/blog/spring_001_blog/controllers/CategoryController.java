@@ -86,9 +86,9 @@ public class CategoryController {
 	public ResponseEntity<?> getCategoriesPaginated(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 
-		Page<CategoryResponseDTO> categoriesPage = categoryService.getCategoriesPaginated(page, size);
+		Page<CategoryFullInfoDTO> categoriesPage = categoryService.getCategoriesPaginated(page, size);
 
-		ApiResponse<Page<CategoryResponseDTO>> apiResponse = new ApiResponse<>(
+		ApiResponse<Page<CategoryFullInfoDTO>> apiResponse = new ApiResponse<>(
 				ResponseStatus.SUCCESS.getHttpStatusCode(), "/api/category/pagination", MethodEnum.GET,
 				"Success method GET", categoriesPage, false);
 

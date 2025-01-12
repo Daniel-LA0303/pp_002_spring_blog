@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -63,15 +62,13 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Page<CategoryResponseDTO> getCategoriesPaginated(int page, int size) {
+	public Page<CategoryFullInfoDTO> getCategoriesPaginated(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 
-		Page<CategoryEntity> categoryEntities = categoryRepository.findAll(pageable);
+		// Llamada al repositorio con la paginación
+		Page<CategoryFullInfoDTO> categoryFullInfoPage = categoryRepository.findAllCategoryFullInfo(pageable);
 
-		List<CategoryResponseDTO> categoryDTOs = categoryEntities.stream()
-				.map(CategoryMappers::fromCategoryEToCategoryEntity).collect(Collectors.toList());
-
-		return new PageImpl<>(categoryDTOs, pageable, categoryEntities.getTotalElements());
+		return categoryFullInfoPage;
 	}
 
 	/**
