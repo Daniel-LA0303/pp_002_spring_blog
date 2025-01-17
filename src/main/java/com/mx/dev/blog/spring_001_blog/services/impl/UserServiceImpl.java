@@ -17,6 +17,7 @@ import com.mx.dev.blog.spring_001_blog.repositories.UserInfoRepository;
 import com.mx.dev.blog.spring_001_blog.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
@@ -131,6 +132,18 @@ public class UserServiceImpl implements UserService {
 
 		return userRepository.findUserInfoById(id).orElseThrow(() -> new ServiceException("There was a problem",
 				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user", MethodEnum.GET));
+	}
+
+	@Override
+	public UserFullEngagementDTO getUserFullEngagement(Long userId) throws ServiceException {
+
+		// 1. first we should search user
+		UserEntity userEntity = getOneUserOrThrow(userId);
+
+		// 2. if user exists then we search user engagement
+		UserFullEngagementDTO userFullEngagementDTO = userRepository.getUserEngagementData(userEntity.getUserId());
+
+		return userFullEngagementDTO;
 	}
 
 	@Override

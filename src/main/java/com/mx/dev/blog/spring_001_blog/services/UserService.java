@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
@@ -27,6 +28,8 @@ public interface UserService {
 	UserSimpleResponseDTO getOneUserSimpleInfo(Long id) throws ServiceException;
 
 	UserInfoDTO getOneUserWithInfo(Long id) throws ServiceException;
+
+	UserFullEngagementDTO getUserFullEngagement(Long userId) throws ServiceException;
 
 	void updateUserInfo(UserUpdateInfoRequestDTO userUpdateInfoRequestDTO, Long userId) throws ServiceException;
 

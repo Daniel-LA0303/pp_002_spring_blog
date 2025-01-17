@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
@@ -94,6 +95,17 @@ public class UserController {
 
 		ApiResponse<UserInfoDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/user", MethodEnum.GET, "Success method GET", user, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/get-user-engagement/{userId}")
+	public ResponseEntity<?> getUserFullEngagement(@PathVariable Long userId) throws ServiceException {
+
+		UserFullEngagementDTO userFullEngagementDTO = userService.getUserFullEngagement(userId);
+
+		ApiResponse<UserFullEngagementDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/user", MethodEnum.GET, "Success method GET", userFullEngagementDTO, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}

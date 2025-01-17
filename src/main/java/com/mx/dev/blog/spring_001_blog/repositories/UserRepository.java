@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserTopDTO;
@@ -74,6 +75,27 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			    ORDER BY COUNT(b.blogId) DESC
 			""")
 	Page<UserTopDTO> getTopUsersByPosts(Pageable pageable);
+
+	@Query("""
+			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO(
+			        COUNT(DISTINCT bt.blogId),
+			        COUNT(DISTINCT bult.id.blogId),
+			        COUNT(DISTINCT cuft.id.categoryId),
+			        COUNT(DISTINCT burt.id.blogId),
+			        COUNT(DISTINCT ct.commentId),
+			        COUNT(DISTINCT CASE WHEN uft.id.followerId = :userId THEN uft.id.followedId END),
+			        COUNT(DISTINCT CASE WHEN uft.id.followedId = :userId THEN uft.id.followerId END)
+			    )
+			    FROM UserEntity ut
+			    LEFT JOIN BlogEntity bt ON ut.userId = bt.userId
+			    LEFT JOIN BlogUserLikeEntity bult ON ut.userId = bult.id.userId
+			    LEFT JOIN CategoryUserFollowEntity cuft ON ut.userId = cuft.id.userId
+			    LEFT JOIN BlogUserReadEntity burt ON ut.userId = burt.id.userId
+			    LEFT JOIN CommentEntity ct ON ut.userId = ct.userId
+			    LEFT JOIN UserFollowsEntity uft ON ut.userId = uft.id.followerId OR ut.userId = uft.id.followedId
+			    WHERE ut.userId = :userId
+			""")
+	UserFullEngagementDTO getUserEngagementData(@Param("userId") Long userId);
 
 	@Query("""
 			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO(
