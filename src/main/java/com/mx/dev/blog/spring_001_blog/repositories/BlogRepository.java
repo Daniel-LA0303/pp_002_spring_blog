@@ -22,6 +22,11 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 	@Query("SELECT COUNT(b) > 0 FROM BlogEntity b WHERE b.slug = :slug")
 	boolean existsBySlug(String slug);
 
+	@Query("SELECT b FROM BlogEntity b " + "JOIN CategoryBlogEntity bc ON b.blogId = bc.id.blogId "
+			+ "JOIN CategoryEntity c ON bc.id.categoryId = c.categoryId " + "WHERE c.name = :categoryName "
+			+ "ORDER BY b.createdAt DESC")
+	Page<BlogEntity> findBlogsByCategoryName(@Param("categoryName") String categoryName, Pageable pageable);
+
 	@Query("SELECT b FROM BlogEntity b WHERE b.userId = :userId ORDER BY b.createdAt DESC")
 	Page<BlogEntity> findBlogsByUserId(@Param("userId") Long userId, Pageable pageable);
 

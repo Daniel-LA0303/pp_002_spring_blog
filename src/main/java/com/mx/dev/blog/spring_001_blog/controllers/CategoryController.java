@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.services.CategoryService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
@@ -85,9 +86,9 @@ public class CategoryController {
 	public ResponseEntity<?> getCategoriesPaginated(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 
-		Page<CategoryResponseDTO> categoriesPage = categoryService.getCategoriesPaginated(page, size);
+		Page<CategoryFullInfoDTO> categoriesPage = categoryService.getCategoriesPaginated(page, size);
 
-		ApiResponse<Page<CategoryResponseDTO>> apiResponse = new ApiResponse<>(
+		ApiResponse<Page<CategoryFullInfoDTO>> apiResponse = new ApiResponse<>(
 				ResponseStatus.SUCCESS.getHttpStatusCode(), "/api/category/pagination", MethodEnum.GET,
 				"Success method GET", categoriesPage, false);
 
@@ -101,12 +102,12 @@ public class CategoryController {
 	 * @return
 	 * @throws ServiceException
 	 */
-	@GetMapping("/{categoryId}")
-	public ResponseEntity<?> getOneCategory(@PathVariable Long categoryId) throws ServiceException {
+	@GetMapping("/{categoryName}")
+	public ResponseEntity<?> getOneCategory(@PathVariable String categoryName) throws ServiceException {
 
-		CategoryResponseDTO categoryResponseDTO = categoryService.getOneCategory(categoryId);
+		CategoryFullInfoDTO categoryResponseDTO = categoryService.getOneCategory(categoryName);
 
-		ApiResponse<CategoryResponseDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+		ApiResponse<CategoryFullInfoDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/category", MethodEnum.GET, "Success method GET", categoryResponseDTO, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);

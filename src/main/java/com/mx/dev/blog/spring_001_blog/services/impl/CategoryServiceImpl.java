@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.repositories.CategoryRepository;
 import com.mx.dev.blog.spring_001_blog.services.CategoryService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
@@ -62,15 +62,13 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Page<CategoryResponseDTO> getCategoriesPaginated(int page, int size) {
+	public Page<CategoryFullInfoDTO> getCategoriesPaginated(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 
-		Page<CategoryEntity> categoryEntities = categoryRepository.findAll(pageable);
+		// Llamada al repositorio con la paginación
+		Page<CategoryFullInfoDTO> categoryFullInfoPage = categoryRepository.findAllCategoryFullInfo(pageable);
 
-		List<CategoryResponseDTO> categoryDTOs = categoryEntities.stream()
-				.map(CategoryMappers::fromCategoryEToCategoryEntity).collect(Collectors.toList());
-
-		return new PageImpl<>(categoryDTOs, pageable, categoryEntities.getTotalElements());
+		return categoryFullInfoPage;
 	}
 
 	/**
@@ -114,10 +112,13 @@ public class CategoryServiceImpl implements CategoryService {
 	 * >>>>>>> feature/LAZD-service-category get one category
 	 */
 	@Override
-	public CategoryResponseDTO getOneCategory(Long categoryId) throws ServiceException {
+	public CategoryFullInfoDTO getOneCategory(String categoryName) throws ServiceException {
 
-		CategoryEntity categoryEntity = getCategoryByIdOrThrow(categoryId);
-		return CategoryMappers.fromCategoryEToCategoryEntity(categoryEntity);
+		// CategoryEntity categoryEntity = getCategoryByIdOrThrow(categoryId);
+
+		CategoryFullInfoDTO categoryFullInfoDTO = categoryRepository.findCategoryFullInfoByName(categoryName);
+
+		return categoryFullInfoDTO;
 	}
 
 	/**
