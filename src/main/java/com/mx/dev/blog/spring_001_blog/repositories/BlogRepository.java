@@ -25,6 +25,21 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 	@Query("SELECT b FROM BlogEntity b WHERE b.userId = :userId ORDER BY b.createdAt DESC")
 	Page<BlogEntity> findBlogsByUserId(@Param("userId") Long userId, Pageable pageable);
 
+	@Query("""
+			    SELECT b
+			    FROM BlogEntity b
+			    JOIN BlogUserLikeEntity bult ON b.blogId = bult.id.blogId
+			    WHERE bult.id.userId = :userId
+			    ORDER BY b.createdAt DESC
+			""")
+	Page<BlogEntity> findBlogsLikedByUser(@Param("userId") Long userId, Pageable pageable);
+
+	/*
+	 * @Query("SELECT b FROM BlogEntity b JOIN BlogUserReadEntity bur ON b.blogId = bur.blogId WHERE bur.userId = :userId ORDER BY b.createdAt DESC"
+	 * ) Page<BlogEntity> findBlogsReadByUser(@Param("userId") Long userId, Pageable
+	 * pageable);
+	 */
+
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO(" + "COALESCE(c.blogId, 0), "
 			+ "COALESCE(COUNT(DISTINCT c.commentId), 0), " + "COALESCE(COUNT(DISTINCT bult.id.userId), 0), "
 			+ "COALESCE(COUNT(DISTINCT burt.id.userId), 0)) "

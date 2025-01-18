@@ -277,6 +277,103 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
+	public Page<BlogInfoCardDTO> getBlogsPaginatedByLike(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+
+		Page<BlogEntity> blogEntities = blogRepository.findBlogsLikedByUser(1L, pageable);
+
+		List<Long> blogIds = blogEntities.getContent().stream().map(BlogEntity::getBlogId).distinct()
+				.collect(Collectors.toList());
+
+		List<BlogEngagementDTO> engagementList = blogRepository.getBlogEngagementDataForBlogs(blogIds);
+
+		Map<Long, BlogEngagementDTO> engagementData = engagementList.stream().filter(dto -> dto.getBlogId() != null)
+				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto, (existing, duplicate) -> {
+					existing.setCommentsNumber(existing.getCommentsNumber() + duplicate.getCommentsNumber());
+					existing.setLikesNumber(existing.getLikesNumber() + duplicate.getLikesNumber());
+					existing.setSavedNumber(existing.getSavedNumber() + duplicate.getSavedNumber());
+					return existing;
+				}));
+
+		List<Long> userIds = blogEntities.getContent().stream().map(BlogEntity::getUserId).distinct()
+				.collect(Collectors.toList());
+
+		Map<Long, String> usernames = userRepository.findByIds(userIds).stream()
+				.collect(Collectors.toMap(UserEntity::getUserId, UserEntity::getUsername));
+
+		Page<BlogInfoCardDTO> blogInfoCards = blogEntities.map(blogEntity -> {
+
+			BlogEngagementDTO engagementDTO = engagementData.get(blogEntity.getBlogId());
+
+			if (engagementDTO == null) {
+				engagementDTO = new BlogEngagementDTO(blogEntity.getBlogId(), 0L, 0L, 0L);
+			}
+
+			BlogInfoCardDTO dto = BlogMappers.toBlogInfoCardDTO(blogEntity, usernames.get(blogEntity.getUserId()));
+			dto.setBlogEngagementDTO(engagementDTO);
+
+			return dto;
+		});
+
+		return blogInfoCards;
+	}
+
+	/*
+	 * @Override public Page<BlogInfoCardDTO> getBlogsPaginatedByRead(Long userId,
+	 * int page, int size) { Pageable pageable = PageRequest.of(page, size);
+	 * 
+	 * // Obtener los blogs que el usuario ha leído. Page<BlogEntity> blogEntities =
+	 * blogRepository.findBlogsReadByUser(userId, pageable);
+	 * 
+	 * // Extraer los IDs únicos de los blogs. List<Long> blogIds =
+	 * blogEntities.getContent().stream().map(BlogEntity::getBlogId).distinct()
+	 * .collect(Collectors.toList());
+	 * 
+	 * // Obtener los datos de engagement para estos blogs. List<BlogEngagementDTO>
+	 * engagementList = blogRepository.getBlogEngagementDataForBlogs(blogIds);
+	 * 
+	 * // Mapear los datos de engagement a un Map para un acceso rápido. Map<Long,
+	 * BlogEngagementDTO> engagementData = engagementList.stream().filter(dto ->
+	 * dto.getBlogId() != null)
+	 * .collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto,
+	 * (existing, duplicate) -> {
+	 * existing.setCommentsNumber(existing.getCommentsNumber() +
+	 * duplicate.getCommentsNumber());
+	 * existing.setLikesNumber(existing.getLikesNumber() +
+	 * duplicate.getLikesNumber());
+	 * existing.setSavedNumber(existing.getSavedNumber() +
+	 * duplicate.getSavedNumber()); return existing; }));
+	 * 
+	 * // Extraer los IDs únicos de los usuarios que escribieron los blogs.
+	 * List<Long> userIds =
+	 * blogEntities.getContent().stream().map(BlogEntity::getUserId).distinct()
+	 * .collect(Collectors.toList());
+	 * 
+	 * // Obtener los nombres de usuario para estos IDs. Map<Long, String> usernames
+	 * = userRepository.findByIds(userIds).stream()
+	 * .collect(Collectors.toMap(UserEntity::getUserId, UserEntity::getUsername));
+	 * 
+	 * // Convertir las entidades de blogs en DTOs para la salida final.
+	 * Page<BlogInfoCardDTO> blogInfoCards = blogEntities.map(blogEntity -> {
+	 * 
+	 * // Obtener el engagement del blog. BlogEngagementDTO engagementDTO =
+	 * engagementData.get(blogEntity.getBlogId());
+	 * 
+	 * // Si no hay datos de engagement, inicializar un DTO vacío. if (engagementDTO
+	 * == null) { engagementDTO = new BlogEngagementDTO(blogEntity.getBlogId(), 0L,
+	 * 0L, 0L); }
+	 * 
+	 * // Convertir el blog en un DTO y añadir el engagement. BlogInfoCardDTO dto =
+	 * BlogMappers.toBlogInfoCardDTO(blogEntity,
+	 * usernames.get(blogEntity.getUserId()));
+	 * dto.setBlogEngagementDTO(engagementDTO);
+	 * 
+	 * return dto; });
+	 * 
+	 * return blogInfoCards; }
+	 */
+
+	@Override
 	public HomePageResponseDTO getHomePageInfo() {
 
 		Pageable pageable = PageRequest.of(0, 4);

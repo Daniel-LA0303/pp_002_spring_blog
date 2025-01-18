@@ -80,11 +80,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO(
 			        COUNT(DISTINCT bt.blogId),
 			        COUNT(DISTINCT bult.id.blogId),
-			        COUNT(DISTINCT cuft.id.categoryId),
 			        COUNT(DISTINCT burt.id.blogId),
 			        COUNT(DISTINCT ct.commentId),
 			        COUNT(DISTINCT CASE WHEN uft.id.followerId = :userId THEN uft.id.followedId END),
-			        COUNT(DISTINCT CASE WHEN uft.id.followedId = :userId THEN uft.id.followerId END)
+			        COUNT(DISTINCT CASE WHEN uft.id.followedId = :userId THEN uft.id.followerId END),
+			        COUNT(DISTINCT cuft.id.categoryId)
 			    )
 			    FROM UserEntity ut
 			    LEFT JOIN BlogEntity bt ON ut.userId = bt.userId
