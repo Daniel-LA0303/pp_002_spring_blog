@@ -1,11 +1,15 @@
 package com.mx.dev.blog.spring_001_blog.config.security;
 
 import java.util.Date;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
+import com.mx.dev.blog.spring_001_blog.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -14,11 +18,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class JwtTokenProvider {
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Value("${app.jwt.secret}")
 	private String jwtSecret;
@@ -31,14 +39,19 @@ public class JwtTokenProvider {
 	 * 
 	 * @param authentication
 	 * @return
+	 * @throws ServiceException
 	 */
 	public String generateToken(Authentication authentication) {
 		String username = authentication.getName();
 		Date actualDate = new Date();
 		Date expirationDate = new Date(actualDate.getTime() + jwtExpirationInMs);
 
-		String token = Jwts.builder().setSubject(username).setIssuedAt(new Date()).setExpiration(expirationDate)
-				.signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, jwtSecret).compact();
+		Optional<UserEntity> userEntity = userRepository.findUserByUsername(username);
+
+		String token = Jwts.builder().setSubject(userEntity.get().getUsername())
+				.claim("userId", userEntity.get().getUserId()).claim("email", userEntity.get().getEmail())
+				.setIssuedAt(actualDate).setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
 
 		return token;
 	}

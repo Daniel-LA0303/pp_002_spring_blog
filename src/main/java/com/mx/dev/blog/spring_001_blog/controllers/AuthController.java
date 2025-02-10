@@ -1,5 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.dev.blog.spring_001_blog.config.security.JwtTokenProvider;
 import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
+import com.mx.dev.blog.spring_001_blog.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.JWTAuthResponseDto;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.LoginDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserAuthLoginSuccessDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -38,6 +42,9 @@ public class AuthController {
 	private UserService userService;
 
 	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	private UserValidator userValidator = new UserValidator();
@@ -50,10 +57,22 @@ public class AuthController {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		// obtenemos el token del jwt
 		String token = jwtTokenProvider.generateToken(authentication);
 
-		return ResponseEntity.ok(new JWTAuthResponseDto(token));
+		String username = authentication.getName();
+		Optional<UserEntity> userEntity = userRepository.findUserByUsername(username);
+
+		if (!userEntity.isPresent()) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+		}
+
+		UserAuthLoginSuccessDTO userAuthLoginSuccessDTO = new UserAuthLoginSuccessDTO(userEntity.get().getUserId(),
+				userEntity.get().getUsername(), userEntity.get().getEmail(), new JWTAuthResponseDto(token));
+
+		ApiResponse<UserAuthLoginSuccessDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/auth", MethodEnum.POST, "Success method POST", userAuthLoginSuccessDTO, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
 	@PostMapping("/register")
