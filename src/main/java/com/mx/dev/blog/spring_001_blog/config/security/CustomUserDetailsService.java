@@ -27,19 +27,23 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		UserEntity userEntity;
 		try {
-			userEntity = userService.getOneUserByUsernameOrThrow(username);
+			// Cambiamos la lógica para buscar por email en lugar de username
+			userEntity = userService.getOneUserByEmailOrThrow(email); // Aquí debe ser un método que busque por email
+
+			System.out.println("***************");
+			System.out.println(userEntity.getEmail());
 		} catch (ServiceException e) {
-			throw new UsernameNotFoundException("User not found with username: " + username, e);
+			throw new UsernameNotFoundException("User not found with email: " + email, e);
 		}
 
 		if (userEntity == null || userEntity.getRoles() == null) {
-			throw new UsernameNotFoundException("User or roles not found for username: " + username);
+			throw new UsernameNotFoundException("User or roles not found for email: " + email);
 		}
 
-		return new User(userEntity.getUsername(), userEntity.getPassword(), getAuthorities(userEntity.getRoles()));
+		return new User(userEntity.getEmail(), userEntity.getPassword(), getAuthorities(userEntity.getRoles()));
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthorities(Set<RoleEntity> roles) {

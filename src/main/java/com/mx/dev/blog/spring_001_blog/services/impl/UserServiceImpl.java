@@ -2,7 +2,9 @@ package com.mx.dev.blog.spring_001_blog.services.impl;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,18 +45,22 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserEntity createUser(UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
 
+		Map<String, String> errorMap = new HashMap<>();
+
 		// 1. Check if username is already used
 		if (userRepository.existsByUsername(userCreateRequestDTO.getUsername())) {
-			throw new ServiceException(
-					String.format("Username '%s' is already taken", userCreateRequestDTO.getUsername()),
-					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/user", MethodEnum.POST);
+			errorMap.put("username",
+					String.format("Username '%s' is already taken", userCreateRequestDTO.getUsername()));
 		}
 
 		// 2. Check if email is already used
 		if (userRepository.existsByEmail(userCreateRequestDTO.getEmail())) {
-			throw new ServiceException(
-					String.format("Email '%s' is already registered", userCreateRequestDTO.getEmail()),
-					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/user", MethodEnum.POST);
+			errorMap.put("email", String.format("Email '%s' is already registered", userCreateRequestDTO.getEmail()));
+		}
+
+		if (!errorMap.isEmpty()) {
+			throw new ServiceException("User registration failed due to validation errors",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/user", MethodEnum.POST, errorMap);
 		}
 
 		// 3. Create and save the new user

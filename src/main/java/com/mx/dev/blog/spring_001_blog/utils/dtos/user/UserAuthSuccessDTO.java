@@ -1,6 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
-public class UserAuthLoginSuccessDTO {
+public class UserAuthSuccessDTO {
 
 	/**
 	 * user id
@@ -25,7 +25,7 @@ public class UserAuthLoginSuccessDTO {
 	/**
 	 * 
 	 */
-	public UserAuthLoginSuccessDTO() {
+	public UserAuthSuccessDTO() {
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class UserAuthLoginSuccessDTO {
 	 * @param email
 	 * @param tokenInfo
 	 */
-	public UserAuthLoginSuccessDTO(Long userId, String username, String email, JWTAuthResponseDto tokenInfo) {
+	public UserAuthSuccessDTO(Long userId, String username, String email, JWTAuthResponseDto tokenInfo) {
 		this.userId = userId;
 		this.username = username;
 		this.email = email;

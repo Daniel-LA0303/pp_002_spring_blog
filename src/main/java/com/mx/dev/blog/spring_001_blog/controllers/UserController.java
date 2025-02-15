@@ -32,7 +32,7 @@ import com.mx.dev.blog.spring_001_blog.utils.validators.UserValidator;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "http://localhost:5173", methods = { RequestMethod.GET, RequestMethod.POST })
+@CrossOrigin(origins = "http://localhost:5173", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT })
 public class UserController {
 
 	@Autowired

@@ -42,16 +42,28 @@ public class JwtTokenProvider {
 	 * @throws ServiceException
 	 */
 	public String generateToken(Authentication authentication) {
-		String username = authentication.getName();
+		String email = authentication.getName(); // Aquí `getName()` devuelve el email si estás autenticando por email
 		Date actualDate = new Date();
 		Date expirationDate = new Date(actualDate.getTime() + jwtExpirationInMs);
 
-		Optional<UserEntity> userEntity = userRepository.findUserByUsername(username);
+		Optional<UserEntity> userEntity = userRepository.findUserByEmail(email); // Cambiar la búsqueda por email
 
-		String token = Jwts.builder().setSubject(userEntity.get().getUsername())
+		String token = Jwts.builder().setSubject(userEntity.get().getEmail()) // Usamos el email como subject
 				.claim("userId", userEntity.get().getUserId()).claim("email", userEntity.get().getEmail())
 				.setIssuedAt(actualDate).setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, jwtSecret)
 				.compact();
+
+		return token;
+	}
+
+	public String generateTokenForUser(UserEntity userEntity) {
+		Date actualDate = new Date();
+		Date expirationDate = new Date(actualDate.getTime() + jwtExpirationInMs);
+
+		// Generar el token usando la entidad del usuario
+		String token = Jwts.builder().setSubject(userEntity.getEmail()) // Usamos el email como subject
+				.claim("userId", userEntity.getUserId()).claim("email", userEntity.getEmail()).setIssuedAt(actualDate)
+				.setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 
 		return token;
 	}
