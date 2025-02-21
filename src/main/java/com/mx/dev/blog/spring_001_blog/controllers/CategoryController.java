@@ -84,7 +84,7 @@ public class CategoryController {
 
 	@GetMapping("/pagination")
 	public ResponseEntity<?> getCategoriesPaginated(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size) {
+			@RequestParam(defaultValue = "15") int size) {
 
 		Page<CategoryFullInfoDTO> categoriesPage = categoryService.getCategoriesPaginated(page, size);
 
