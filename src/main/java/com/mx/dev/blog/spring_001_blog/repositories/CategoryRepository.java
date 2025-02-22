@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryTopInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 
@@ -19,7 +20,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 	boolean existsByName(@Param("name") String name);
 
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO( "
-			+ "c.categoryId, c.name, c.description, c.color, COUNT(cb.id.blogId), c.createdAt) "
+			+ "c.categoryId, c.name, c.description, c.color, COUNT(cb.id.blogId), c.longDescription ,c.createdAt) "
 			+ "FROM CategoryEntity c " + "LEFT JOIN CategoryBlogEntity cb ON c.categoryId = cb.id.categoryId "
 			+ "GROUP BY c.categoryId, c.name, c.description, c.color, c.createdAt")
 	Page<CategoryFullInfoDTO> findAllCategoryFullInfo(Pageable pageable);
@@ -34,9 +35,10 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 	Optional<CategoryEntity> findCategoryByName(String name);
 
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO( " + "c.categoryId, "
-			+ "c.name, " + "c.description, " + "c.color, " + "COUNT(cb.id.blogId), " + "c.createdAt) "
-			+ "FROM CategoryEntity c " + "LEFT JOIN CategoryBlogEntity cb ON c.categoryId = cb.id.categoryId "
-			+ "WHERE c.name = :categoryName " + "GROUP BY c.categoryId, c.name, c.description, c.color, c.createdAt")
+			+ "c.name, " + "c.description, " + "c.color, " + "COUNT(cb.id.blogId), "
+			+ " c.longDescription, c.createdAt) " + "FROM CategoryEntity c "
+			+ "LEFT JOIN CategoryBlogEntity cb ON c.categoryId = cb.id.categoryId " + "WHERE c.name = :categoryName "
+			+ "GROUP BY c.categoryId, c.name, c.description, c.color, c.createdAt")
 	CategoryFullInfoDTO findCategoryFullInfoByName(@Param("categoryName") String categoryName);
 
 	@Query("select ce from CategoryEntity ce where ce.categoryId in :ids")
@@ -55,5 +57,21 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 			    ORDER BY COUNT(cuf.id.userId) DESC
 			""")
 	Page<CategoryTopInfoDTO> findTopCategories(Pageable pageable);
+
+	@Query("""
+			SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO(
+			    u.userId, u.username, u.email, ui.profilePicture, u.createdAt
+			)
+			FROM UserEntity u
+			JOIN UserInfoEntity ui ON u.userId = ui.userId
+			WHERE u.userId IN (
+			    SELECT cuf.id.userId
+			    FROM CategoryUserFollowEntity cuf
+			    JOIN CategoryEntity c ON cuf.id.categoryId = c.categoryId
+			    WHERE c.name = :categoryName
+			)
+			ORDER BY u.createdAt DESC
+			""")
+	List<UserSimpleResponseDTO> findTopUsersByCategory(@Param("categoryName") String categoryName, Pageable pageable);
 
 }

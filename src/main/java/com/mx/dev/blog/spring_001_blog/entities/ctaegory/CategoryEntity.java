@@ -51,6 +51,12 @@ public class CategoryEntity {
 	private String label;
 
 	/**
+	 * long description
+	 */
+	@Column(name = "long_description")
+	private String longDescription;
+
+	/**
 	 * created at
 	 */
 	@Column(name = "created_at")
@@ -75,17 +81,19 @@ public class CategoryEntity {
 	 * @param color
 	 * @param value
 	 * @param label
+	 * @param longDescription
 	 * @param createdAt
 	 * @param updatedAt
 	 */
 	public CategoryEntity(Long categoryId, String name, String description, String color, String value, String label,
-			LocalDateTime createdAt, LocalDateTime updatedAt) {
+			String longDescription, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.categoryId = categoryId;
 		this.name = name;
 		this.description = description;
 		this.color = color;
 		this.value = value;
 		this.label = label;
+		this.longDescription = longDescription;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
@@ -133,6 +141,15 @@ public class CategoryEntity {
 	 */
 	public String getLabel() {
 		return label;
+	}
+
+	/**
+	 * return the value of the property longDescription
+	 *
+	 * @return the longDescription
+	 */
+	public String getLongDescription() {
+		return longDescription;
 	}
 
 	/**
@@ -205,6 +222,15 @@ public class CategoryEntity {
 	 */
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	/**
+	 * set the value of the property longDescription
+	 *
+	 * @param longDescription the longDescription to set
+	 */
+	public void setLongDescription(String longDescription) {
+		this.longDescription = longDescription;
 	}
 
 	/**

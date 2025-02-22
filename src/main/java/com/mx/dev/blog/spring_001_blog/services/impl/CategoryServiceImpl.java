@@ -14,9 +14,11 @@ import org.springframework.stereotype.Service;
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.repositories.CategoryRepository;
 import com.mx.dev.blog.spring_001_blog.services.CategoryService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -112,13 +114,22 @@ public class CategoryServiceImpl implements CategoryService {
 	 * >>>>>>> feature/LAZD-service-category get one category
 	 */
 	@Override
-	public CategoryFullInfoDTO getOneCategory(String categoryName) throws ServiceException {
+	public BlogsByCategoryInfoDTO getOneCategory(String categoryName) throws ServiceException {
 
 		// CategoryEntity categoryEntity = getCategoryByIdOrThrow(categoryId);
 
+		Pageable pageable = PageRequest.of(0, 15);
+		List<UserSimpleResponseDTO> userSimpleResponseDTO = categoryRepository.findTopUsersByCategory(categoryName,
+				pageable);
+
 		CategoryFullInfoDTO categoryFullInfoDTO = categoryRepository.findCategoryFullInfoByName(categoryName);
 
-		return categoryFullInfoDTO;
+		BlogsByCategoryInfoDTO blogsByCategoryInfoDTO = new BlogsByCategoryInfoDTO();
+
+		blogsByCategoryInfoDTO.setCategoryFullInfoDTO(categoryFullInfoDTO);
+		blogsByCategoryInfoDTO.setFollewersCategory(userSimpleResponseDTO);
+
+		return blogsByCategoryInfoDTO;
 	}
 
 	/**

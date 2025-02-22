@@ -30,6 +30,11 @@ public class CategoryFullInfoDTO {
 	private Long postsNumber;
 
 	/**
+	 * long description
+	 */
+	private String longDescription;
+
+	/**
 	 * created at
 	 */
 	private LocalDateTime createdAt;
@@ -42,19 +47,21 @@ public class CategoryFullInfoDTO {
 
 	/**
 	 * @param categoryId
-	 * @param nameString
+	 * @param name
 	 * @param description
 	 * @param color
 	 * @param postsNumber
+	 * @param longDescription
 	 * @param createdAt
 	 */
 	public CategoryFullInfoDTO(Long categoryId, String name, String description, String color, Long postsNumber,
-			LocalDateTime createdAt) {
+			String longDescription, LocalDateTime createdAt) {
 		this.categoryId = categoryId;
 		this.name = name;
 		this.description = description;
 		this.color = color;
 		this.postsNumber = postsNumber;
+		this.longDescription = longDescription;
 		this.createdAt = createdAt;
 	}
 
@@ -92,6 +99,15 @@ public class CategoryFullInfoDTO {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * return the value of the property longDescription
+	 *
+	 * @return the longDescription
+	 */
+	public String getLongDescription() {
+		return longDescription;
 	}
 
 	/**
@@ -146,6 +162,24 @@ public class CategoryFullInfoDTO {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * set the value of the property longDescription
+	 *
+	 * @param longDescription the longDescription to set
+	 */
+	public void setLongDescription(String longDescription) {
+		this.longDescription = longDescription;
+	}
+
+	/**
+	 * set the value of the property name
+	 *
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

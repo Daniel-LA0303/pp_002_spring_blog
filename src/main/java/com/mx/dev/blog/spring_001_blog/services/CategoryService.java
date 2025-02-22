@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
@@ -20,7 +21,7 @@ public interface CategoryService {
 
 	List<CategoryEntity> getListCategories(List<Long> ids) throws ServiceException;
 
-	CategoryFullInfoDTO getOneCategory(String categoryName) throws ServiceException;
+	BlogsByCategoryInfoDTO getOneCategory(String categoryName) throws ServiceException;
 
 	CategoryResponseDTO updateCategroy(CategoryRequestDTO categoryRequestDTO, Long categoryId) throws ServiceException;
 }

@@ -20,6 +20,11 @@ public class UserSimpleResponseDTO {
 	private String email;
 
 	/**
+	 * profilePicture
+	 */
+	private String profilePicture;
+
+	/**
 	 * created at
 	 */
 	private LocalDateTime createdAt;
@@ -34,14 +39,15 @@ public class UserSimpleResponseDTO {
 	 * @param userId
 	 * @param username
 	 * @param email
-	 * @param password
-	 * @param userDetailsDTO
+	 * @param profilePicture
 	 * @param createdAt
-	 * @param updatedAt
 	 */
-	public UserSimpleResponseDTO(Long userId, String username, String email, LocalDateTime createdAt) {
+	public UserSimpleResponseDTO(Long userId, String username, String email, String profilePicture,
+			LocalDateTime createdAt) {
 		this.userId = userId;
+		this.username = username;
 		this.email = email;
+		this.profilePicture = profilePicture;
 		this.createdAt = createdAt;
 	}
 
@@ -61,6 +67,15 @@ public class UserSimpleResponseDTO {
 	 */
 	public String getEmail() {
 		return email;
+	}
+
+	/**
+	 * return the value of the property profilePicture
+	 *
+	 * @return the profilePicture
+	 */
+	public String getProfilePicture() {
+		return profilePicture;
 	}
 
 	/**
@@ -97,6 +112,15 @@ public class UserSimpleResponseDTO {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	/**
+	 * set the value of the property profilePicture
+	 *
+	 * @param profilePicture the profilePicture to set
+	 */
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 	/**
