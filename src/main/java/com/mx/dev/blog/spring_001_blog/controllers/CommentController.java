@@ -3,18 +3,22 @@ package com.mx.dev.blog.spring_001_blog.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.dev.blog.spring_001_blog.entities.comment.CommentEntity;
 import com.mx.dev.blog.spring_001_blog.services.CommentService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -37,6 +41,24 @@ public class CommentController {
 	 */
 	CommentValidator commentValidator = new CommentValidator();
 
+	@DeleteMapping("/{commentId}")
+	public ResponseEntity<?> deleteComment(@PathVariable Long commentId, @RequestParam Long userId,
+			@RequestParam Long blogId) throws ServiceException {
+
+		// Primero, validamos la solicitud
+		// commentValidator.validateDelete(commentId, userId, blogId); // Asegúrate de
+		// implementar este método en el validador
+
+		// Llamamos al servicio para eliminar el comentario
+		commentService.deleteComment(commentId, userId, blogId);
+
+		// Preparamos la respuesta
+		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.DELETED.getHttpStatusCode(), "/api/comment",
+				MethodEnum.DELETE, "Comment deleted successfully", null, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
 	/**
 	 * get comment by blog
 	 * 
@@ -45,11 +67,12 @@ public class CommentController {
 	 * @throws ServiceException
 	 */
 	@GetMapping("/get-comments-by-blog/{blogId}")
-	public ResponseEntity<?> getCommentsByBlog(@PathVariable Long blogId) throws ServiceException {
+	public ResponseEntity<?> getCommentsByBlog(@PathVariable Long blogId, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "5") int size) throws ServiceException {
 
-		List<CommentEntity> comments = commentService.getAllCommentsByBlog(blogId);
+		Page<CommentCardDTO> comments = commentService.getAllCommentsByBlog(blogId, page, size);
 
-		ApiResponse<List<CommentEntity>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+		ApiResponse<Page<CommentCardDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/comment", MethodEnum.GET, "Success method GET", comments, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
@@ -86,9 +109,9 @@ public class CommentController {
 
 		commentValidator.validate(commentCreateRequestDTO);
 
-		CommentEntity commentEntity = commentService.createComment(commentCreateRequestDTO);
+		CommentCardDTO commentEntity = commentService.createComment(commentCreateRequestDTO);
 
-		ApiResponse<CommentEntity> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
+		ApiResponse<CommentCardDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
 				"/api/comment", MethodEnum.POST, "Success method POST", commentEntity, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);

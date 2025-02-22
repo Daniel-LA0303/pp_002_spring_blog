@@ -46,7 +46,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 	 */
 
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO(" + "COALESCE(c.blogId, 0), "
-			+ "COALESCE(COUNT(DISTINCT c.commentId), 0), " + "COALESCE(COUNT(DISTINCT bult.id.userId), 0), "
+			+ "COALESCE(COUNT(DISTINCT bult.id.userId), 0), " + "COALESCE(COUNT(DISTINCT c.commentId), 0), "
 			+ "COALESCE(COUNT(DISTINCT burt.id.userId), 0)) "
 			+ "FROM com.mx.dev.blog.spring_001_blog.entities.comment.CommentEntity c "
 			+ "LEFT JOIN com.mx.dev.blog.spring_001_blog.entities.blog.BlogUserLikeEntity bult ON c.blogId = bult.id.blogId "
@@ -55,7 +55,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 	BlogEngagementDTO getBlogEngagementData(@Param("blogId") Long blogId);
 
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO(" + "b.blogId, "
-			+ "COUNT(DISTINCT c.commentId), " + "COUNT(DISTINCT bult.id.userId), " + "COUNT(DISTINCT burt.id.userId)) "
+			+ "COUNT(DISTINCT bult.id.userId), " + "COUNT(DISTINCT c.commentId), " + "COUNT(DISTINCT burt.id.userId)) "
 			+ "FROM com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity b "
 			+ "LEFT JOIN com.mx.dev.blog.spring_001_blog.entities.comment.CommentEntity c ON b.blogId = c.blogId "
 			+ "LEFT JOIN com.mx.dev.blog.spring_001_blog.entities.blog.BlogUserLikeEntity bult ON b.blogId = bult.id.blogId "

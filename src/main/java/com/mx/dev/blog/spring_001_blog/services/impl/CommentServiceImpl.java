@@ -4,16 +4,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.entities.comment.CommentEntity;
 import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
+import com.mx.dev.blog.spring_001_blog.entities.user.UserInfoEntity;
 import com.mx.dev.blog.spring_001_blog.repositories.CommentRepository;
+import com.mx.dev.blog.spring_001_blog.repositories.UserInfoRepository;
+import com.mx.dev.blog.spring_001_blog.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.services.BlogService;
 import com.mx.dev.blog.spring_001_blog.services.CommentService;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -26,6 +33,12 @@ public class CommentServiceImpl implements CommentService {
 	private CommentRepository commentRepository;
 
 	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private UserInfoRepository userInfoRepository;
+
+	@Autowired
 	private BlogService blogService;
 
 	@Autowired
@@ -33,32 +46,66 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	@Transactional
-	public CommentEntity createComment(CommentCreateRequestDTO commentCreateRequestDTO) throws ServiceException {
+	public CommentCardDTO createComment(CommentCreateRequestDTO commentCreateRequestDTO) throws ServiceException {
 
 		// 1. first we check if blog exists
 		BlogEntity blogEntity = blogService.getBlogByIdOrThrow(commentCreateRequestDTO.getBlogId());
 
-		// 2. we check if user exists
+		// 2.
 		UserEntity userEntity = userService.getOneUserOrThrow(commentCreateRequestDTO.getUserId());
 
+		// 3.
 		CommentEntity commentEntity = new CommentEntity();
-
 		commentEntity.setBlogId(blogEntity.getBlogId());
 		commentEntity.setContent(commentCreateRequestDTO.getContent());
 		commentEntity.setCreatedAt(LocalDateTime.now());
 		commentEntity.setUpdatedAt(LocalDateTime.now());
 		commentEntity.setUserId(userEntity.getUserId());
 
-		return commentRepository.save(commentEntity);
+		commentEntity = commentRepository.save(commentEntity);
+
+		// 4.
+		UserInfoEntity userInfoEntity = userInfoRepository.findUserInfoByUserId(userEntity.getUserId()).orElse(null);
+
+		// 5.
+		return new CommentCardDTO(commentEntity.getCommentId(), userEntity.getUserId(), blogEntity.getBlogId(),
+				commentEntity.getContent(), userInfoEntity != null ? userInfoEntity.getProfilePicture() : null,
+				userEntity.getUsername(), commentEntity.getUpdatedAt());
 	}
 
 	@Override
-	public List<CommentEntity> getAllCommentsByBlog(Long blogId) throws ServiceException {
+	public void deleteComment(Long commentId, Long userId, Long blogId) throws ServiceException {
 
-		// 1. first we check if blog exists
+		// 1. Primero verificamos si el comentario existe
+		CommentEntity commentEntity = getCommentByIdOrThrow(commentId);
+
+		// 2. Verificamos si el blog existe (si no existe, no se puede eliminar un
+		// comentario asociado a un blog inexistente)
 		blogService.getBlogByIdOrThrow(blogId);
 
-		return commentRepository.findAllCommentsByBlogId(blogId);
+		// 3. Verificamos si el usuario existe
+		UserEntity userEntity = userService.getOneUserOrThrow(userId);
+
+		// 4. Comprobamos si el usuario tiene permisos para eliminar el comentario
+		if (!commentEntity.getUserId().equals(userEntity.getUserId())) {
+			throw new ServiceException("You do not have permissions to delete this comment",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/comment", MethodEnum.DELETE);
+		}
+
+		// 5. Si todo es correcto, eliminamos el comentario
+		commentRepository.deleteById(commentId);
+	}
+
+	@Override
+	public Page<CommentCardDTO> getAllCommentsByBlog(Long blogId, int page, int size) throws ServiceException {
+		// 1. Verificar si el blog existe
+		blogService.getBlogByIdOrThrow(blogId);
+
+		// 2. Crear un objeto Pageable para la paginación
+		Pageable pageable = PageRequest.of(page, size);
+
+		// 3. Obtener los comentarios paginados
+		return commentRepository.findAllCommentsByBlogId(blogId, pageable);
 	}
 
 	@Override

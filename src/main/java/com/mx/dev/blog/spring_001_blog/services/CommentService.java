@@ -2,15 +2,20 @@ package com.mx.dev.blog.spring_001_blog.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.mx.dev.blog.spring_001_blog.entities.comment.CommentEntity;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 public interface CommentService {
 
-	CommentEntity createComment(CommentCreateRequestDTO commentCreateRequestDTO) throws ServiceException;
+	CommentCardDTO createComment(CommentCreateRequestDTO commentCreateRequestDTO) throws ServiceException;
 
-	List<CommentEntity> getAllCommentsByBlog(Long blogId) throws ServiceException;
+	void deleteComment(Long commentId, Long userId, Long blogId) throws ServiceException;
+
+	Page<CommentCardDTO> getAllCommentsByBlog(Long blogId, int page, int size) throws ServiceException;
 
 	List<CommentEntity> getAllCommentsByUser(Long userId) throws ServiceException;
 
