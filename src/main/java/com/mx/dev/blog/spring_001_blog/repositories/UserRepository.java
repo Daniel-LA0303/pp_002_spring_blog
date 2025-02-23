@@ -1,11 +1,15 @@
 package com.mx.dev.blog.spring_001_blog.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,8 +21,16 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserTopDTO;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
+	@Transactional
+	@Modifying
+	@Query("DELETE FROM UserFollowsEntity uf WHERE uf.id.followerId = :followerId AND uf.id.followedId = :followedId")
+	void deleteByFollowerIdAndFollowedId(@Param("followerId") Long followerId, @Param("followedId") Long followedId);
+
 	@Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM UserEntity u WHERE u.email = :email")
 	boolean existsByEmail(@Param("email") String email);
+
+	@Query("SELECT COUNT(uf) > 0 FROM UserFollowsEntity uf WHERE uf.id.followerId = :followerId AND uf.id.followedId = :followedId")
+	boolean existsByFollowerIdAndFollowedId(@Param("followerId") Long followerId, @Param("followedId") Long followedId);
 
 	@Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM UserEntity u WHERE u.username = :username")
 	boolean existsByUsername(@Param("username") String username);
@@ -60,6 +72,13 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			    GROUP BY u.userId, ui.bio, ui.work, ui.education, ui.profilePicture, ui.skills, ui.city, ui.website
 			""")
 	Optional<UserInfoDTO> findUserInfoById(@Param("userId") Long userId);
+
+	@Query("""
+			    SELECT uf.id.followerId
+			    FROM UserFollowsEntity uf
+			    WHERE uf.id.followedId = :userId
+			""")
+	List<Long> getFollowersIds(@Param("userId") Long userId);
 
 	@Query("""
 			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserTopDTO(
@@ -116,5 +135,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			    GROUP BY u.userId, u.username, ui.profilePicture, ui.city
 			""")
 	UserInfoCardDTO getUserInfoCard(@Param("userId") Long userId);
+
+	@Query(value = "INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (:followerId, :followedId, :createdAt)", nativeQuery = true)
+	@Modifying
+	void insertUserFollow(@Param("followerId") Long followerId, @Param("followedId") Long followedId,
+			@Param("createdAt") LocalDateTime createdAt);
 
 }

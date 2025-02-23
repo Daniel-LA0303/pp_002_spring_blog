@@ -1,5 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
+import java.util.List;
+
 public class UserInfoCardDTO {
 
 	/**
@@ -38,6 +40,11 @@ public class UserInfoCardDTO {
 	private Long following;
 
 	/**
+	 * users followers
+	 */
+	private List<Long> usersFollowers;
+
+	/**
 	 * 
 	 */
 	public UserInfoCardDTO() {
@@ -51,6 +58,7 @@ public class UserInfoCardDTO {
 	 * @param blogsByUser
 	 * @param followers
 	 * @param following
+	 * @param usersFollowers
 	 */
 	public UserInfoCardDTO(Long userId, String username, String profilePicture, String city, Long blogsByUser,
 			Long followers, Long following) {
@@ -61,6 +69,7 @@ public class UserInfoCardDTO {
 		this.blogsByUser = blogsByUser;
 		this.followers = followers;
 		this.following = following;
+		// this.usersFollowers = usersFollowers;
 	}
 
 	/**
@@ -127,6 +136,15 @@ public class UserInfoCardDTO {
 	}
 
 	/**
+	 * return the value of the property usersFollowers
+	 *
+	 * @return the usersFollowers
+	 */
+	public List<Long> getUsersFollowers() {
+		return usersFollowers;
+	}
+
+	/**
 	 * set the value of the property blogsByUser
 	 *
 	 * @param blogsByUser the blogsByUser to set
@@ -187,6 +205,15 @@ public class UserInfoCardDTO {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * set the value of the property usersFollowers
+	 *
+	 * @param usersFollowers the usersFollowers to set
+	 */
+	public void setUsersFollowers(List<Long> usersFollowers) {
+		this.usersFollowers = usersFollowers;
 	}
 
 }

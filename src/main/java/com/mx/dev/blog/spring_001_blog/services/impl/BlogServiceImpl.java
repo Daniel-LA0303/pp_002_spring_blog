@@ -547,13 +547,12 @@ public class BlogServiceImpl implements BlogService {
 			blogEngagementDTO = new BlogEngagementDTO(blogEntity.getBlogId(), 0L, 0L, 0L);
 		}
 
-		System.out.println("***engament by one blog**");
-		System.out.println("Engament idblog: " + blogEngagementDTO.getBlogId() + ", likes "
-				+ blogEngagementDTO.getLikesNumber() + ", comments" + blogEngagementDTO.getCommentsNumber() + ", save: "
-				+ blogEngagementDTO.getSavedNumber());
-
 		// 3. we need some info from user
 		UserInfoCardDTO userInfoCardDTO = userRepository.getUserInfoCard(blogEntity.getUserId());
+
+		// 4. get users list
+		List<Long> usersFollwers = userRepository.getFollowersIds(blogEntity.getUserId());
+		userInfoCardDTO.setUsersFollowers(usersFollwers);
 
 		// 4. prepare info
 		List<CategorySmallInfoDTO> categories = CategoryMappers.toListCategorySmallInfo(blogEntity.getCategories());

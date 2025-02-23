@@ -33,4 +33,8 @@ public interface UserService {
 
 	void updateUserInfo(UserUpdateInfoRequestDTO userUpdateInfoRequestDTO, Long userId) throws ServiceException;
 
+	void userFollowed(Long followerId, Long followedId) throws ServiceException;
+
+	void userUnfollowed(Long followerId, Long followedId) throws ServiceException;
+
 }

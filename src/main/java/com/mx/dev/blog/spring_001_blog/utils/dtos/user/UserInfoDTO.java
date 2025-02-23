@@ -1,6 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UserInfoDTO {
 
@@ -33,6 +34,8 @@ public class UserInfoDTO {
 	private String webSite;
 
 	private long categoryFollows;
+
+	private List<Long> usersFollowers;
 
 	/**
 	 * 
@@ -193,6 +196,15 @@ public class UserInfoDTO {
 	}
 
 	/**
+	 * return the value of the property usersFollowers
+	 *
+	 * @return the usersFollowers
+	 */
+	public List<Long> getUsersFollowers() {
+		return usersFollowers;
+	}
+
+	/**
 	 * return the value of the property webSite
 	 *
 	 * @return the webSite
@@ -325,6 +337,15 @@ public class UserInfoDTO {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * set the value of the property usersFollowers
+	 *
+	 * @param usersFollowers the usersFollowers to set
+	 */
+	public void setUsersFollowers(List<Long> usersFollowers) {
+		this.usersFollowers = usersFollowers;
 	}
 
 	/**

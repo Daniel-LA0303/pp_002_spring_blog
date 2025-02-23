@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
 		// 5. Create associated UserInfoEntity using userId
 		UserInfoEntity userInfoEntity = new UserInfoEntity();
-		userInfoEntity.setUserId(savedUser.getUserId()); // Set userId in user_info_tbl
+		userInfoEntity.setUserId(savedUser.getUserId());
 		userInfoEntity.setIsActive(false);
 
 		userInfoRepository.save(userInfoEntity);
@@ -135,9 +135,16 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserInfoDTO getOneUserWithInfo(Long id) throws ServiceException {
+		// Obtener los seguidores del usuario
+		List<Long> usersFollowers = userRepository.getFollowersIds(id);
 
-		return userRepository.findUserInfoById(id).orElseThrow(() -> new ServiceException("There was a problem",
-				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user", MethodEnum.GET));
+		UserInfoDTO userInfo = userRepository.findUserInfoById(id)
+				.orElseThrow(() -> new ServiceException("There was a problem",
+						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user", MethodEnum.GET));
+
+		userInfo.setUsersFollowers(usersFollowers);
+
+		return userInfo;
 	}
 
 	@Override
@@ -171,6 +178,39 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(userEntity);
 		userInfoRepository.save(userEntityToUpdate);
 
+	}
+
+	@Override
+	@Transactional
+	public void userFollowed(Long followerId, Long followedId) throws ServiceException {
+		try {
+			if (userRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
+				throw new ServiceException("User is already following this user.",
+						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/follow", MethodEnum.POST);
+			}
+
+			userRepository.insertUserFollow(followerId, followedId, LocalDateTime.now());
+
+		} catch (Exception e) {
+			throw new ServiceException("Error following the user", ResponseStatus.NOT_FOUND.getHttpStatusCode(),
+					"/api/follow", MethodEnum.POST);
+		}
+	}
+
+	@Override
+	public void userUnfollowed(Long followerId, Long followedId) throws ServiceException {
+		try {
+			if (!userRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
+				throw new ServiceException("User is not following this user.",
+						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/follow", MethodEnum.DELETE);
+			}
+
+			userRepository.deleteByFollowerIdAndFollowedId(followerId, followedId);
+
+		} catch (Exception e) {
+			throw new ServiceException("Error unfollowing the user", ResponseStatus.NOT_FOUND.getHttpStatusCode(),
+					"/api/follow", MethodEnum.DELETE);
+		}
 	}
 
 }
