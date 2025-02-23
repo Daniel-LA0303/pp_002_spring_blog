@@ -41,6 +41,52 @@ public class BlogController {
 	 */
 	private final BlogValidator blogValidator = new BlogValidator();
 
+	@PostMapping("/{blogId}/like")
+	public ResponseEntity<?> blogLiked(@PathVariable Long blogId, @RequestParam Long userId) throws ServiceException {
+
+		blogService.blogLiked(userId, blogId);
+
+		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
+				"/api/blog/" + blogId + "/like?userId=" + userId, MethodEnum.POST, "Blog liked successfully", "Success",
+				false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/{blogId}/read")
+	public ResponseEntity<?> blogRead(@PathVariable Long blogId, @RequestParam Long userId) throws ServiceException {
+		blogService.blogRead(userId, blogId);
+
+		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
+				"/api/blog/" + blogId + "/read?userId=" + userId, MethodEnum.POST, "Blog marked as read successfully",
+				"Success", false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/{blogId}/unlike")
+	public ResponseEntity<?> blogUnliked(@PathVariable Long blogId, @RequestParam Long userId) throws ServiceException {
+
+		blogService.blogUnliked(userId, blogId);
+
+		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/blog/" + blogId + "/unlike?userId=" + userId, MethodEnum.DELETE, "Blog unliked successfully",
+				"Success", false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{blogId}/read")
+	public ResponseEntity<?> blogUnread(@PathVariable Long blogId, @RequestParam Long userId) throws ServiceException {
+		blogService.blogUnread(userId, blogId);
+
+		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/blog/" + blogId + "/read?userId=" + userId, MethodEnum.DELETE,
+				"Blog unmarked as read successfully", "Success", false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
 	/**
 	 * delete blog
 	 * 

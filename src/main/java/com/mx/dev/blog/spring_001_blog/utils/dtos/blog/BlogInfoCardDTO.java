@@ -61,6 +61,16 @@ public class BlogInfoCardDTO {
 	private BlogEngagementDTO blogEngagementDTO;
 
 	/**
+	 * users liked
+	 */
+	private List<Long> usersLiked;
+
+	/**
+	 * users saved
+	 */
+	private List<Long> usersReaded;
+
+	/**
 	 * 
 	 */
 	public BlogInfoCardDTO() {
@@ -76,10 +86,13 @@ public class BlogInfoCardDTO {
 	 * @param userId
 	 * @param username
 	 * @param categories
+	 * @param blogEngagementDTO
+	 * @param usersLiked
+	 * @param usersReaded
 	 */
 	public BlogInfoCardDTO(Long blogId, String title, String description, BlogStatusEnum status, String slug,
 			LocalDateTime createdAt, Long userId, String username, List<CategorySmallInfoDTO> categories,
-			BlogEngagementDTO blogEngagementDTO) {
+			BlogEngagementDTO blogEngagementDTO, List<Long> usersLiked, List<Long> usersReaded) {
 		this.blogId = blogId;
 		this.title = title;
 		this.description = description;
@@ -90,6 +103,8 @@ public class BlogInfoCardDTO {
 		this.username = username;
 		this.categories = categories;
 		this.blogEngagementDTO = blogEngagementDTO;
+		this.usersLiked = usersLiked;
+		this.usersReaded = usersReaded;
 	}
 
 	/**
@@ -183,6 +198,24 @@ public class BlogInfoCardDTO {
 	}
 
 	/**
+	 * return the value of the property usersLiked
+	 *
+	 * @return the usersLiked
+	 */
+	public List<Long> getUsersLiked() {
+		return usersLiked;
+	}
+
+	/**
+	 * return the value of the property usersReaded
+	 *
+	 * @return the usersReaded
+	 */
+	public List<Long> getUsersReaded() {
+		return usersReaded;
+	}
+
+	/**
 	 * set the value of the property blogEngagementDTO
 	 *
 	 * @param blogEngagementDTO the blogEngagementDTO to set
@@ -270,6 +303,24 @@ public class BlogInfoCardDTO {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * set the value of the property usersLiked
+	 *
+	 * @param usersLiked the usersLiked to set
+	 */
+	public void setUsersLiked(List<Long> usersLiked) {
+		this.usersLiked = usersLiked;
+	}
+
+	/**
+	 * set the value of the property usersReaded
+	 *
+	 * @param usersReaded the usersReaded to set
+	 */
+	public void setUsersReaded(List<Long> usersReaded) {
+		this.usersReaded = usersReaded;
 	}
 
 }
