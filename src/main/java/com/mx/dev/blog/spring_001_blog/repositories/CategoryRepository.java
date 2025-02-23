@@ -1,11 +1,15 @@
 package com.mx.dev.blog.spring_001_blog.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,8 +20,16 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 
+	@Transactional
+	@Modifying
+	@Query("DELETE FROM CategoryUserFollowEntity cuf WHERE cuf.id.userId = :userId AND cuf.id.categoryId = :categoryId")
+	void deleteFollowCategoryUser(@Param("userId") Long userId, @Param("categoryId") Long categoryId);
+
 	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM CategoryEntity c WHERE c.name = :name")
 	boolean existsByName(@Param("name") String name);
+
+	@Query("SELECT CASE WHEN COUNT(cuf) > 0 THEN TRUE ELSE FALSE END FROM CategoryUserFollowEntity cuf WHERE cuf.id.userId = :userId AND cuf.id.categoryId = :categoryId")
+	boolean existsByUserIdAndCategoryFollowId(@Param("userId") Long userId, @Param("categoryId") Long categoryId);
 
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO( "
 			+ "c.categoryId, c.name, c.description, c.color, COUNT(cb.id.blogId), c.longDescription ,c.createdAt) "
@@ -73,5 +85,24 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 			ORDER BY u.createdAt DESC
 			""")
 	List<UserSimpleResponseDTO> findTopUsersByCategory(@Param("categoryName") String categoryName, Pageable pageable);
+
+	@Query("""
+			    SELECT u.userId
+			    FROM UserEntity u
+			    JOIN UserInfoEntity ui ON u.userId = ui.userId
+			    WHERE u.userId IN (
+			        SELECT cuf.id.userId
+			        FROM CategoryUserFollowEntity cuf
+			        JOIN CategoryEntity c ON cuf.id.categoryId = c.categoryId
+			        WHERE c.name = :categoryName
+			    )
+			    ORDER BY u.createdAt DESC
+			""")
+	List<Long> findUserFollowersIdsByCategory(@Param("categoryName") String categoryName);
+
+	@Modifying
+	@Query(value = "INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (:userId, :categoryId, :createdAt)", nativeQuery = true)
+	void saveFollowCategoryUser(@Param("userId") Long userId, @Param("categoryId") Long categoryId,
+			@Param("createdAt") LocalDateTime createdAt);
 
 }

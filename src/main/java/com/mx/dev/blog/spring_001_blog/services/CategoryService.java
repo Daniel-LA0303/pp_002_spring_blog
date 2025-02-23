@@ -6,18 +6,21 @@ import org.springframework.data.domain.Page;
 
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 public interface CategoryService {
 
+	void categoryFollow(Long userId, Long categoryId) throws ServiceException;
+
+	void categoryUnfollow(Long userId, Long categoryId) throws ServiceException;
+
 	CategoryResponseDTO createCategory(CategoryRequestDTO categoryRequestDTO) throws ServiceException;
 
 	List<CategoryResponseDTO> getAllCategories();
 
-	Page<CategoryFullInfoDTO> getCategoriesPaginated(int page, int size);
+	Page<BlogsByCategoryInfoDTO> getCategoriesPaginated(int page, int size);
 
 	List<CategoryEntity> getListCategories(List<Long> ids) throws ServiceException;
 

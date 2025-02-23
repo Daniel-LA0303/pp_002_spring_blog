@@ -17,6 +17,11 @@ public class BlogsByCategoryInfoDTO {
 	private List<UserSimpleResponseDTO> follewersCategory;
 
 	/**
+	 * users followers
+	 */
+	private List<Long> usersFollowersIds;
+
+	/**
 	 * 
 	 */
 	public BlogsByCategoryInfoDTO() {
@@ -25,11 +30,13 @@ public class BlogsByCategoryInfoDTO {
 	/**
 	 * @param categoryFullInfoDTO
 	 * @param follewersCategory
+	 * @param usersFollowersIds
 	 */
 	public BlogsByCategoryInfoDTO(CategoryFullInfoDTO categoryFullInfoDTO,
-			List<UserSimpleResponseDTO> follewersCategory) {
+			List<UserSimpleResponseDTO> follewersCategory, List<Long> usersFollowersIds) {
 		this.categoryFullInfoDTO = categoryFullInfoDTO;
 		this.follewersCategory = follewersCategory;
+		this.usersFollowersIds = usersFollowersIds;
 	}
 
 	/**
@@ -51,6 +58,15 @@ public class BlogsByCategoryInfoDTO {
 	}
 
 	/**
+	 * return the value of the property usersFollowersIds
+	 *
+	 * @return the usersFollowersIds
+	 */
+	public List<Long> getUsersFollowersIds() {
+		return usersFollowersIds;
+	}
+
+	/**
 	 * set the value of the property categoryFullInfoDTO
 	 *
 	 * @param categoryFullInfoDTO the categoryFullInfoDTO to set
@@ -66,6 +82,15 @@ public class BlogsByCategoryInfoDTO {
 	 */
 	public void setFollewersCategory(List<UserSimpleResponseDTO> follewersCategory) {
 		this.follewersCategory = follewersCategory;
+	}
+
+	/**
+	 * set the value of the property usersFollowersIds
+	 *
+	 * @param usersFollowersIds the usersFollowersIds to set
+	 */
+	public void setUsersFollowersIds(List<Long> usersFollowersIds) {
+		this.usersFollowersIds = usersFollowersIds;
 	}
 
 }

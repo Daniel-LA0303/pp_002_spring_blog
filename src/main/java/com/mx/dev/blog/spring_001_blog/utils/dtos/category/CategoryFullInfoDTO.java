@@ -1,6 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.category;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CategoryFullInfoDTO {
 
@@ -33,6 +34,11 @@ public class CategoryFullInfoDTO {
 	 * long description
 	 */
 	private String longDescription;
+
+	/**
+	 * users followers
+	 */
+	private List<Long> usersFollowersIds;
 
 	/**
 	 * created at

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +38,37 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+	@Override
+	@Transactional
+	public void categoryFollow(Long userId, Long categoryId) throws ServiceException {
+
+		try {
+
+			if (categoryRepository.existsByUserIdAndCategoryFollowId(userId, categoryId)) {
+				throw new ServiceException("The user is already following this category.",
+						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/category", MethodEnum.GET);
+			}
+
+			categoryRepository.saveFollowCategoryUser(userId, categoryId, LocalDateTime.now());
+
+		} catch (Exception e) {
+			throw new ServiceException("Error while following the category.",
+					ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/category", MethodEnum.GET);
+		}
+
+	}
+
+	@Override
+	@Transactional
+	public void categoryUnfollow(Long userId, Long categoryId) throws ServiceException {
+		if (!categoryRepository.existsByUserIdAndCategoryFollowId(userId, categoryId)) {
+			throw new ServiceException("The user is not following this category.",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/category", MethodEnum.GET);
+		}
+
+		categoryRepository.deleteFollowCategoryUser(userId, categoryId);
+	}
+
 	/**
 	 * create a new category
 	 */
@@ -64,13 +97,34 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Page<CategoryFullInfoDTO> getCategoriesPaginated(int page, int size) {
+	public Page<BlogsByCategoryInfoDTO> getCategoriesPaginated(int page, int size) {
+		// Crear el objeto Pageable para la paginación de categorías
 		Pageable pageable = PageRequest.of(page, size);
 
-		// Llamada al repositorio con la paginación
+		// Obtener las categorías paginadas con la información completa de la categoría
 		Page<CategoryFullInfoDTO> categoryFullInfoPage = categoryRepository.findAllCategoryFullInfo(pageable);
 
-		return categoryFullInfoPage;
+		// Mapear las categorías paginadas a BlogsByCategoryInfoDTO
+		Page<BlogsByCategoryInfoDTO> blogsByCategoryInfoPage = categoryFullInfoPage.map(categoryFullInfoDTO -> {
+			BlogsByCategoryInfoDTO blogsByCategoryInfoDTO = new BlogsByCategoryInfoDTO();
+
+			// Obtener los seguidores de la categoría
+			List<UserSimpleResponseDTO> userSimpleResponseDTO = categoryRepository
+					.findTopUsersByCategory(categoryFullInfoDTO.getName(), pageable);
+
+			// Obtener los IDs de los seguidores
+			List<Long> usersFollowers = categoryRepository
+					.findUserFollowersIdsByCategory(categoryFullInfoDTO.getName());
+
+			// Establecer los valores en el DTO
+			blogsByCategoryInfoDTO.setCategoryFullInfoDTO(categoryFullInfoDTO);
+			blogsByCategoryInfoDTO.setFollewersCategory(userSimpleResponseDTO);
+			blogsByCategoryInfoDTO.setUsersFollowersIds(usersFollowers);
+
+			return blogsByCategoryInfoDTO;
+		});
+
+		return blogsByCategoryInfoPage;
 	}
 
 	/**
@@ -126,8 +180,11 @@ public class CategoryServiceImpl implements CategoryService {
 
 		BlogsByCategoryInfoDTO blogsByCategoryInfoDTO = new BlogsByCategoryInfoDTO();
 
+		List<Long> usersFollowers = categoryRepository.findUserFollowersIdsByCategory(categoryName);
+
 		blogsByCategoryInfoDTO.setCategoryFullInfoDTO(categoryFullInfoDTO);
 		blogsByCategoryInfoDTO.setFollewersCategory(userSimpleResponseDTO);
+		blogsByCategoryInfoDTO.setUsersFollowersIds(usersFollowers);
 
 		return blogsByCategoryInfoDTO;
 	}

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.services.CategoryService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
@@ -45,6 +45,32 @@ public class CategoryController {
 	 * validation
 	 */
 	private final CategoryValidator categoryValidator = new CategoryValidator();
+
+	@PostMapping("/{categoryId}/follow")
+	public ResponseEntity<?> categoryFollow(@PathVariable Long categoryId, @RequestParam Long userId)
+			throws ServiceException {
+
+		categoryService.categoryFollow(userId, categoryId);
+
+		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
+				"/api/category/" + categoryId + "/follow?userId=" + userId, MethodEnum.POST,
+				"Category followed successfully", "Success", false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/{categoryId}/unfollow")
+	public ResponseEntity<?> categoryUnfollow(@PathVariable Long categoryId, @RequestParam Long userId)
+			throws ServiceException {
+
+		categoryService.categoryUnfollow(userId, categoryId);
+
+		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/category/" + categoryId + "/unfollow?userId=" + userId, MethodEnum.DELETE,
+				"Category unfollowed successfully", "Success", false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
 
 	/**
 	 * get all categories with a dto
@@ -87,9 +113,9 @@ public class CategoryController {
 	public ResponseEntity<?> getCategoriesPaginated(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "15") int size) {
 
-		Page<CategoryFullInfoDTO> categoriesPage = categoryService.getCategoriesPaginated(page, size);
+		Page<BlogsByCategoryInfoDTO> categoriesPage = categoryService.getCategoriesPaginated(page, size);
 
-		ApiResponse<Page<CategoryFullInfoDTO>> apiResponse = new ApiResponse<>(
+		ApiResponse<Page<BlogsByCategoryInfoDTO>> apiResponse = new ApiResponse<>(
 				ResponseStatus.SUCCESS.getHttpStatusCode(), "/api/category/pagination", MethodEnum.GET,
 				"Success method GET", categoriesPage, false);
 
