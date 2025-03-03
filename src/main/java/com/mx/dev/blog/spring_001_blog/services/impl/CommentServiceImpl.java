@@ -16,7 +16,6 @@ import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
 import com.mx.dev.blog.spring_001_blog.entities.user.UserInfoEntity;
 import com.mx.dev.blog.spring_001_blog.repositories.CommentRepository;
 import com.mx.dev.blog.spring_001_blog.repositories.UserInfoRepository;
-import com.mx.dev.blog.spring_001_blog.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.services.BlogService;
 import com.mx.dev.blog.spring_001_blog.services.CommentService;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
@@ -32,8 +31,8 @@ public class CommentServiceImpl implements CommentService {
 	@Autowired
 	private CommentRepository commentRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+	// @Autowired
+	// private UserRepository userRepository;
 
 	@Autowired
 	private UserInfoRepository userInfoRepository;

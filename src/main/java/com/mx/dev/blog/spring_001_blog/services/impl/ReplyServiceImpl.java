@@ -1,9 +1,13 @@
 package com.mx.dev.blog.spring_001_blog.services.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity;
@@ -15,6 +19,7 @@ import com.mx.dev.blog.spring_001_blog.services.BlogService;
 import com.mx.dev.blog.spring_001_blog.services.CommentService;
 import com.mx.dev.blog.spring_001_blog.services.ReplyService;
 import com.mx.dev.blog.spring_001_blog.services.UserService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.reply.ReplyCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.reply.ReplyCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -36,7 +41,7 @@ public class ReplyServiceImpl implements ReplyService {
 	private ReplyRepository replyRepository;
 
 	@Override
-	public ReplyEntity createReply(ReplyCreateRequestDTO replyCreateRequestDTO) throws ServiceException {
+	public ReplyCardDTO createReply(ReplyCreateRequestDTO replyCreateRequestDTO) throws ServiceException {
 
 		// 1. first we need validate if exists user
 		UserEntity userEntity = userService.getOneUserOrThrow(replyCreateRequestDTO.getUserId());
@@ -56,23 +61,35 @@ public class ReplyServiceImpl implements ReplyService {
 		replyEntity.setUpdatedAt(LocalDateTime.now());
 		replyEntity.setUserId(userEntity.getUserId());
 
-		return replyRepository.save(replyEntity);
+		ReplyEntity savedReply = replyRepository.save(replyEntity);
+
+		return replyRepository.findReplyById(savedReply.getReplyId())
+				.orElseThrow(() -> new ServiceException("Reply not found after update",
+						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/reply", MethodEnum.PUT));
 	}
 
 	@Override
+	@Transactional
 	public ReplyEntity getOneReplyOrThrow(Long replyId) throws ServiceException {
 		return replyRepository.findById(replyId).orElseThrow(() -> new ServiceException("Reply not found",
 				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/reply", MethodEnum.GET));
 	}
 
 	@Override
-	public List<ReplyEntity> getRepliesByComment(Long commentId) throws ServiceException {
+	public Page<ReplyCardDTO> getRepliesByComment(Long commentId, int page, int size) throws ServiceException {
 
-		return replyRepository.findAllRepliesByCommentId(commentId);
+		commentService.getCommentByIdOrThrow(commentId);
+
+		Pageable pageable = PageRequest.of(page, size);
+
+		return replyRepository.findAllRepliesByCommentId(commentId, pageable);
 	}
 
 	@Override
-	public ReplyEntity updateReply(ReplyCreateRequestDTO replyCreateRequestDTO, Long replyId) throws ServiceException {
+	@Transactional
+	public ReplyCardDTO updateReply(ReplyCreateRequestDTO replyCreateRequestDTO, Long replyId) throws ServiceException {
+
+		System.out.println("reply id: " + replyId);
 
 		// 1. check if reply eixsts
 		ReplyEntity replyEntity = getOneReplyOrThrow(replyId);
@@ -96,11 +113,14 @@ public class ReplyServiceImpl implements ReplyService {
 		replyEntity.setBlogId(blogEntity.getBlogId());
 		replyEntity.setCommentId(commentEntity.getCommentId());
 		replyEntity.setContent(replyCreateRequestDTO.getContent());
-		replyEntity.setCreatedAt(LocalDateTime.now());
 		replyEntity.setUpdatedAt(LocalDateTime.now());
 		replyEntity.setUserId(userEntity.getUserId());
 
-		return replyRepository.save(replyEntity);
+		replyRepository.save(replyEntity);
+
+		return replyRepository.findReplyById(replyId)
+				.orElseThrow(() -> new ServiceException("Reply not found after update",
+						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/reply", MethodEnum.PUT));
 	}
 
 }

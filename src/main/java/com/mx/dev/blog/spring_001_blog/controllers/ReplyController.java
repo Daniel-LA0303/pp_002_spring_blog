@@ -1,8 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mx.dev.blog.spring_001_blog.entities.reply.ReplyEntity;
 import com.mx.dev.blog.spring_001_blog.services.ReplyService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.reply.ReplyCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.reply.ReplyCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -32,11 +32,12 @@ public class ReplyController {
 	private ReplyValidator replyValidator = new ReplyValidator();
 
 	@GetMapping("/get-replies-by-comment/{commentId}")
-	public ResponseEntity<?> getCommentsByBlog(@PathVariable Long commentId) throws ServiceException {
+	public ResponseEntity<?> getCommentsByBlog(@PathVariable Long commentId, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "5") int size) throws ServiceException {
 
-		List<ReplyEntity> replies = replyService.getRepliesByComment(commentId);
+		Page<ReplyCardDTO> replies = replyService.getRepliesByComment(commentId, page, size);
 
-		ApiResponse<List<ReplyEntity>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+		ApiResponse<Page<ReplyCardDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/comment", MethodEnum.GET, "Success method GET", replies, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
@@ -48,9 +49,9 @@ public class ReplyController {
 
 		replyValidator.validate(replyCreateRequestDTO);
 
-		ReplyEntity replyEntity = replyService.createReply(replyCreateRequestDTO);
+		ReplyCardDTO replyEntity = replyService.createReply(replyCreateRequestDTO);
 
-		ApiResponse<ReplyEntity> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
+		ApiResponse<ReplyCardDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
 				"/api/reply", MethodEnum.POST, "Success method POST", replyEntity, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
@@ -60,12 +61,13 @@ public class ReplyController {
 	public ResponseEntity<?> updateComment(@RequestBody ReplyCreateRequestDTO replyCreateRequestDTO,
 			@PathVariable Long replyId) throws ServiceException {
 
+		System.out.println("******");
 		replyValidator.validate(replyCreateRequestDTO);
 
-		ReplyEntity replyEntity = replyService.updateReply(replyCreateRequestDTO, replyId);
+		ReplyCardDTO replyUpdated = replyService.updateReply(replyCreateRequestDTO, replyId);
 
-		ApiResponse<ReplyEntity> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
-				"/api/reply", MethodEnum.POST, "Success method POST", replyEntity, false);
+		ApiResponse<ReplyCardDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
+				"/api/reply", MethodEnum.POST, "Success method POST", replyUpdated, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
