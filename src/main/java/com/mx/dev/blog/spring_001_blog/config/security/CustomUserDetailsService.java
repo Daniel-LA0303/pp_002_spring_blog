@@ -12,9 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.mx.dev.blog.spring_001_blog.entities.user.RoleEntity;
-import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
-import com.mx.dev.blog.spring_001_blog.services.UserService;
+import com.mx.dev.blog.spring_001_blog.user.entities.RoleEntity;
+import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
+import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 @Service

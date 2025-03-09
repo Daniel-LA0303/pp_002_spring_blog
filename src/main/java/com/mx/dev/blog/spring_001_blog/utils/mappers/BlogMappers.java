@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 
-import com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity;
+import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;

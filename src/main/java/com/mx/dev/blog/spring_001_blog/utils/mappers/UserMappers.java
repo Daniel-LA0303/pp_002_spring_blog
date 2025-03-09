@@ -3,8 +3,8 @@ package com.mx.dev.blog.spring_001_blog.utils.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.mx.dev.blog.spring_001_blog.entities.user.UserEntity;
-import com.mx.dev.blog.spring_001_blog.entities.user.UserInfoEntity;
+import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
+import com.mx.dev.blog.spring_001_blog.user.entities.UserInfoEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 
