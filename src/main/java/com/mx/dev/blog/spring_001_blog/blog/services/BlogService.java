@@ -45,6 +45,8 @@ public interface BlogService {
 
 	BlogPageResponseDTO getOneBlog(Long blogId) throws ServiceException;
 
+	Page<BlogInfoCardDTO> searchBlogs(String query, int page, int size);
+
 	BlogEntity updateBlog(BlogCreateRequestDTO blogCreateRequestDTO, Long blogId) throws ServiceException;
 
 }

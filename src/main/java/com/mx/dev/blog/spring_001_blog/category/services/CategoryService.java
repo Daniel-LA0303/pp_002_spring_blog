@@ -26,5 +26,7 @@ public interface CategoryService {
 
 	BlogsByCategoryInfoDTO getOneCategory(String categoryName) throws ServiceException;
 
+	Page<BlogsByCategoryInfoDTO> searchCategories(String query, int page, int size);
+
 	CategoryResponseDTO updateCategroy(CategoryRequestDTO categoryRequestDTO, Long categoryId) throws ServiceException;
 }

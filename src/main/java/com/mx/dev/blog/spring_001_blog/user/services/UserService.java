@@ -2,9 +2,12 @@ package com.mx.dev.blog.spring_001_blog.user.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
@@ -30,6 +33,8 @@ public interface UserService {
 	UserInfoDTO getOneUserWithInfo(Long id) throws ServiceException;
 
 	UserFullEngagementDTO getUserFullEngagement(Long userId) throws ServiceException;
+
+	Page<UserInfoCardDTO> searchUsers(String query, int page, int size);
 
 	void updateUserInfo(UserUpdateInfoRequestDTO userUpdateInfoRequestDTO, Long userId) throws ServiceException;
 

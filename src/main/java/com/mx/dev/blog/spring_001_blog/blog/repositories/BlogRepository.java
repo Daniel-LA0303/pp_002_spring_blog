@@ -59,6 +59,10 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			""")
 	Page<BlogEntity> findBlogsLikedByUser(@Param("userId") Long userId, Pageable pageable);
 
+	// search
+	@Query("SELECT b FROM BlogEntity b " + "WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :query, '%'))")
+	Page<BlogEntity> findByTitleContainingIgnoreCase(@Param("query") String query, Pageable pageable);
+
 	@Query("SELECT b.id.userId FROM BlogUserLikeEntity b WHERE b.id.blogId = :blogId")
 	List<Long> findUserIdsLikeByBlogId(@Param("blogId") Long blogId);
 

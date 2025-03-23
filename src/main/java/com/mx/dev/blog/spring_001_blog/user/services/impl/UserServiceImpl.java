@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
@@ -157,6 +161,15 @@ public class UserServiceImpl implements UserService {
 		UserFullEngagementDTO userFullEngagementDTO = userRepository.getUserEngagementData(userEntity.getUserId());
 
 		return userFullEngagementDTO;
+	}
+
+	@Override
+	public Page<UserInfoCardDTO> searchUsers(String query, int page, int size) {
+
+		System.out.println("**********use");
+		System.out.println(query);
+		Pageable pageable = PageRequest.of(page, size);
+		return userRepository.findByUsernameContainingIgnoreCase(query, pageable);
 	}
 
 	@Override

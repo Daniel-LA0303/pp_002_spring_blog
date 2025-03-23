@@ -189,6 +189,38 @@ public class CategoryServiceImpl implements CategoryService {
 		return blogsByCategoryInfoDTO;
 	}
 
+	@Override
+	public Page<BlogsByCategoryInfoDTO> searchCategories(String query, int page, int size) {
+		// Crear el objeto Pageable para la paginación
+		Pageable pageable = PageRequest.of(page, size);
+
+		// Obtener las categorías paginadas que coinciden con la búsqueda
+		Page<CategoryFullInfoDTO> categoryFullInfoPage = categoryRepository.findByNameContainingIgnoreCase(query,
+				pageable);
+
+		// Mapear las categorías paginadas a BlogsByCategoryInfoDTO
+		Page<BlogsByCategoryInfoDTO> blogsByCategoryInfoPage = categoryFullInfoPage.map(categoryFullInfoDTO -> {
+			BlogsByCategoryInfoDTO blogsByCategoryInfoDTO = new BlogsByCategoryInfoDTO();
+
+			// Obtener los seguidores de la categoría
+			List<UserSimpleResponseDTO> userSimpleResponseDTO = categoryRepository
+					.findTopUsersByCategory(categoryFullInfoDTO.getName(), pageable);
+
+			// Obtener los IDs de los seguidores
+			List<Long> usersFollowers = categoryRepository
+					.findUserFollowersIdsByCategory(categoryFullInfoDTO.getName());
+
+			// Establecer los valores en el DTO
+			blogsByCategoryInfoDTO.setCategoryFullInfoDTO(categoryFullInfoDTO);
+			blogsByCategoryInfoDTO.setFollewersCategory(userSimpleResponseDTO);
+			blogsByCategoryInfoDTO.setUsersFollowersIds(usersFollowers);
+
+			return blogsByCategoryInfoDTO;
+		});
+
+		return blogsByCategoryInfoPage;
+	}
+
 	/**
 	 * update a category
 	 */
