@@ -14,14 +14,6 @@ import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 @RestControllerAdvice
 public class GlobalExcepction {
 
-	@ExceptionHandler(CategoryException.class)
-	public ResponseEntity<?> handleCategoryException(CategoryException ex) {
-		ApiResponse<Map<String, String>> response = new ApiResponse<>(ex.getStatus(), ex.getPath(), ex.getMethod(),
-				ex.getMessage(), ex.getValidationErrors(), true);
-
-		return new ResponseEntity<>(response, HttpStatus.valueOf(ex.getStatus()));
-	}
-
 	/**
 	 * catch any exception
 	 * 
