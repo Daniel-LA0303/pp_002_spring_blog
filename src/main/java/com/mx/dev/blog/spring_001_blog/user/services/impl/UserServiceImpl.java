@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mx.dev.blog.spring_001_blog.aws_services.s3.services.S3Service;
 import com.mx.dev.blog.spring_001_blog.user.entities.RoleEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserInfoEntity;
@@ -45,23 +46,29 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private RoleRepository roleRepository;
 
+	@Autowired
+	private S3Service s3Service;
+
 	@Override
 	@Transactional
 	public UserEntity createUser(UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
 
 		Map<String, String> errorMap = new HashMap<>();
 
+		System.out.println("******* paso 1********");
 		// 1. Check if username is already used
 		if (userRepository.existsByUsername(userCreateRequestDTO.getUsername())) {
 			errorMap.put("username",
 					String.format("Username '%s' is already taken", userCreateRequestDTO.getUsername()));
 		}
 
+		System.out.println("******* paso 2********");
 		// 2. Check if email is already used
 		if (userRepository.existsByEmail(userCreateRequestDTO.getEmail())) {
 			errorMap.put("email", String.format("Email '%s' is already registered", userCreateRequestDTO.getEmail()));
 		}
 
+		System.out.println("******* paso 3********");
 		if (!errorMap.isEmpty()) {
 			throw new ServiceException("User registration failed due to validation errors",
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/user", MethodEnum.POST, errorMap);
@@ -186,6 +193,24 @@ public class UserServiceImpl implements UserService {
 
 		// 3. update info
 		UserInfoEntity userEntityToUpdate = UserMappers.toUserInfoEntity(userUpdateInfoRequestDTO, userInfoEntity);
+
+		if (userUpdateInfoRequestDTO.getUserImage() != null) {
+			try {
+				// Eliminar imagen anterior (si existe)
+				// if (userInfoEntity.getProfilePicture() != null) {
+				// s3Service.deleteFileFromUrl(userInfoEntity.getProfilePicture());
+				// }
+
+				// Subir nueva imagen a S3
+				Map<String, String> uploadResult = s3Service.uploadFile("spring-react-blog-s3", "profile_pictures_user",
+						userUpdateInfoRequestDTO.getUserImage());
+
+				// Guardar URL en la entidad
+				userInfoEntity.setProfilePicture(uploadResult.get("url"));
+			} catch (Exception e) {
+				// throw new ServiceException("Error al subir imagen: " + e.getMessage());
+			}
+		}
 
 		userEntity.setUpdatedAt(LocalDateTime.now());
 		userRepository.save(userEntity);

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mx.dev.blog.spring_001_blog.aws_services.s3.services.S3Service;
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.blog.repositories.BlogRepository;
 import com.mx.dev.blog.spring_001_blog.blog.services.BlogService;
@@ -58,6 +59,9 @@ public class BlogServiceImpl implements BlogService {
 
 	@Autowired
 	private CategoryService categoryService;
+
+	@Autowired
+	private S3Service s3Service;
 
 	/**
 	 * static methods of services
@@ -171,6 +175,21 @@ public class BlogServiceImpl implements BlogService {
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
 		}
 
+		String blogImgUrl = null;
+		if (blogCreateRequestDTO.getBlogImage() != null && !blogCreateRequestDTO.getBlogImage().isEmpty()) {
+			try {
+				// Subir la imagen a S3
+				Map<String, String> uploadResult = s3Service.uploadFile("spring-react-blog-s3", // Nombre del bucket S3
+						"profiles_pictures_blog", // Ruta dentro del bucket
+						blogCreateRequestDTO.getBlogImage() // Archivo de imagen
+				);
+				blogImgUrl = uploadResult.get("url"); // Obtener la URL de la imagen subida
+			} catch (Exception e) {
+				throw new ServiceException("Error al subir la imagen del blog: " + e.getMessage(),
+						ResponseStatus.INTERNAL_SERVER_ERROR.getHttpStatusCode(), "/api/blog", MethodEnum.POST);
+			}
+		}
+
 		// 5. Now proceed with creating the Blog entity
 		BlogEntity blogEntity = new BlogEntity();
 		blogEntity.setContent(blogCreateRequestDTO.getContent());
@@ -181,6 +200,7 @@ public class BlogServiceImpl implements BlogService {
 		blogEntity.setTitle(blogCreateRequestDTO.getTitle());
 		blogEntity.setUpdatedAt(LocalDateTime.now());
 		blogEntity.setUserId(user.getUserId());
+		blogEntity.setBlogImgUrl(blogImgUrl);
 
 		// Save and flush to make sure blog_id is generated before creating the relation
 		blogRepository.saveAndFlush(blogEntity);

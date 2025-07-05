@@ -56,6 +56,18 @@ public class BlogEntity {
 	private BlogStatusEnum status;
 
 	/**
+	 * minutes to read
+	 */
+	@Column(name = "min_read")
+	private Long minRead;
+
+	/**
+	 * image url
+	 */
+	@Column(name = "blog_img_url")
+	private String blogImgUrl;
+
+	/**
 	 * slug
 	 */
 	@Column(name = "slug")
@@ -85,6 +97,37 @@ public class BlogEntity {
 
 	public BlogEntity() {
 
+	}
+
+	/**
+	 * @param blogId
+	 * @param title
+	 * @param description
+	 * @param content
+	 * @param status
+	 * @param minRead
+	 * @param blogImgUrl
+	 * @param slug
+	 * @param createdAt
+	 * @param updatedAt
+	 * @param userId
+	 * @param categories
+	 */
+	public BlogEntity(Long blogId, String title, String description, String content, BlogStatusEnum status,
+			Long minRead, String blogImgUrl, String slug, LocalDateTime createdAt, LocalDateTime updatedAt, Long userId,
+			List<CategoryEntity> categories) {
+		this.blogId = blogId;
+		this.title = title;
+		this.description = description;
+		this.content = content;
+		this.status = status;
+		this.minRead = minRead;
+		this.blogImgUrl = blogImgUrl;
+		this.slug = slug;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.userId = userId;
+		this.categories = categories;
 	}
 
 	/**
@@ -147,6 +190,15 @@ public class BlogEntity {
 	}
 
 	/**
+	 * return the value of the property blogImgUrl
+	 *
+	 * @return the blogImgUrl
+	 */
+	public String getBlogImgUrl() {
+		return blogImgUrl;
+	}
+
+	/**
 	 * return the value of the property categories
 	 *
 	 * @return the categories
@@ -180,6 +232,15 @@ public class BlogEntity {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * return the value of the property minRead
+	 *
+	 * @return the minRead
+	 */
+	public Long getMinRead() {
+		return minRead;
 	}
 
 	/**
@@ -237,6 +298,15 @@ public class BlogEntity {
 	}
 
 	/**
+	 * set the value of the property blogImgUrl
+	 *
+	 * @param blogImgUrl the blogImgUrl to set
+	 */
+	public void setBlogImgUrl(String blogImgUrl) {
+		this.blogImgUrl = blogImgUrl;
+	}
+
+	/**
 	 * set the value of the property categories
 	 *
 	 * @param categories the categories to set
@@ -270,6 +340,15 @@ public class BlogEntity {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * set the value of the property minRead
+	 *
+	 * @param minRead the minRead to set
+	 */
+	public void setMinRead(Long minRead) {
+		this.minRead = minRead;
 	}
 
 	/**

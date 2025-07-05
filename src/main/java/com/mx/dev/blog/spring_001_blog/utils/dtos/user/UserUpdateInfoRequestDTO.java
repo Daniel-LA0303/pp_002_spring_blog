@@ -1,5 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserUpdateInfoRequestDTO {
 
 	/**
@@ -53,6 +55,11 @@ public class UserUpdateInfoRequestDTO {
 	private String bio;
 
 	/**
+	 * user image
+	 */
+	private MultipartFile userImage;
+
+	/**
 	 * profile picture
 	 */
 
@@ -73,9 +80,10 @@ public class UserUpdateInfoRequestDTO {
 	 * @param city
 	 * @param skills
 	 * @param bio
+	 * @param userImage
 	 */
 	public UserUpdateInfoRequestDTO(String name, String lastName, String work, String education, String pronouns,
-			String website, String address, String city, String skills, String bio) {
+			String website, String address, String city, String skills, String bio, MultipartFile userImage) {
 		this.name = name;
 		this.lastName = lastName;
 		this.work = work;
@@ -86,6 +94,7 @@ public class UserUpdateInfoRequestDTO {
 		this.city = city;
 		this.skills = skills;
 		this.bio = bio;
+		this.userImage = userImage;
 	}
 
 	/**
@@ -158,6 +167,15 @@ public class UserUpdateInfoRequestDTO {
 	 */
 	public String getSkills() {
 		return skills;
+	}
+
+	/**
+	 * return the value of the property userImage
+	 *
+	 * @return the userImage
+	 */
+	public MultipartFile getUserImage() {
+		return userImage;
 	}
 
 	/**
@@ -248,6 +266,15 @@ public class UserUpdateInfoRequestDTO {
 	 */
 	public void setSkills(String skills) {
 		this.skills = skills;
+	}
+
+	/**
+	 * set the value of the property userImage
+	 *
+	 * @param userImage the userImage to set
+	 */
+	public void setUserImage(MultipartFile userImage) {
+		this.userImage = userImage;
 	}
 
 	/**

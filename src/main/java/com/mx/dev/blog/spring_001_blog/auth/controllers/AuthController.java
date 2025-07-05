@@ -105,7 +105,7 @@ public class AuthController {
 	public ResponseEntity<?> saveUser(@RequestBody UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
 
 		// Validaciones de los datos de entrada
-		userValidator.validate(userCreateRequestDTO);
+		// userValidator.validate(userCreateRequestDTO);
 
 		// Cifrar la contraseña del usuario
 		String pass = passwordEncoder.encode(userCreateRequestDTO.getPassword());
@@ -122,6 +122,8 @@ public class AuthController {
 				userEntity.getUsername(), userEntity.getEmail(), new JWTAuthResponseDto(token) // Incluye el token
 																								// generado
 		);
+
+		System.out.println("*******Login prepara salida de datos********");
 
 		// Crear la respuesta API con el DTO del usuario registrado y el token
 		ApiResponse<UserAuthSuccessDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),

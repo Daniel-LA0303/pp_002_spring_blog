@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
@@ -124,15 +127,14 @@ public class UserController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
-	@PutMapping("/{userId}")
-	public ResponseEntity<?> updateUser(@RequestBody UserUpdateInfoRequestDTO userUpdateInfoRequestDTO,
-			@PathVariable Long userId) throws ServiceException {
+	@PutMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> updateUser(@PathVariable Long userId,
+			@RequestPart("userData") UserUpdateInfoRequestDTO userData,
+			@RequestPart(value = "userImage", required = false) MultipartFile userImage) throws ServiceException {
 
-		// userInfoValidator.validate(userUpdateInfoRequestDTO);
+		userData.setUserImage(userImage);
 
-		System.out.println("******");
-		System.out.println(userUpdateInfoRequestDTO.getName());
-		userService.updateUserInfo(userUpdateInfoRequestDTO, userId);
+		userService.updateUserInfo(userData, userId);
 
 		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.UPDATED.getHttpStatusCode(), "/api/user",
 				MethodEnum.PUT, "Success method PUT", "User info updated.", false);
