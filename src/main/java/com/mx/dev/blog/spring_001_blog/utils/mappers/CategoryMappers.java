@@ -31,6 +31,8 @@ public class CategoryMappers {
 		category.setName(categoryRequestDTO.getName());
 		category.setDescription(categoryRequestDTO.getDescription());
 		category.setColor(categoryRequestDTO.getColor());
+		category.setLabel(categoryRequestDTO.getName());
+		category.setValue(categoryRequestDTO.getName());
 		category.setCreatedAt(LocalDateTime.now());
 		category.setUpdatedAt(LocalDateTime.now());
 

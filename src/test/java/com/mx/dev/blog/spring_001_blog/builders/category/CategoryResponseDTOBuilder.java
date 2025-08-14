@@ -27,6 +27,16 @@ public class CategoryResponseDTOBuilder {
 	private String color;
 
 	/**
+	 * label
+	 */
+	private String label;
+
+	/**
+	 * value
+	 */
+	private String value;
+
+	/**
 	 * created at
 	 */
 	private LocalDateTime createdAt;
@@ -38,8 +48,8 @@ public class CategoryResponseDTOBuilder {
 	 */
 	public static CategoryResponseDTOBuilder withAllDummy() {
 		return new CategoryResponseDTOBuilder().setCategoryId(2L).setName("Health")
-				.setDescription("Topics related to health and wellness").setColor("#33FF57")
-				.setCreatedAt(LocalDateTime.parse("2024-10-11T10:45:00"));
+				.setDescription("Topics related to health and wellness").setColor("#33FF57").setLabel("Health")
+				.setValue("Health").setCreatedAt(LocalDateTime.parse("2024-10-11T10:45:00"));
 	}
 
 	/**
@@ -53,6 +63,8 @@ public class CategoryResponseDTOBuilder {
 		responseDTO.setName(name);
 		responseDTO.setDescription(description);
 		responseDTO.setColor(color);
+		responseDTO.setLabel(label);
+		responseDTO.setValue(value);
 		responseDTO.setCreatedAt(createdAt);
 		return responseDTO;
 	}
@@ -102,6 +114,16 @@ public class CategoryResponseDTOBuilder {
 	}
 
 	/**
+	 * set the value of the proppertie label
+	 *
+	 * @param label the label to set
+	 */
+	public CategoryResponseDTOBuilder setLabel(String label) {
+		this.label = label;
+		return this;
+	}
+
+	/**
 	 * Sets the name value
 	 *
 	 * @param name the name to set
@@ -109,6 +131,16 @@ public class CategoryResponseDTOBuilder {
 	 */
 	public CategoryResponseDTOBuilder setName(String name) {
 		this.name = name;
+		return this;
+	}
+
+	/**
+	 * set the value of the proppertie value
+	 *
+	 * @param value the value to set
+	 */
+	public CategoryResponseDTOBuilder setValue(String value) {
+		this.value = value;
 		return this;
 	}
 }

@@ -87,6 +87,7 @@ public class BlogServiceTest {
 		assertEquals(201, apiResponse.getStatus());
 		assertEquals("/api/blog", apiResponse.getPath());
 		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+
 		assertEquals("Success method POST", apiResponse.getMessage());
 		assertEquals(false, apiResponse.getError());
 		assertNotNull(apiResponse.getTimestamp());

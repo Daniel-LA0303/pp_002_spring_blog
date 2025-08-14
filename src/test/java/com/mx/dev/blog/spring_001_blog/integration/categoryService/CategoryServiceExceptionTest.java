@@ -24,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
@@ -35,7 +34,7 @@ import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = "/import.sql")
+//@Sql(scripts = "/import.sql")
 @ActiveProfiles("test")
 public class CategoryServiceExceptionTest {
 
@@ -81,20 +80,19 @@ public class CategoryServiceExceptionTest {
 				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
 				});
 
-		// check http status
+		// basic test
+		assertNotNull(response);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
 
 		// get api response
 		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
-		assertNotNull(apiResponse);
-		assertNull(apiResponse.getData());
-
-		// check apirepsonse
 		assertEquals(400, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
 		assertEquals(MethodEnum.POST, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
 
 	}
@@ -109,20 +107,19 @@ public class CategoryServiceExceptionTest {
 				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
 				});
 
-		// check http status
+		// basic test
+		assertNotNull(response);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
 
 		// get api response
 		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
-		assertNotNull(apiResponse);
-		assertNotNull(apiResponse.getData());
-
-		// check apirepsonse
 		assertEquals(400, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
 		assertEquals(MethodEnum.POST, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(true, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
 
 	}
@@ -140,11 +137,19 @@ public class CategoryServiceExceptionTest {
 				new ParameterizedTypeReference<ApiResponse<List<CategoryEntity>>>() {
 				});
 
+		// basic test
+		assertNotNull(response);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertNotNull(response.getBody());
+		assertEquals(400, response.getStatusCodeValue());
 
 		ApiResponse<List<CategoryEntity>> apiResponse = response.getBody();
 		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
 
 	}
 
@@ -179,20 +184,19 @@ public class CategoryServiceExceptionTest {
 				HttpMethod.PUT, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
 				});
 
-		// check http status
+		// basic test
+		assertNotNull(response);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
 
 		// get api respopse
 		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
-		assertNotNull(apiResponse);
-		assertNull(apiResponse.getData());
-
-		// check apirepsonse
 		assertEquals(400, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
 		assertEquals(MethodEnum.PUT, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
 
 	}
@@ -207,20 +211,19 @@ public class CategoryServiceExceptionTest {
 				HttpMethod.PUT, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
 				});
 
+		// basic test
+		assertNotNull(response);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
 
 		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
-		assertNotNull(apiResponse);
-		assertNotNull(apiResponse.getData());
-
-		// check apirepsonse
 		assertEquals(400, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
 		assertEquals(MethodEnum.POST, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(true, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
-
 	}
 
 	@Test
@@ -233,20 +236,20 @@ public class CategoryServiceExceptionTest {
 				HttpMethod.PUT, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
 				});
 
+		// basic test
+		assertNotNull(response);
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+		assertEquals(404, response.getStatusCodeValue());
 
 		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
-		assertNotNull(apiResponse);
-		assertNull(apiResponse.getData());
-
-		// check apirepsonse
 		assertEquals(404, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
-		// TODO this response should be PUT not POST
-		// assertEquals(MethodEnum.POST, apiResponse.getMethod()); <------ check this
+		assertEquals(MethodEnum.GET, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
+
 	}
 
 }

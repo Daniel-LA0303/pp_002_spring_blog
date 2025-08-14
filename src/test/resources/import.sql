@@ -18,3 +18,43 @@ INSERT INTO category_tbl (name, description, color, "value", label, long_descrip
 INSERT INTO category_tbl (name, description, color, "value", label, long_description, created_at, updated_at) VALUES ('Angular', 'Angular framework resources', '#DD0031', 'ANGULAR', 'Angular', 'Frontend development with Angular framework.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO category_tbl (name, description, color, "value", label, long_description, created_at, updated_at) VALUES ('Vue.js', 'Vue.js development resources', '#42B883', 'VUE', 'Vue.js', 'Frontend development with Vue.js framework.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO category_tbl (name, description, color, "value", label, long_description, created_at, updated_at) VALUES ('DevOps', 'DevOps tools and practices', '#0A0A0A', 'DEVOPS', 'DevOps', 'CI/CD pipelines, automation, and cloud infrastructure.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Roles
+INSERT INTO role_tbl (role_name) VALUES ('USER_ROLE');
+INSERT INTO role_tbl (role_name) VALUES ('ADMIN_ROLE');
+
+-- Usuarios
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('luis', 'luis@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('ana', 'ana@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('carlos', 'carlos@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('maria', 'maria@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('jose', 'jose@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('laura', 'laura@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('andres', 'andres@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('sofia', 'sofia@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('fernando', 'fernando@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('valeria', 'valeria@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Información de usuarios
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_luis.png', 'Apasionado por la tecnología y el café.', CURRENT_TIMESTAMP, TRUE, '555-1001', 'Calle 1 #123', 1, 'Luis', 'Martínez', 'Desarrollador Backend', 'Ingeniería en Sistemas', 'él', 'http://luis.dev', 'Ciudad de México', 'Java, Spring Boot, SQL');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_ana.png', 'Amante del arte y la fotografía.', CURRENT_TIMESTAMP, TRUE, '555-1002', 'Avenida Reforma 45', 2, 'Ana', 'García', 'Fotógrafa', 'Lic. Artes Visuales', 'ella', 'http://ana.art', 'Monterrey', 'Fotografía, Edición');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_carlos.png', 'Ingeniero mecánico y ciclista aficionado.', CURRENT_TIMESTAMP, TRUE, '555-1003', 'Calle Los Pinos 89', 3, 'Carlos', 'Hernández', 'Ingeniero Mecánico', 'Ingeniería Mecánica', 'él', 'http://carlos.engineer', 'Guadalajara', 'AutoCAD, SolidWorks');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_maria.png', 'Chef apasionada por la repostería.', CURRENT_TIMESTAMP, TRUE, '555-1004', 'Boulevard del Sol 23', 4, 'María', 'Fernández', 'Chef', 'Gastronomía', 'ella', 'http://maria.cooking', 'Puebla', 'Repostería, Cocina Internacional');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_jose.png', 'Amante de los deportes y el trekking.', CURRENT_TIMESTAMP, TRUE, '555-1005', 'Calle Montaña 56', 5, 'José', 'Ramírez', 'Profesor de Educación Física', 'Lic. Educación', 'él', 'http://jose.sports', 'Toluca', 'Fútbol, Trekking, Fitness');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_laura.png', 'Diseñadora gráfica y amante del cine.', CURRENT_TIMESTAMP, TRUE, '555-1006', 'Calle Creativa 78', 6, 'Laura', 'Santos', 'Diseñadora Gráfica', 'Diseño Gráfico', 'ella', 'http://laura.design', 'Querétaro', 'Photoshop, Illustrator, Animación');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_andres.png', 'Desarrollador fullstack y gamer.', CURRENT_TIMESTAMP, TRUE, '555-1007', 'Avenida Código 99', 7, 'Andrés', 'Pérez', 'Desarrollador Fullstack', 'Ingeniería en Sistemas', 'él', 'http://andres.dev', 'Monterrey', 'Java, JS, React, Spring');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_sofia.png', 'Periodista y escritora de novelas cortas.', CURRENT_TIMESTAMP, TRUE, '555-1008', 'Calle Letras 12', 8, 'Sofía', 'Lopez', 'Periodista', 'Comunicación', 'ella', 'http://sofia.news', 'Guadalajara', 'Redacción, Investigación');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_fernando.png', 'Fotógrafo y viajero empedernido.', CURRENT_TIMESTAMP, TRUE, '555-1009', 'Avenida Mundo 34', 9, 'Fernando', 'Castillo', 'Fotógrafo', 'Fotografía', 'él', 'http://fernando.photos', 'Puebla', 'Fotografía, Edición, Viajes');
+INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_valeria.png', 'Ingeniera de software y aficionada a la lectura.', CURRENT_TIMESTAMP, TRUE, '555-1010', 'Calle Código 101', 10, 'Valeria', 'Gómez', 'Ingeniera de Software', 'Ingeniería en Sistemas', 'ella', 'http://valeria.dev', 'Ciudad de México', 'Java, Python, SQL');
+
+-- Asignación de rol USER_ROLE (id=1)
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (1, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (2, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (3, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (4, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (5, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (6, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (7, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (8, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (9, 1);
+INSERT INTO user_role_tbl (user_id, role_id) VALUES (10, 1);

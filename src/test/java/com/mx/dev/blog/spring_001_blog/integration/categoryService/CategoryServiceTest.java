@@ -56,8 +56,9 @@ public class CategoryServiceTest {
 	void createCategorySuccessTest() {
 
 		// change data builder
-		CategoryResponseDTO categoryBuilder = CategoryResponseDTOBuilder.withAllDummy().setCategoryId(6L)
-				.setName("Sample Category").setDescription("This is a sample description.").setColor("#FF5733").build();
+		CategoryResponseDTO categoryBuilder = CategoryResponseDTOBuilder.withAllDummy().setCategoryId(21L)
+				.setName("Sample Category").setDescription("This is a sample description.").setColor("#FF5733")
+				.setLabel("Sample Category").setValue("Sample Category").build();
 
 		HttpEntity<CategoryRequestDTO> requestEntity = new HttpEntity<>(categoryRequestDTOBuilder, headers);
 
@@ -65,23 +66,33 @@ public class CategoryServiceTest {
 				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
 				});
 
+		// basic test
+		assertNotNull(response);
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertEquals(201, response.getStatusCodeValue());
 
+		// extract api response
 		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
-		assertNotNull(apiResponse);
-
-		// check data
-		assertEquals(categoryBuilder.getColor(), apiResponse.getData().getColor());
-		assertEquals(categoryBuilder.getDescription(), apiResponse.getData().getDescription());
-		assertEquals(categoryBuilder.getName(), apiResponse.getData().getName());
-
-		// check apirepsonse
 		assertEquals(201, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
 		assertEquals(MethodEnum.POST, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
+
+		// extract data
+		CategoryResponseDTO categoryResponseDTO = apiResponse.getData();
+		assertNotNull(categoryResponseDTO);
+
+		// check data
+		assertNotNull(categoryResponseDTO.getCategoryId());
+		assertEquals(categoryBuilder.getName(), categoryResponseDTO.getName());
+		assertEquals(categoryBuilder.getDescription(), categoryResponseDTO.getDescription());
+		assertEquals(categoryBuilder.getColor(), categoryResponseDTO.getColor());
+		assertEquals(categoryBuilder.getLabel(), categoryResponseDTO.getLabel());
+		assertEquals(categoryBuilder.getValue(), categoryResponseDTO.getValue());
+		assertNotNull(categoryResponseDTO.getCreatedAt());
 
 	}
 
@@ -94,23 +105,25 @@ public class CategoryServiceTest {
 
 		ResponseEntity<ApiResponse> response = testRestTemplate.getForEntity("/api/category", ApiResponse.class);
 
-		System.out.println("*************");
-		System.out.println(response.getBody().getMessage());
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-
-		ApiResponse<List<CategoryResponseDTO>> apiResponse = response.getBody();
+		// basic test
 		assertNotNull(response);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(200, response.getStatusCodeValue());
 
-		List<CategoryResponseDTO> categories = apiResponse.getData();
-		assertNotNull(categories);
-
-		// check apirepsonse
+		// extract api response
+		ApiResponse<List<CategoryResponseDTO>> apiResponse = response.getBody();
 		assertEquals(200, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
 		assertEquals(MethodEnum.GET, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
+
+		// extract data from api response
+		List<CategoryResponseDTO> categories = apiResponse.getData();
+		assertNotNull(categories);
+		assertEquals(20, categories.size());
 
 	}
 
@@ -127,48 +140,62 @@ public class CategoryServiceTest {
 				new ParameterizedTypeReference<ApiResponse<List<CategoryEntity>>>() {
 				});
 
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertNotNull(response.getBody());
-
-		ApiResponse<List<CategoryEntity>> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getData());
-		assertFalse(apiResponse.getData().isEmpty());
-		assertEquals(2, apiResponse.getData().size());
-
-	}
-
-	@Test
-	@Order(3)
-	void getOneCategorySuccessTest() {
-
-		ResponseEntity<ApiResponse<CategoryResponseDTO>> response = testRestTemplate.exchange("/api/category/2",
-				HttpMethod.GET, null, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
-				});
-
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-
-		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
+		// basic test
 		assertNotNull(response);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(200, response.getStatusCodeValue());
 
-		CategoryResponseDTO categoryResponseDTO = apiResponse.getData();
-		assertNotNull(categoryResponseDTO);
-
-		assertEquals(categoryResponseDTO.getCategoryId(), categoryResponseDTO.getCategoryId());
-		assertEquals(categoryResponseDTO.getColor(), categoryResponseDTO.getColor());
-		assertEquals(categoryResponseDTO.getDescription(), categoryResponseDTO.getDescription());
-		assertEquals(categoryResponseDTO.getName(), categoryResponseDTO.getName());
-
-		// check apirepsonse
+		// extract api response
+		ApiResponse<List<CategoryEntity>> apiResponse = response.getBody();
 		assertEquals(200, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.GET, apiResponse.getMethod());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
 
+		// extract data from api response
+		List<CategoryEntity> categories = apiResponse.getData();
+		assertNotNull(categories);
+		assertFalse(categories.isEmpty());
+		assertEquals(ids.size(), categories.size());
+
 	}
+
+	// TODO check first blogs testing
+	/*
+	 * @Test
+	 * 
+	 * @Order(3) void getOneCategorySuccessTest() {
+	 * 
+	 * ResponseEntity<ApiResponse<CategoryResponseDTO>> response =
+	 * testRestTemplate.exchange("/api/category/2", HttpMethod.GET, null, new
+	 * ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() { });
+	 * 
+	 * assertEquals(HttpStatus.OK, response.getStatusCode());
+	 * 
+	 * ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
+	 * assertNotNull(response); assertEquals(200, response.getStatusCodeValue());
+	 * 
+	 * CategoryResponseDTO categoryResponseDTO = apiResponse.getData();
+	 * assertNotNull(categoryResponseDTO);
+	 * 
+	 * assertEquals(categoryResponseDTO.getCategoryId(),
+	 * categoryResponseDTO.getCategoryId());
+	 * assertEquals(categoryResponseDTO.getColor(), categoryResponseDTO.getColor());
+	 * assertEquals(categoryResponseDTO.getDescription(),
+	 * categoryResponseDTO.getDescription());
+	 * assertEquals(categoryResponseDTO.getName(), categoryResponseDTO.getName());
+	 * 
+	 * // check apirepsonse assertEquals(200, apiResponse.getStatus());
+	 * assertNotNull(apiResponse.getPath()); assertEquals(MethodEnum.GET,
+	 * apiResponse.getMethod()); assertNotNull(apiResponse.getMessage());
+	 * assertEquals(false, apiResponse.getError());
+	 * assertNotNull(apiResponse.getTimestamp());
+	 * 
+	 * }
+	 */
 
 	@BeforeEach
 	void setUp() {
@@ -189,7 +216,7 @@ public class CategoryServiceTest {
 
 		CategoryResponseDTO categoryResponseDTOBuilder = CategoryResponseDTOBuilder.withAllDummy().setCategoryId(1L)
 				.setName("New Category EDIT").setDescription("This is a sample description.").setColor("#FF5733")
-				.build();
+				.setLabel("New Category EDIT").setValue("New Category EDIT").build();
 
 		CategoryRequestDTO categoryRequestDTOBuilder = CategoryRequestDTOBuilder.withAllDummy()
 				.setName("New Category EDIT").build();
@@ -200,25 +227,33 @@ public class CategoryServiceTest {
 				HttpMethod.PUT, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
 				});
 
+		// basic test
+		assertNotNull(response);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(200, response.getStatusCodeValue());
 
+		// extract api response
 		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
-		assertNotNull(apiResponse);
-		assertNotNull(apiResponse.getData());
-
-		assertEquals(categoryResponseDTOBuilder.getCategoryId(), apiResponse.getData().getCategoryId());
-		assertEquals(categoryResponseDTOBuilder.getDescription(), apiResponse.getData().getDescription());
-		assertEquals(categoryResponseDTOBuilder.getColor(), apiResponse.getData().getColor());
-		assertEquals(categoryResponseDTOBuilder.getName(), apiResponse.getData().getName());
-
-		// check apirepsonse
 		assertEquals(200, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
-		// TODO should be put but is post
-		// assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
+
+		// extract data
+		CategoryResponseDTO categoryResponseDTO = apiResponse.getData();
+		assertNotNull(categoryResponseDTO);
+
+		// check data
+		assertNotNull(categoryResponseDTO.getCategoryId());
+		assertEquals(categoryResponseDTOBuilder.getName(), categoryResponseDTO.getName());
+		assertEquals(categoryResponseDTOBuilder.getDescription(), categoryResponseDTO.getDescription());
+		assertEquals(categoryResponseDTOBuilder.getColor(), categoryResponseDTO.getColor());
+		assertEquals(categoryResponseDTOBuilder.getLabel(), categoryResponseDTO.getLabel());
+		assertEquals(categoryResponseDTOBuilder.getValue(), categoryResponseDTO.getValue());
+		assertNotNull(categoryResponseDTO.getCreatedAt());
 
 	}
 

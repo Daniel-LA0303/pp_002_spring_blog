@@ -241,6 +241,8 @@ public class CategoryServiceImpl implements CategoryService {
 		existingCategory.setName(categoryRequestDTO.getName());
 		existingCategory.setDescription(categoryRequestDTO.getDescription());
 		existingCategory.setColor(categoryRequestDTO.getColor());
+		existingCategory.setLabel(categoryRequestDTO.getName());
+		existingCategory.setValue(categoryRequestDTO.getName());
 		existingCategory.setUpdatedAt(LocalDateTime.now());
 
 		CategoryEntity updatedCategory = categoryRepository.save(existingCategory);
