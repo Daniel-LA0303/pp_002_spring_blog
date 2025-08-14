@@ -2,6 +2,8 @@ package com.mx.dev.blog.spring_001_blog.utils.dtos.blog;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class BlogCreateRequestDTO {
 
 	/**
@@ -25,6 +27,11 @@ public class BlogCreateRequestDTO {
 	private Long userId;
 
 	/**
+	 * image
+	 */
+	private MultipartFile blogImage;
+
+	/**
 	 * categories
 	 */
 	private List<Long> categories;
@@ -39,16 +46,27 @@ public class BlogCreateRequestDTO {
 	 * @param title
 	 * @param description
 	 * @param content
-	 * @param slug
 	 * @param userId
+	 * @param blogImage
 	 * @param categories
 	 */
-	public BlogCreateRequestDTO(String title, String description, String content, Long userId, List<Long> categories) {
+	public BlogCreateRequestDTO(String title, String description, String content, Long userId, MultipartFile blogImage,
+			List<Long> categories) {
 		this.title = title;
 		this.description = description;
 		this.content = content;
 		this.userId = userId;
+		this.blogImage = blogImage;
 		this.categories = categories;
+	}
+
+	/**
+	 * return the value of the property blogImage
+	 *
+	 * @return the blogImage
+	 */
+	public MultipartFile getBlogImage() {
+		return blogImage;
 	}
 
 	/**
@@ -94,6 +112,15 @@ public class BlogCreateRequestDTO {
 	 */
 	public Long getUserId() {
 		return userId;
+	}
+
+	/**
+	 * set the value of the property blogImage
+	 *
+	 * @param blogImage the blogImage to set
+	 */
+	public void setBlogImage(MultipartFile blogImage) {
+		this.blogImage = blogImage;
 	}
 
 	/**

@@ -23,11 +23,16 @@ public class UserValidator implements Validator<UserCreateRequestDTO> {
 		return Pattern.matches(UserRegex.ALFANUMERIC_150, username);
 	}
 
+	public boolean isValidPassword(String password) {
+		return Pattern.matches(UserRegex.ALFANUMERIC_200, password);
+	}
+
 	@Override
 	public void validate(UserCreateRequestDTO t) throws ServiceException {
 		mapValidation.clear();
 		validateEmail(t.getEmail());
 		validateUsername(t.getUsername());
+		validatePassword(t.getPassword());
 
 		if (!mapValidation.isEmpty()) {
 			throw new ServiceException("Validation errors", ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/user",
@@ -41,6 +46,15 @@ public class UserValidator implements Validator<UserCreateRequestDTO> {
 
 		if (!isValid || email.isBlank() || email.isEmpty()) {
 			mapValidation.put("email", ValidationUserEnum.EMAIL.getMessage());
+		}
+	}
+
+	public void validatePassword(String password) {
+
+		boolean isValid = isValidPassword(password);
+
+		if (!isValid || password.isBlank() || password.isEmpty()) {
+			mapValidation.put("password", "Please password can not be empty");
 		}
 	}
 

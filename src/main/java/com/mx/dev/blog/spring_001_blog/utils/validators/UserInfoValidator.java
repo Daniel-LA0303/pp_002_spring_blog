@@ -23,8 +23,8 @@ public class UserInfoValidator implements Validator<UserUpdateInfoRequestDTO> {
 		mapValidation.clear();
 
 		validateBio(t.getBio());
-		validateDirection(t.getDirection());
-		validatePhone(t.getPhone());
+		// validateDirection(t.getDirection());
+		// validatePhone(t.getPhone());
 
 		if (!mapValidation.isEmpty()) {
 			throw new ServiceException("Validation errors", ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/user",

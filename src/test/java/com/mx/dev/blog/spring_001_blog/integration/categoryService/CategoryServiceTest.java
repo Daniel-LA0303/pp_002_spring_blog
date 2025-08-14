@@ -27,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryResponseDTOBuilder;
-import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
+import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
@@ -133,6 +133,7 @@ public class CategoryServiceTest {
 		assertNotNull(apiResponse.getData());
 		assertFalse(apiResponse.getData().isEmpty());
 		assertEquals(2, apiResponse.getData().size());
+
 	}
 
 	@Test

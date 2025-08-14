@@ -15,6 +15,10 @@ public class BlogDevSpringApp {
 		System.setProperty("DB_URL", dotenv.get("DB_URL"));
 		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
 		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+		// System.setProperty("S3_ACCESS_KEY", dotenv.get("S3_ACCESS_KEY"));
+		// System.setProperty("S3_SECRET_ACCESS_KEY",
+		// dotenv.get("S3_SECRET_ACCESS_KEY"));
+		// System.setProperty("S3_REGION", dotenv.get("S3_REGION"));
 
 		SpringApplication.run(BlogDevSpringApp.class, args);
 	}

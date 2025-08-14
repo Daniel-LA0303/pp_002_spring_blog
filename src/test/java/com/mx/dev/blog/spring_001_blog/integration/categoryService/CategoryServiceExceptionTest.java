@@ -27,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryRequestDTOBuilder;
-import com.mx.dev.blog.spring_001_blog.entities.ctaegory.CategoryEntity;
+import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
