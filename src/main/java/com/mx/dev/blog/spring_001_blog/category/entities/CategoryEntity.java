@@ -41,7 +41,7 @@ public class CategoryEntity {
 	/**
 	 * value
 	 */
-	@Column(name = "value")
+	@Column(name = "`value`")
 	private String value;
 
 	/**

@@ -52,7 +52,7 @@ public class CategoryServiceTest {
 	CategoryRequestDTO categoryRequestDTOBuilder;
 
 	@Test
-	@Order(3)
+	@Order(4)
 	void createCategorySuccessTest() {
 
 		// change data builder
@@ -94,6 +94,8 @@ public class CategoryServiceTest {
 
 		ResponseEntity<ApiResponse> response = testRestTemplate.getForEntity("/api/category", ApiResponse.class);
 
+		System.out.println("*************");
+		System.out.println(response.getBody().getMessage());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
 		ApiResponse<List<CategoryResponseDTO>> apiResponse = response.getBody();
@@ -113,7 +115,7 @@ public class CategoryServiceTest {
 	}
 
 	@Test
-	@Order(5)
+	@Order(2)
 	void getCategoriesById() {
 
 		List<Long> ids = Arrays.asList(1L, 2L);
@@ -137,7 +139,7 @@ public class CategoryServiceTest {
 	}
 
 	@Test
-	@Order(2)
+	@Order(3)
 	void getOneCategorySuccessTest() {
 
 		ResponseEntity<ApiResponse<CategoryResponseDTO>> response = testRestTemplate.exchange("/api/category/2",
@@ -182,7 +184,7 @@ public class CategoryServiceTest {
 	}
 
 	@Test
-	@Order(4)
+	@Order(5)
 	void updateCategorySuccessTest() {
 
 		CategoryResponseDTO categoryResponseDTOBuilder = CategoryResponseDTOBuilder.withAllDummy().setCategoryId(1L)
