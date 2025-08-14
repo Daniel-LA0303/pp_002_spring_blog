@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.integration.services;
+package com.mx.dev.blog.spring_001_blog.integration.categoryService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryResponseDTOBuilder;
@@ -36,7 +35,7 @@ import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = "/import.sql")
+//@Sql(scripts = "/import.sql")
 @ActiveProfiles("test")
 public class CategoryServiceTest {
 

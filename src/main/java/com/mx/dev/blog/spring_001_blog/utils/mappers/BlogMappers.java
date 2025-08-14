@@ -8,13 +8,13 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
 
 public class BlogMappers {
 
-	public static BlogResponseDTO toCategoryResponseDTO(BlogEntity blogEntity) {
+	public static BlogResponseDTO toBlogResponseDTO(BlogEntity blogEntity) {
 
 		BlogResponseDTO blogResponseDTO = new BlogResponseDTO();
 		blogResponseDTO.setBlogId(blogEntity.getBlogId());
 		blogResponseDTO.setContent(blogEntity.getContent());
 		blogResponseDTO.setCreatedAt(blogEntity.getCreatedAt());
-		blogResponseDTO.setDescription(blogResponseDTO.getDescription());
+		blogResponseDTO.setDescription(blogEntity.getDescription());
 		blogResponseDTO.setSlug(blogEntity.getSlug());
 		blogResponseDTO.setStatus(blogEntity.getStatus());
 		blogResponseDTO.setTitle(blogEntity.getTitle());
@@ -25,7 +25,7 @@ public class BlogMappers {
 
 	public static List<BlogResponseDTO> toListBlogResponseDTO(List<BlogEntity> blogEntities) {
 
-		return blogEntities.stream().map(BlogMappers::toCategoryResponseDTO).collect(Collectors.toList());
+		return blogEntities.stream().map(BlogMappers::toBlogResponseDTO).collect(Collectors.toList());
 	}
 
 }

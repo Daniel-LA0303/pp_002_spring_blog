@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.integration.services;
+package com.mx.dev.blog.spring_001_blog.integration.categoryService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,18 +39,36 @@ import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 @ActiveProfiles("test")
 public class CategoryServiceExceptionTest {
 
+	/**
+	 * rest template
+	 */
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 
+	/**
+	 * port
+	 */
 	@LocalServerPort
 	private int port;
 
+	/**
+	 * headers
+	 */
 	HttpHeaders headers;
 
+	/**
+	 * valid data
+	 */
 	CategoryRequestDTO validData;
 
+	/**
+	 * invalid data
+	 */
 	CategoryRequestDTO invalidDataCategory;
 
+	/**
+	 * category
+	 */
 	CategoryRequestDTO categoryExisting;
 
 	@Test

@@ -72,7 +72,7 @@ public class BlogServiceImpl implements BlogService {
 	 */
 	@Transactional
 	@Override
-	public BlogEntity createBlog(BlogCreateRequestDTO blogCreateRequestDTO) throws ServiceException {
+	public BlogResponseDTO createBlog(BlogCreateRequestDTO blogCreateRequestDTO) throws ServiceException {
 		// 1. first check if user exists
 		UserSimpleResponseDTO user = userService.getOneUserSimpleInfo(blogCreateRequestDTO.getUserId());
 
@@ -114,7 +114,7 @@ public class BlogServiceImpl implements BlogService {
 		// 6. Save to the database
 		blogRepository.save(blogEntity);
 
-		return blogEntity;
+		return BlogMappers.toBlogResponseDTO(blogEntity);
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	@Transactional
-	public BlogEntity updateBlog(BlogCreateRequestDTO blogCreateRequestDTO, Long blogId) throws ServiceException {
+	public BlogResponseDTO updateBlog(BlogCreateRequestDTO blogCreateRequestDTO, Long blogId) throws ServiceException {
 		// 1. first check if user exists
 		UserSimpleResponseDTO user = userService.getOneUserSimpleInfo(blogCreateRequestDTO.getUserId());
 
@@ -213,7 +213,7 @@ public class BlogServiceImpl implements BlogService {
 		// 6. Save to the database
 		blogRepository.save(blogEntity);
 
-		return blogEntity;
+		return BlogMappers.toBlogResponseDTO(blogEntity);
 	}
 
 }

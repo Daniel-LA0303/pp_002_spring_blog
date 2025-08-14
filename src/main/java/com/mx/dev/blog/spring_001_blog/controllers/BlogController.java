@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mx.dev.blog.spring_001_blog.entities.blog.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.services.BlogService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
@@ -101,10 +100,10 @@ public class BlogController {
 
 		blogValidator.validate(blogCreateRequestDTO);
 
-		BlogEntity blogEntity = blogService.createBlog(blogCreateRequestDTO);
+		BlogResponseDTO blogResponseDTO = blogService.createBlog(blogCreateRequestDTO);
 
-		ApiResponse<BlogEntity> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(), "/api/blog",
-				MethodEnum.POST, "Success method POST", blogEntity, false);
+		ApiResponse<BlogResponseDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
+				"/api/blog", MethodEnum.POST, "Success method POST", blogResponseDTO, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
@@ -123,10 +122,10 @@ public class BlogController {
 
 		blogValidator.validate(blogCreateRequestDTO);
 
-		BlogEntity blogEntity = blogService.updateBlog(blogCreateRequestDTO, blogId);
+		BlogResponseDTO blogResponseDTO = blogService.updateBlog(blogCreateRequestDTO, blogId);
 
-		ApiResponse<BlogEntity> apiResponse = new ApiResponse<>(ResponseStatus.UPDATED.getHttpStatusCode(), "/api/blog",
-				MethodEnum.PUT, "Success method PUT", blogEntity, false);
+		ApiResponse<BlogResponseDTO> apiResponse = new ApiResponse<>(ResponseStatus.UPDATED.getHttpStatusCode(),
+				"/api/blog", MethodEnum.PUT, "Success method PUT", blogResponseDTO, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}

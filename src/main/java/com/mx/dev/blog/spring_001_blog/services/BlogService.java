@@ -10,7 +10,7 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 public interface BlogService {
 
-	BlogEntity createBlog(BlogCreateRequestDTO blogCreateRequestDTO) throws ServiceException;
+	BlogResponseDTO createBlog(BlogCreateRequestDTO blogCreateRequestDTO) throws ServiceException;
 
 	void deleteBlog(Long blogId, Long userId) throws ServiceException;
 
@@ -20,6 +20,6 @@ public interface BlogService {
 
 	BlogResponsePageDTO getOneBlog(Long blogId) throws ServiceException;
 
-	BlogEntity updateBlog(BlogCreateRequestDTO blogCreateRequestDTO, Long blogId) throws ServiceException;
+	BlogResponseDTO updateBlog(BlogCreateRequestDTO blogCreateRequestDTO, Long blogId) throws ServiceException;
 
 }
