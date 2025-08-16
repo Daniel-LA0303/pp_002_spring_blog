@@ -58,3 +58,71 @@ INSERT INTO user_role_tbl (user_id, role_id) VALUES (7, 1);
 INSERT INTO user_role_tbl (user_id, role_id) VALUES (8, 1);
 INSERT INTO user_role_tbl (user_id, role_id) VALUES (9, 1);
 INSERT INTO user_role_tbl (user_id, role_id) VALUES (10, 1);
+
+-- Blogs
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Tech Trends 2025', 'Latest trends in technology', 'Content about tech trends...', 'PUBLISHED', 'tech-trends-2025', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Healthy Living Tips', 'How to maintain a healthy lifestyle', 'Content about health...', 'PUBLISHED', 'healthy-living-tips', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Lifestyle Hacks', 'Tips to improve daily life', 'Content about lifestyle...', 'PUBLISHED', 'lifestyle-hacks', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Education Resources', 'Learning resources and guides', 'Content about education...', 'PUBLISHED', 'education-resources', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Travel Asia', 'Exploring Asia destinations', 'Content about Asia travel...', 'PUBLISHED', 'travel-asia', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Programming Languages', 'Overview of popular programming languages', 'Content about programming...', 'PUBLISHED', 'programming-languages', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Java Spring Boot', 'Guide to Spring Boot development', 'Content about Spring Boot...', 'PUBLISHED', 'java-spring-boot', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Travel Europe', 'Exploring Europe destinations', 'Content about Europe travel...', 'PUBLISHED', 'travel-europe', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 6);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Fitness Routines', 'Effective fitness routines', 'Content about fitness...', 'PUBLISHED', 'fitness-routines', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 7);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('AI in 2025', 'Artificial Intelligence developments', 'Content about AI...', 'PUBLISHED', 'ai-in-2025', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 8);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Cybersecurity Basics', 'Introduction to cybersecurity', 'Content about cybersecurity...', 'PUBLISHED', 'cybersecurity-basics', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 9);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Cooking Tips', 'Tips for better cooking', 'Content about cooking...', 'PUBLISHED', 'cooking-tips', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Web Development', 'Modern web development practices', 'Content about web dev...', 'PUBLISHED', 'web-development', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Travel South America', 'Exploring South America', 'Content about South America...', 'PUBLISHED', 'travel-south-america', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Mental Health', 'Strategies for mental wellness', 'Content about mental health...', 'PUBLISHED', 'mental-health', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Photography Tips', 'Improve your photography skills', 'Content about photography...', 'PUBLISHED', 'photography-tips', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Blockchain Basics', 'Understanding blockchain technology', 'Content about blockchain...', 'PUBLISHED', 'blockchain-basics', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 6);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Mobile App Development', 'Creating apps for Android and iOS', 'Content about mobile apps...', 'PUBLISHED', 'mobile-app-development', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 7);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Travel North America', 'Exploring North America', 'Content about North America...', 'PUBLISHED', 'travel-north-america', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 8);
+INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Data Science 101', 'Introduction to data science', 'Content about data science...', 'PUBLISHED', 'data-science-101', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 9);
+
+-- Blog - Categorías
+-- Blog 1 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (1, 1);
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (1, 4);
+-- Blog 2 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (2, 2);
+-- Blog 3
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (3, 3);
+-- Blog 4 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (4, 4);
+-- Blog 5 -
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (5, 5);
+-- Blog 6 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (6, 1);
+-- Blog 7
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (7, 1);
+-- Blog 8 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (8, 5);
+-- Blog 9 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (9, 2);
+-- Blog 10 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (10, 1);
+-- Blog 11 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (11, 1);
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (11, 6);
+-- Blog 12 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (12, 3);
+-- Blog 13 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (13, 1);
+-- Blog 14 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (14, 5);
+-- Blog 15 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (15, 2);
+-- Blog 16 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (16, 3);
+-- Blog 17 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (17, 1);
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (17, 4);
+-- Blog 18 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (18, 1);
+-- Blog 19 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (19, 5);
+-- Blog 20 
+INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (20, 4);
+
