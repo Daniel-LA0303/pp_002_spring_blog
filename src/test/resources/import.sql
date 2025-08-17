@@ -294,5 +294,46 @@ INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALU
 INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Well explained.', 9, 19, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('I will share this.', 10, 20, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+-- REPLIES
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 1', 1, 1, 1, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 1', 2, 1, 1, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 2', 3, 2, 2, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 2', 4, 2, 2, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 3', 5, 3, 3, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 3', 6, 3, 3, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 4', 7, 4, 4, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 4', 8, 4, 4, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 5', 9, 5, 5, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 5', 10, 5, 5, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 6', 1, 6, 6, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 6', 2, 6, 6, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 7', 3, 7, 7, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 7', 4, 7, 7, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 8', 5, 8, 8, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 8', 6, 8, 8, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 9', 7, 9, 9, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 9', 8, 9, 9, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 10', 9, 10, 10, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 10', 10, 10, 10, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 11', 1, 11, 11, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 11', 2, 11, 11, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 12', 3, 12, 12, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 12', 4, 12, 12, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 13', 5, 13, 13, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 13', 6, 13, 13, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 14', 7, 14, 14, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 14', 8, 14, 14, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 15', 9, 15, 15, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 15', 10, 15, 15, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 16', 1, 16, 16, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 16', 2, 16, 16, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 17', 3, 17, 17, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 17', 4, 17, 17, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 18', 5, 18, 18, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 18', 6, 18, 18, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 19', 7, 19, 19, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 19', 8, 19, 19, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 1 al comentario 20', 9, 20, 20, NOW(), NOW());
+INSERT INTO reply_tbl (content, user_id, blog_id, comment_id, created_at, updated_at) VALUES ('Reply 2 al comentario 20', 10, 20, 20, NOW(), NOW());
 
 

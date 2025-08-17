@@ -61,13 +61,12 @@ public class ReplyController {
 	public ResponseEntity<?> updateComment(@RequestBody ReplyCreateRequestDTO replyCreateRequestDTO,
 			@PathVariable Long replyId) throws ServiceException {
 
-		System.out.println("******");
 		replyValidator.validate(replyCreateRequestDTO);
 
 		ReplyCardDTO replyUpdated = replyService.updateReply(replyCreateRequestDTO, replyId);
 
-		ApiResponse<ReplyCardDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
-				"/api/reply", MethodEnum.POST, "Success method POST", replyUpdated, false);
+		ApiResponse<ReplyCardDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/reply", MethodEnum.PUT, "Success method POST", replyUpdated, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}

@@ -63,9 +63,7 @@ public class ReplyServiceImpl implements ReplyService {
 
 		ReplyEntity savedReply = replyRepository.save(replyEntity);
 
-		return replyRepository.findReplyById(savedReply.getReplyId())
-				.orElseThrow(() -> new ServiceException("Reply not found after update",
-						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/reply", MethodEnum.PUT));
+		return replyRepository.findReplyById(savedReply.getReplyId()).get();
 	}
 
 	@Override
@@ -118,9 +116,7 @@ public class ReplyServiceImpl implements ReplyService {
 
 		replyRepository.save(replyEntity);
 
-		return replyRepository.findReplyById(replyId)
-				.orElseThrow(() -> new ServiceException("Reply not found after update",
-						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/reply", MethodEnum.PUT));
+		return replyRepository.findReplyById(replyEntity.getReplyId()).get();
 	}
 
 }

@@ -62,7 +62,7 @@ public class CommentServiceTest {
 
 	@Test
 	@Order(4)
-	void createCategorySuccessTest() {
+	void createCommentSuccessTest() {
 
 		HttpEntity<CommentCreateRequestDTO> requestEntity = new HttpEntity<>(commentCreateRequestDTOBuilder, headers);
 
@@ -195,7 +195,7 @@ public class CommentServiceTest {
 
 	@Test
 	@Order(5)
-	void updateCategorySuccessTest() {
+	void updateCommentSuccessTest() {
 
 		CommentCreateRequestDTO commentCreateRequestDTO = CommentCreateRequestDTOBuilder.withAllDummy()
 				.setContent("New content EDIT").setUserId(2L).setBlogId(2L).build();
