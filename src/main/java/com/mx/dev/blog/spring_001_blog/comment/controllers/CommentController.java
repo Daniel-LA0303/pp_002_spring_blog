@@ -131,9 +131,9 @@ public class CommentController {
 
 		commentValidator.validate(commentCreateRequestDTO);
 
-		CommentEntity commentEntity = commentService.updateComment(commentCreateRequestDTO, commentId);
+		CommentCardDTO commentEntity = commentService.updateComment(commentCreateRequestDTO, commentId);
 
-		ApiResponse<CommentEntity> apiResponse = new ApiResponse<>(ResponseStatus.UPDATED.getHttpStatusCode(),
+		ApiResponse<CommentCardDTO> apiResponse = new ApiResponse<>(ResponseStatus.UPDATED.getHttpStatusCode(),
 				"/api/comment", MethodEnum.PUT, "Success method PUT", commentEntity, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);

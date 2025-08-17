@@ -21,9 +21,9 @@ public interface CommentService {
 
 	CommentEntity getCommentByIdOrThrow(Long commentId) throws ServiceException;
 
-	CommentEntity getOneComment(Long commentId) throws ServiceException;
+	// CommentEntity getOneComment(Long commentId) throws ServiceException;
 
-	CommentEntity updateComment(CommentCreateRequestDTO commentCreateRequestDTO, Long commentId)
+	CommentCardDTO updateComment(CommentCreateRequestDTO commentCreateRequestDTO, Long commentId)
 			throws ServiceException;
 
 }

@@ -123,21 +123,22 @@ public class CommentServiceImpl implements CommentService {
 				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/comment", MethodEnum.GET));
 	}
 
-	@Override
-	public CommentEntity getOneComment(Long commentId) throws ServiceException {
+	/*
+	 * @Override public CommentEntity getOneComment(Long commentId) throws
+	 * ServiceException {
+	 * 
+	 * return getCommentByIdOrThrow(commentId); }
+	 */
 
-		return getCommentByIdOrThrow(commentId);
-	}
-
 	@Override
-	public CommentEntity updateComment(CommentCreateRequestDTO commentCreateRequestDTO, Long commentId)
+	public CommentCardDTO updateComment(CommentCreateRequestDTO commentCreateRequestDTO, Long commentId)
 			throws ServiceException {
 
 		// 1. first check if comment exists
 		CommentEntity commentEntity = getCommentByIdOrThrow(commentId);
 
 		// 2. first we check if blog exists
-		blogService.getBlogByIdOrThrow(commentCreateRequestDTO.getBlogId());
+		BlogEntity blogEntity = blogService.getBlogByIdOrThrow(commentCreateRequestDTO.getBlogId());
 
 		// 3. we check if user exists
 		UserEntity userEntity = userService.getOneUserOrThrow(commentCreateRequestDTO.getUserId());
@@ -148,10 +149,19 @@ public class CommentServiceImpl implements CommentService {
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/comment", MethodEnum.PUT);
 		}
 
+		// 5. update fields
 		commentEntity.setContent(commentCreateRequestDTO.getContent());
 		commentEntity.setUpdatedAt(LocalDateTime.now());
 
-		return commentRepository.save(commentEntity);
+		commentEntity = commentRepository.save(commentEntity);
+
+		// 6. get extra info for DTO
+		UserInfoEntity userInfoEntity = userInfoRepository.findUserInfoByUserId(userEntity.getUserId()).orElse(null);
+
+		// 7. return DTO instead of entity
+		return new CommentCardDTO(commentEntity.getCommentId(), userEntity.getUserId(), blogEntity.getBlogId(),
+				commentEntity.getContent(), userInfoEntity != null ? userInfoEntity.getProfilePicture() : null,
+				userEntity.getUsername(), commentEntity.getUpdatedAt());
 	}
 
 }
