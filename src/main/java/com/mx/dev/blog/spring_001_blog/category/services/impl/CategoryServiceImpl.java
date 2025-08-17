@@ -42,19 +42,20 @@ public class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	public void categoryFollow(Long userId, Long categoryId) throws ServiceException {
 
-		try {
+//		try {
 
-			if (categoryRepository.existsByUserIdAndCategoryFollowId(userId, categoryId)) {
-				throw new ServiceException("The user is already following this category.",
-						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/category", MethodEnum.GET);
-			}
-
-			categoryRepository.saveFollowCategoryUser(userId, categoryId, LocalDateTime.now());
-
-		} catch (Exception e) {
-			throw new ServiceException("Error while following the category.",
-					ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/category", MethodEnum.GET);
+		if (categoryRepository.existsByUserIdAndCategoryFollowId(userId, categoryId)) {
+			throw new ServiceException("The user is already following this category.",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/category", MethodEnum.POST);
 		}
+
+		categoryRepository.saveFollowCategoryUser(userId, categoryId, LocalDateTime.now());
+
+		// } catch (Exception e) {
+//			throw new ServiceException("Error while following the category.",
+		// ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/category",
+		// MethodEnum.GET);
+		// }
 
 	}
 
@@ -63,7 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public void categoryUnfollow(Long userId, Long categoryId) throws ServiceException {
 		if (!categoryRepository.existsByUserIdAndCategoryFollowId(userId, categoryId)) {
 			throw new ServiceException("The user is not following this category.",
-					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/category", MethodEnum.GET);
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/category", MethodEnum.DELETE);
 		}
 
 		categoryRepository.deleteFollowCategoryUser(userId, categoryId);

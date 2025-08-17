@@ -59,6 +59,50 @@ INSERT INTO user_role_tbl (user_id, role_id) VALUES (8, 1);
 INSERT INTO user_role_tbl (user_id, role_id) VALUES (9, 1);
 INSERT INTO user_role_tbl (user_id, role_id) VALUES (10, 1);
 
+-- user1 sigue Tech, Gaming y Programming
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (1, 1, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (1, 9, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (1, 20, NOW());
+
+-- user2 sigue Health y Sports
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (2, 2, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (2, 3, NOW());
+
+-- user3 sigue Tech y Food
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (3, 1, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (3, 4, NOW());
+
+-- user4 sigue Travel, Music y Movies
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (4, 5, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (4, 6, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (4, 7, NOW());
+
+-- user5 sigue Science y Gaming
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (5, 8, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (5, 9, NOW());
+
+-- user6 sigue Business y Education
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (6, 10, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (6, 11, NOW());
+
+-- user7 sigue History y Art
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (7, 12, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (7, 13, NOW());
+
+-- user8 sigue Politics y Nature
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (8, 14, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (8, 15, NOW());
+
+-- user9 sigue Books y Fashion
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (9, 16, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (9, 17, NOW());
+
+-- user10 sigue Photography, Cars y Programming
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (10, 18, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (10, 19, NOW());
+INSERT INTO category_user_follow_tbl (user_id, category_id, created_at) VALUES (10, 20, NOW());
+
+
 -- Blogs
 INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Tech Trends 2025', 'Latest trends in technology', 'Content about tech trends...', 'PUBLISHED', 'tech-trends-2025', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Healthy Living Tips', 'How to maintain a healthy lifestyle', 'Content about health...', 'PUBLISHED', 'healthy-living-tips', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2);

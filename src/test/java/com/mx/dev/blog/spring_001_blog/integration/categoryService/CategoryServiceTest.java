@@ -25,11 +25,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.mx.dev.blog.spring_001_blog.builders.blog.BlogsByCategoryInfoDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryResponseDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
+import com.mx.dev.blog.spring_001_blog.dto.PageDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.search.MultipleSearchDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 
@@ -51,8 +57,10 @@ public class CategoryServiceTest {
 
 	CategoryRequestDTO categoryRequestDTOBuilder;
 
+	BlogsByCategoryInfoDTO blogsByCategoryInfoDTO;
+
 	@Test
-	@Order(4)
+	@Order(3)
 	void createCategorySuccessTest() {
 
 		// change data builder
@@ -101,7 +109,7 @@ public class CategoryServiceTest {
 	 */
 	@Test
 	@Order(1)
-	void getAllCategoriesTest() {
+	void getAllCategoriesSuccessTest() {
 
 		ResponseEntity<ApiResponse> response = testRestTemplate.getForEntity("/api/category", ApiResponse.class);
 
@@ -129,7 +137,7 @@ public class CategoryServiceTest {
 
 	@Test
 	@Order(2)
-	void getCategoriesById() {
+	void getCategoriesByIdSuccessTest() {
 
 		List<Long> ids = Arrays.asList(1L, 2L);
 
@@ -163,39 +171,113 @@ public class CategoryServiceTest {
 
 	}
 
-	// TODO check first blogs testing
-	/*
-	 * @Test
-	 * 
-	 * @Order(3) void getOneCategorySuccessTest() {
-	 * 
-	 * ResponseEntity<ApiResponse<CategoryResponseDTO>> response =
-	 * testRestTemplate.exchange("/api/category/2", HttpMethod.GET, null, new
-	 * ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() { });
-	 * 
-	 * assertEquals(HttpStatus.OK, response.getStatusCode());
-	 * 
-	 * ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
-	 * assertNotNull(response); assertEquals(200, response.getStatusCodeValue());
-	 * 
-	 * CategoryResponseDTO categoryResponseDTO = apiResponse.getData();
-	 * assertNotNull(categoryResponseDTO);
-	 * 
-	 * assertEquals(categoryResponseDTO.getCategoryId(),
-	 * categoryResponseDTO.getCategoryId());
-	 * assertEquals(categoryResponseDTO.getColor(), categoryResponseDTO.getColor());
-	 * assertEquals(categoryResponseDTO.getDescription(),
-	 * categoryResponseDTO.getDescription());
-	 * assertEquals(categoryResponseDTO.getName(), categoryResponseDTO.getName());
-	 * 
-	 * // check apirepsonse assertEquals(200, apiResponse.getStatus());
-	 * assertNotNull(apiResponse.getPath()); assertEquals(MethodEnum.GET,
-	 * apiResponse.getMethod()); assertNotNull(apiResponse.getMessage());
-	 * assertEquals(false, apiResponse.getError());
-	 * assertNotNull(apiResponse.getTimestamp());
-	 * 
-	 * }
-	 */
+	@Test
+	@Order(5)
+	void getCategoriesPaginated() {
+
+		ResponseEntity<ApiResponse<PageDTO<BlogsByCategoryInfoDTO>>> response = testRestTemplate.exchange(
+				"/api/category/pagination?page=0&size=15", HttpMethod.GET, null,
+				new ParameterizedTypeReference<ApiResponse<PageDTO<BlogsByCategoryInfoDTO>>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(200, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<PageDTO<BlogsByCategoryInfoDTO>> apiResponse = response.getBody();
+		assertEquals(200, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.GET, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
+	@Order(6)
+	void getOneCategoryWithAllInfoSuccessTest() {
+
+		ResponseEntity<ApiResponse<BlogsByCategoryInfoDTO>> response = testRestTemplate.exchange(
+				"/api/category/Lifestyle", HttpMethod.GET, null,
+				new ParameterizedTypeReference<ApiResponse<BlogsByCategoryInfoDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(200, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<BlogsByCategoryInfoDTO> apiResponse = response.getBody();
+		assertEquals(200, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.GET, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+		// extract data
+		BlogsByCategoryInfoDTO blogsByCategoryInfoDTO = apiResponse.getData();
+		assertNotNull(blogsByCategoryInfoDTO);
+
+		// extract category full info
+		CategoryFullInfoDTO categoryFullInfoDTO = blogsByCategoryInfoDTO.getCategoryFullInfoDTO();
+
+		// check userSimpleResponseDTOs
+		List<UserSimpleResponseDTO> userSimpleResponseDTOs = blogsByCategoryInfoDTO.getFollewersCategory();
+		assertNotNull(userSimpleResponseDTOs);
+		assertEquals(1, userSimpleResponseDTOs.size());
+
+		// check userSimpleResponseDTOs
+		List<Long> usersFollowersIds = blogsByCategoryInfoDTO.getUsersFollowersIds();
+		assertNotNull(usersFollowersIds);
+		assertEquals(1, usersFollowersIds.size());
+
+		// check blogsByCategoryInfoDTO
+		assertEquals(blogsByCategoryInfoDTO.getCategoryFullInfoDTO().getCategoryId(),
+				categoryFullInfoDTO.getCategoryId());
+		assertEquals(blogsByCategoryInfoDTO.getCategoryFullInfoDTO().getColor(), categoryFullInfoDTO.getColor());
+		assertNotNull(blogsByCategoryInfoDTO.getCategoryFullInfoDTO().getCreatedAt());
+		assertEquals(blogsByCategoryInfoDTO.getCategoryFullInfoDTO().getDescription(),
+				categoryFullInfoDTO.getDescription());
+		assertEquals(blogsByCategoryInfoDTO.getCategoryFullInfoDTO().getLongDescription(),
+				categoryFullInfoDTO.getLongDescription());
+		assertEquals(blogsByCategoryInfoDTO.getCategoryFullInfoDTO().getName(), categoryFullInfoDTO.getName());
+		assertEquals(blogsByCategoryInfoDTO.getCategoryFullInfoDTO().getPostsNumber(),
+				categoryFullInfoDTO.getPostsNumber());
+
+	}
+
+	@Test
+	@Order(7)
+	void searchCategorySuccessTest() {
+
+		ResponseEntity<ApiResponse<PageDTO<MultipleSearchDTO>>> response = testRestTemplate.exchange(
+				"/api/search?query=java&page=0&size=10", HttpMethod.GET, null,
+				new ParameterizedTypeReference<ApiResponse<PageDTO<MultipleSearchDTO>>>() {
+				});
+
+		// basic test
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertNotNull(response.getBody());
+		assertEquals("Search by param", response.getBody().getMessage());
+
+		// extract api response
+		ApiResponse<PageDTO<MultipleSearchDTO>> apiResponse = response.getBody();
+		assertEquals(200, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.GET, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
 
 	@BeforeEach
 	void setUp() {
@@ -204,6 +286,8 @@ public class CategoryServiceTest {
 
 		categoryRequestDTOBuilder = CategoryRequestDTOBuilder.withAllDummy().build();
 
+		blogsByCategoryInfoDTO = BlogsByCategoryInfoDTOBuilder.withAllDummy().build();
+
 		headers = new HttpHeaders();
 
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -211,7 +295,7 @@ public class CategoryServiceTest {
 	}
 
 	@Test
-	@Order(5)
+	@Order(4)
 	void updateCategorySuccessTest() {
 
 		CategoryResponseDTO categoryResponseDTOBuilder = CategoryResponseDTOBuilder.withAllDummy().setCategoryId(1L)
@@ -254,6 +338,58 @@ public class CategoryServiceTest {
 		assertEquals(categoryResponseDTOBuilder.getLabel(), categoryResponseDTO.getLabel());
 		assertEquals(categoryResponseDTOBuilder.getValue(), categoryResponseDTO.getValue());
 		assertNotNull(categoryResponseDTO.getCreatedAt());
+
+	}
+
+	@Test
+	@Order(9)
+	void userFollowCategorySuccessfully() {
+
+		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/category/2/follow?userId=1",
+				HttpMethod.POST, new HttpEntity<>(null, headers),
+				new ParameterizedTypeReference<ApiResponse<String>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertEquals(201, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<String> apiResponse = response.getBody();
+		assertEquals(201, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
+	@Order(10)
+	void userUnfollowCategorySuccessfully() {
+
+		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/category/1/unfollow?userId=1",
+				HttpMethod.DELETE, new HttpEntity<>(null, headers),
+				new ParameterizedTypeReference<ApiResponse<String>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(200, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<String> apiResponse = response.getBody();
+		assertEquals(200, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(false, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
 
 	}
 

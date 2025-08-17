@@ -252,4 +252,59 @@ public class CategoryServiceExceptionTest {
 
 	}
 
+	@Test
+	@Order(8)
+	void userFollowCategoryExceptionTest() {
+
+		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/category/1/follow?userId=1",
+				HttpMethod.POST, new HttpEntity<>(null, headers),
+				new ParameterizedTypeReference<ApiResponse<String>>() {
+				});
+
+		System.out.println("**********");
+		System.out.println(response.getBody().getMessage());
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<String> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertEquals("The user is already following this category.", apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
+	@Order(7)
+	void userUnfollowCategoryExceptionTest() {
+
+		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/category/10/unfollow?userId=1",
+				HttpMethod.DELETE, new HttpEntity<>(null, headers),
+				new ParameterizedTypeReference<ApiResponse<String>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<String> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
+		assertEquals("The user is not following this category.", apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
 }
