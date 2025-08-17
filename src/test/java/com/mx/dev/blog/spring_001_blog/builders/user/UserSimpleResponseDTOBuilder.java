@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.builders;
+package com.mx.dev.blog.spring_001_blog.builders.user;
 
 import java.time.LocalDateTime;
 

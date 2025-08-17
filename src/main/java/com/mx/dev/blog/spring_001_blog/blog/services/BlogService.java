@@ -39,7 +39,7 @@ public interface BlogService {
 
 	Page<BlogInfoCardDTO> getBlogsPaginated(int page, int size);
 
-	Page<BlogInfoCardDTO> getBlogsPaginatedByLike(int page, int size);
+	// Page<BlogInfoCardDTO> getBlogsPaginatedByLike(int page, int size);
 
 	HomePageResponseDTO getHomePageInfo();
 

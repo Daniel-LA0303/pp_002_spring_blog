@@ -170,3 +170,128 @@ INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (19, 5);
 -- Blog 20 
 INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (20, 4);
 
+-- Usuario 1 leyó 10 blogs
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 1, '2025-08-01 10:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 2, '2025-08-01 11:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 3, '2025-08-01 12:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 4, '2025-08-01 13:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 5, '2025-08-01 14:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 6, '2025-08-01 15:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 7, '2025-08-01 16:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 8, '2025-08-01 17:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 9, '2025-08-01 18:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (1, 10, '2025-08-01 19:00:00');
+
+-- Usuario 2 leyó 10 blogs
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 11, '2025-08-02 10:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 12, '2025-08-02 11:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 13, '2025-08-02 12:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 14, '2025-08-02 13:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 15, '2025-08-02 14:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 16, '2025-08-02 15:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 17, '2025-08-02 16:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 18, '2025-08-02 17:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 19, '2025-08-02 18:00:00');
+INSERT INTO blog_user_reada_tbl (user_id, blog_id, created_at) VALUES (2, 20, '2025-08-02 19:00:00');
+
+-- Usuario 1 dio like a 10 blogs
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 1, '2025-08-05 10:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 2, '2025-08-05 11:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 3, '2025-08-05 12:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 4, '2025-08-05 13:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 5, '2025-08-05 14:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 6, '2025-08-05 15:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 7, '2025-08-05 16:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 8, '2025-08-05 17:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 9, '2025-08-05 18:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (1, 10, '2025-08-05 19:00:00');
+
+-- Usuario 2 dio like a 10 blogs
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 11, '2025-08-06 10:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 12, '2025-08-06 11:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 13, '2025-08-06 12:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 14, '2025-08-06 13:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 15, '2025-08-06 14:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 16, '2025-08-06 15:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 17, '2025-08-06 16:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 18, '2025-08-06 17:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 19, '2025-08-06 18:00:00');
+INSERT INTO blog_user_like_tbl (user_id, blog_id, created_at) VALUES (2, 20, '2025-08-06 19:00:00');
+
+-- FOLLOWERS
+-- Usuario 1 sigue a 2,5,7
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (1, 2, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (1, 5, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (1, 7, NOW());
+
+-- Usuario 2 sigue a 1,3,6
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (2, 1, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (2, 3, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (2, 6, NOW());
+
+-- Usuario 3 sigue a 2,4,8
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (3, 2, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (3, 4, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (3, 8, NOW());
+
+-- Usuario 4 sigue a 1,5,9
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (4, 1, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (4, 5, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (4, 9, NOW());
+
+-- Usuario 5 sigue a 3,6,10
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (5, 3, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (5, 6, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (5, 10, NOW());
+
+-- Usuario 6 sigue a 1,4,7
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (6, 1, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (6, 4, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (6, 7, NOW());
+
+-- Usuario 7 sigue a 2,5,9
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (7, 2, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (7, 5, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (7, 9, NOW());
+
+-- Usuario 8 sigue a 3,6,10
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (8, 3, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (8, 6, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (8, 10, NOW());
+
+-- Usuario 9 sigue a 1,4,8
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (9, 1, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (9, 4, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (9, 8, NOW());
+
+-- Usuario 10 sigue a 2,5,7
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (10, 2, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (10, 5, NOW());
+INSERT INTO user_follows_tbl (follower_id, followed_id, created_at) VALUES (10, 7, NOW());
+
+
+-- COMMENTS
+-- Comentarios para blogs del 1 al 20
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Great post! Very informative.', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('I learned a lot, thanks!', 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Interesting perspective.', 3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Nice article!', 4, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('I disagree with some points.', 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Thanks for sharing!', 6, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Helpful content.', 7, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('I will try this out.', 8, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Good read!', 9, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Amazing insights.', 10, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Loved this post!', 1, 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Very useful information.', 2, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Thanks for the tips.', 3, 13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Awesome read.', 4, 14, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('I appreciate this!', 5, 15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Very interesting.', 6, 16, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Helpful article.', 7, 17, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Good tips.', 8, 18, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('Well explained.', 9, 19, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO comment_tbl (content, user_id, blog_id, created_at, updated_at) VALUES ('I will share this.', 10, 20, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+

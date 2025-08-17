@@ -3,8 +3,8 @@ package com.mx.dev.blog.spring_001_blog.builders.blog;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.mx.dev.blog.spring_001_blog.builders.UserSimpleResponseDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryFullInfoDTOBuilder;
+import com.mx.dev.blog.spring_001_blog.builders.user.UserSimpleResponseDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;

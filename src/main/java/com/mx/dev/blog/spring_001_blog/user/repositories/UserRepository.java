@@ -128,6 +128,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			""")
 	UserFullEngagementDTO getUserEngagementData(@Param("userId") Long userId);
 
+	// TODO check this query
 	@Query("""
 			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO(
 			        u.userId,

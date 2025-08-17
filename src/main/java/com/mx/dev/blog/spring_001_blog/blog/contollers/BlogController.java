@@ -125,10 +125,17 @@ public class BlogController {
 	}
 
 	@GetMapping("/{categoryName}/blogs")
-	public ResponseEntity<Page<BlogInfoCardDTO>> getBlogsByCategoryName(@PathVariable String categoryName,
+	public ResponseEntity<ApiResponse<Page<BlogInfoCardDTO>>> getBlogsByCategoryName(@PathVariable String categoryName,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 		Page<BlogInfoCardDTO> blogs = blogService.getBlogsByCategoryNamePaginated(categoryName, page, size);
-		return ResponseEntity.ok(blogs);
+
+		Page<BlogInfoCardDTO> blogsPage = blogService.getBlogsByCategoryNamePaginated(categoryName, page, size);
+
+		ApiResponse<Page<BlogInfoCardDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+				"/api/blog/" + categoryName + "/blogs", MethodEnum.GET, "Blogs obtenidos correctamente", blogsPage,
+				false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
 	@GetMapping("/pagination")
