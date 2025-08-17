@@ -125,6 +125,7 @@ INSERT INTO blog_tbl (title, description, content, status, slug, created_at, upd
 INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Travel North America', 'Exploring North America', 'Content about North America...', 'PUBLISHED', 'travel-north-america', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 8);
 INSERT INTO blog_tbl (title, description, content, status, slug, created_at, updated_at, user_id) VALUES ('Data Science 101', 'Introduction to data science', 'Content about data science...', 'PUBLISHED', 'data-science-101', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 9);
 
+
 -- Blog - Categorías
 -- Blog 1 
 INSERT INTO blog_category_tbl (blog_id, category_id) VALUES (1, 1);

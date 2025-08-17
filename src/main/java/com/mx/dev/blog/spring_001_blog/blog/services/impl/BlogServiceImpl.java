@@ -88,36 +88,26 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	@Transactional
 	public void blogLiked(Long userId, Long blogId) throws ServiceException {
-		try {
-			if (blogRepository.existsByUserIdAndBlogId(userId, blogId)) {
-				throw new ServiceException("Blog error in generate slug, please come back in a few minutes.",
-						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
-			}
 
-			blogRepository.insertBlogLike(userId, blogId, LocalDateTime.now());
-
-		} catch (Exception e) {
-			throw new ServiceException("Blog not found", ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/blog",
-					MethodEnum.GET);
+		if (blogRepository.existsByUserIdAndBlogId(userId, blogId)) {
+			throw new ServiceException("Blog error in like.", ResponseStatus.BAD_REQUEST.getHttpStatusCode(),
+					"/api/blog", MethodEnum.GET);
 		}
+
+		blogRepository.insertBlogLike(userId, blogId, LocalDateTime.now());
+
 	}
 
 	@Override
 	@Transactional
 	public void blogRead(Long userId, Long blogId) throws ServiceException {
-		try {
-			if (blogRepository.existsByUserIdAndBlogIdRead(userId, blogId)) {
-				throw new ServiceException("El blog ya ha sido leído por el usuario.",
-						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog/read", MethodEnum.POST);
-			}
 
-			blogRepository.insertBlogRead(userId, blogId, LocalDateTime.now());
-			System.out.println("***hola****");
-
-		} catch (Exception e) {
-			throw new ServiceException("Error al registrar la lectura del blog",
-					ResponseStatus.INTERNAL_SERVER_ERROR.getHttpStatusCode(), "/api/blog/read", MethodEnum.POST);
+		if (blogRepository.existsByUserIdAndBlogIdRead(userId, blogId)) {
+			throw new ServiceException("El blog ya ha sido leído por el usuario.",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog/read", MethodEnum.POST);
 		}
+
+		blogRepository.insertBlogRead(userId, blogId, LocalDateTime.now());
 
 	}
 
@@ -125,8 +115,8 @@ public class BlogServiceImpl implements BlogService {
 	public void blogUnliked(Long userId, Long blogId) throws ServiceException {
 
 		if (!blogRepository.existsByUserIdAndBlogId(userId, blogId)) {
-			throw new ServiceException("Blog error in generate slug, please come back in a few minutes.",
-					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
+			throw new ServiceException("Blog error in unlike.", ResponseStatus.BAD_REQUEST.getHttpStatusCode(),
+					"/api/blog", MethodEnum.GET);
 		}
 
 		blogRepository.deleteByUserIdAndBlogId(userId, blogId);
@@ -140,7 +130,6 @@ public class BlogServiceImpl implements BlogService {
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog/read", MethodEnum.DELETE);
 		}
 
-		// Elimina la entrada de lectura del blog para el usuario
 		blogRepository.deleteByUserIdAndBlogIdRead(userId, blogId);
 	}
 
@@ -257,13 +246,21 @@ public class BlogServiceImpl implements BlogService {
 		List<BlogEngagementDTO> engagementList = blogRepository.getBlogEngagementDataForBlogs(blogIds);
 
 		// Crear un mapa para acceso rápido a los datos de compromiso
+		// TODO this part was remplaced and was commented
 		Map<Long, BlogEngagementDTO> engagementData = engagementList.stream().filter(dto -> dto.getBlogId() != null)
-				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto, (existing, duplicate) -> {
-					existing.setCommentsNumber(existing.getCommentsNumber() + duplicate.getCommentsNumber());
-					existing.setLikesNumber(existing.getLikesNumber() + duplicate.getLikesNumber());
-					existing.setSavedNumber(existing.getSavedNumber() + duplicate.getSavedNumber());
-					return existing;
-				}));
+				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto));
+		/*
+		 * Map<Long, BlogEngagementDTO> engagementData =
+		 * engagementList.stream().filter(dto -> dto.getBlogId() != null)
+		 * .collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto,
+		 * (existing, duplicate) -> {
+		 * existing.setCommentsNumber(existing.getCommentsNumber() +
+		 * duplicate.getCommentsNumber());
+		 * existing.setLikesNumber(existing.getLikesNumber() +
+		 * duplicate.getLikesNumber());
+		 * existing.setSavedNumber(existing.getSavedNumber() +
+		 * duplicate.getSavedNumber()); return existing; }));
+		 */
 
 		// Obtener IDs de usuarios únicos
 		List<Long> userIds = blogEntities.getContent().stream().map(BlogEntity::getUserId).distinct()
@@ -314,13 +311,22 @@ public class BlogServiceImpl implements BlogService {
 
 		List<BlogEngagementDTO> engagementList = blogRepository.getBlogEngagementDataForBlogs(blogIds);
 
+		// TODO this change and was commented
 		Map<Long, BlogEngagementDTO> engagementData = engagementList.stream().filter(dto -> dto.getBlogId() != null)
-				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto, (existing, duplicate) -> {
-					existing.setCommentsNumber(existing.getCommentsNumber() + duplicate.getCommentsNumber());
-					existing.setLikesNumber(existing.getLikesNumber() + duplicate.getLikesNumber());
-					existing.setSavedNumber(existing.getSavedNumber() + duplicate.getSavedNumber());
-					return existing;
-				}));
+				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto));
+
+		/*
+		 * Map<Long, BlogEngagementDTO> engagementData =
+		 * engagementList.stream().filter(dto -> dto.getBlogId() != null)
+		 * .collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto,
+		 * (existing, duplicate) -> {
+		 * existing.setCommentsNumber(existing.getCommentsNumber() +
+		 * duplicate.getCommentsNumber());
+		 * existing.setLikesNumber(existing.getLikesNumber() +
+		 * duplicate.getLikesNumber());
+		 * existing.setSavedNumber(existing.getSavedNumber() +
+		 * duplicate.getSavedNumber()); return existing; }));
+		 */
 
 		List<Object[]> likesResults = blogRepository.findUserIdsLikeByBlogIds(blogIds);
 		Map<Long, List<Long>> blogLikesMap = likesResults.stream().collect(Collectors.groupingBy(row -> (Long) row[0], // blogId
@@ -428,13 +434,22 @@ public class BlogServiceImpl implements BlogService {
 					+ ", likes: " + value.getLikesNumber() + ", saved: " + value.getSavedNumber());
 		});
 
+		// TODO this change and was commented
 		Map<Long, BlogEngagementDTO> engagementData = engagementList.stream().filter(dto -> dto.getBlogId() != null)
-				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto, (existing, duplicate) -> {
-					existing.setCommentsNumber(existing.getCommentsNumber() + duplicate.getCommentsNumber());
-					existing.setLikesNumber(existing.getLikesNumber() + duplicate.getLikesNumber());
-					existing.setSavedNumber(existing.getSavedNumber() + duplicate.getSavedNumber());
-					return existing;
-				}));
+				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto));
+
+		/*
+		 * Map<Long, BlogEngagementDTO> engagementData =
+		 * engagementList.stream().filter(dto -> dto.getBlogId() != null)
+		 * .collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto,
+		 * (existing, duplicate) -> {
+		 * existing.setCommentsNumber(existing.getCommentsNumber() +
+		 * duplicate.getCommentsNumber());
+		 * existing.setLikesNumber(existing.getLikesNumber() +
+		 * duplicate.getLikesNumber());
+		 * existing.setSavedNumber(existing.getSavedNumber() +
+		 * duplicate.getSavedNumber()); return existing; }));
+		 */
 
 		System.out.println("**** Engagement Map: " + engagementData);
 
@@ -644,13 +659,22 @@ public class BlogServiceImpl implements BlogService {
 
 		// Obtener datos de engagement (likes, comentarios, guardados)
 		List<BlogEngagementDTO> engagementList = blogRepository.getBlogEngagementDataForBlogs(blogIds);
+
+		// TODO this change and was commented
 		Map<Long, BlogEngagementDTO> engagementData = engagementList.stream().filter(dto -> dto.getBlogId() != null)
-				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto, (existing, duplicate) -> {
-					existing.setCommentsNumber(existing.getCommentsNumber() + duplicate.getCommentsNumber());
-					existing.setLikesNumber(existing.getLikesNumber() + duplicate.getLikesNumber());
-					existing.setSavedNumber(existing.getSavedNumber() + duplicate.getSavedNumber());
-					return existing;
-				}));
+				.collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto));
+		/*
+		 * Map<Long, BlogEngagementDTO> engagementData =
+		 * engagementList.stream().filter(dto -> dto.getBlogId() != null)
+		 * .collect(Collectors.toMap(BlogEngagementDTO::getBlogId, dto -> dto,
+		 * (existing, duplicate) -> {
+		 * existing.setCommentsNumber(existing.getCommentsNumber() +
+		 * duplicate.getCommentsNumber());
+		 * existing.setLikesNumber(existing.getLikesNumber() +
+		 * duplicate.getLikesNumber());
+		 * existing.setSavedNumber(existing.getSavedNumber() +
+		 * duplicate.getSavedNumber()); return existing; }));
+		 */
 
 		// Obtener usuarios que dieron like a los blogs
 		List<Object[]> likesResults = blogRepository.findUserIdsLikeByBlogIds(blogIds);
