@@ -6,6 +6,12 @@ public class JWTAuthResponseDto {
 
 	private String tokenType = "Bearer";
 
+	/**
+	 * 
+	 */
+	public JWTAuthResponseDto() {
+	}
+
 	public JWTAuthResponseDto(String accessToken) {
 		this.accessToken = accessToken;
 	}

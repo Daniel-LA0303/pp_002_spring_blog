@@ -1,5 +1,8 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserAuthSuccessDTO {
 
 	/**

@@ -199,34 +199,26 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void userFollowed(Long followerId, Long followedId) throws ServiceException {
-		try {
-			if (userRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
-				throw new ServiceException("User is already following this user.",
-						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/follow", MethodEnum.POST);
-			}
 
-			userRepository.insertUserFollow(followerId, followedId, LocalDateTime.now());
-
-		} catch (Exception e) {
-			throw new ServiceException("Error following the user", ResponseStatus.NOT_FOUND.getHttpStatusCode(),
-					"/api/follow", MethodEnum.POST);
+		if (userRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
+			throw new ServiceException("User is already following this user.",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/follow", MethodEnum.POST);
 		}
+
+		userRepository.insertUserFollow(followerId, followedId, LocalDateTime.now());
+
 	}
 
 	@Override
 	public void userUnfollowed(Long followerId, Long followedId) throws ServiceException {
-		try {
-			if (!userRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
-				throw new ServiceException("User is not following this user.",
-						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/follow", MethodEnum.DELETE);
-			}
 
-			userRepository.deleteByFollowerIdAndFollowedId(followerId, followedId);
-
-		} catch (Exception e) {
-			throw new ServiceException("Error unfollowing the user", ResponseStatus.NOT_FOUND.getHttpStatusCode(),
-					"/api/follow", MethodEnum.DELETE);
+		if (!userRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
+			throw new ServiceException("User is not following this user.",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/follow", MethodEnum.DELETE);
 		}
+
+		userRepository.deleteByFollowerIdAndFollowedId(followerId, followedId);
+
 	}
 
 }

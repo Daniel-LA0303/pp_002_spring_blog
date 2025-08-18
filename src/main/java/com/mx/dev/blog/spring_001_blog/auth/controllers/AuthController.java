@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,17 +61,8 @@ public class AuthController {
 		try {
 			authLoginValidator.validate(loginDTO);
 
-			Authentication authentication = authenticationManager
-					.authenticate(new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
-							loginDTO.getEmail(), loginDTO.getPassword()));
-
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-
-			String token = jwtTokenProvider.generateToken(authentication);
-
-			String email = authentication.getName();
-			Optional<UserEntity> userEntity = userRepository.findUserByEmail(email);
-
+			// 1. Validar si el usuario existe
+			Optional<UserEntity> userEntity = userRepository.findUserByEmail(loginDTO.getEmail());
 			if (!userEntity.isPresent()) {
 				Map<String, String> errorMap = new HashMap<>();
 				errorMap.put("email", "User not found");
@@ -80,6 +72,15 @@ public class AuthController {
 
 				return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 			}
+
+			// 2. Autenticar
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			// 3. Generar token
+			String token = jwtTokenProvider.generateToken(authentication);
 
 			UserAuthSuccessDTO userAuthLoginSuccessDTO = new UserAuthSuccessDTO(userEntity.get().getUserId(),
 					userEntity.get().getUsername(), userEntity.get().getEmail(), new JWTAuthResponseDto(token));
@@ -93,9 +94,8 @@ public class AuthController {
 			Map<String, String> errorMap = new HashMap<>();
 			errorMap.put("password", "Invalid credentials");
 
-			ApiResponse<Map<String, String>> response = new ApiResponse<>(
-					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/auth", MethodEnum.POST, "Invalid password",
-					errorMap, true);
+			ApiResponse<Map<String, String>> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "/api/auth",
+					MethodEnum.POST, "Invalid password", errorMap, true);
 
 			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 		}

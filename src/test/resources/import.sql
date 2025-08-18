@@ -20,11 +20,11 @@ INSERT INTO category_tbl (name, description, color, "value", label, long_descrip
 INSERT INTO category_tbl (name, description, color, "value", label, long_description, created_at, updated_at) VALUES ('DevOps', 'DevOps tools and practices', '#0A0A0A', 'DEVOPS', 'DevOps', 'CI/CD pipelines, automation, and cloud infrastructure.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Roles
-INSERT INTO role_tbl (role_name) VALUES ('USER_ROLE');
-INSERT INTO role_tbl (role_name) VALUES ('ADMIN_ROLE');
+INSERT INTO role_tbl (role_name) VALUES ('ROLE_USER');
+INSERT INTO role_tbl (role_name) VALUES ('ROLE_ADMIN');
 
 -- Usuarios
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('luis', 'luis@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('luis', 'luis@example.com', '$2a$10$SznJ5S3jwxY/w9psYKnucOM9KQ7i3oP3tooVarcAQhU4BXciO0iAe', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('ana', 'ana@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('carlos', 'carlos@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('maria', 'maria@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
