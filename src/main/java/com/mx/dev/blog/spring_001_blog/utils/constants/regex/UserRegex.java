@@ -8,4 +8,8 @@ public class UserRegex {
 
 	public static final String EMAIL = "^[_A-z0-9-]+(\\.[_A-z0-9-]+)*@[A-z0-9-]+(\\.[A-z0-9-]+)*(\\.[A-z]{2,4})$";
 
+	private UserRegex() {
+		throw new IllegalStateException("Utility class");
+	}
+
 }

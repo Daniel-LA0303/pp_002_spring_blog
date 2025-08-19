@@ -46,9 +46,9 @@ public class UserInfoDTOBuilder {
 	 */
 	public static UserInfoDTOBuilder withAllDummy() {
 		return new UserInfoDTOBuilder().setUserId(1L).setUsername("luis").setEmail("luis@example.com")
-				.setBio("Apasionado por la tecnología y el café.").setWork("Desarrollador Backend")
-				.setEducation("Ingeniería en Sistemas").setCity("Ciudad de México").setProfilePicture("pic_luis.png")
-				.setSkills("Java, Spring Boot, SQL").setBlogsNumber(3).setLikesNumber(10).setFollowers(4)
+				.setBio("Apasionado por la tecnologia y el cafe.").setWork("Desarrollador Backend")
+				.setEducation("Ingenieria en Sistemas").setCity("CDMX").setProfilePicture("pic_luis.png")
+				.setSkills("Java, Spring Boot, SQL").setBlogsNumber(3).setLikesNumber(11).setFollowers(4)
 				.setUsersFollowers(List.of(9L, 6L, 4L, 2L)).setCategoryFollows(3).setCreatedAt(LocalDateTime.now())
 				.setWebSite("http://luis.dev");
 	}

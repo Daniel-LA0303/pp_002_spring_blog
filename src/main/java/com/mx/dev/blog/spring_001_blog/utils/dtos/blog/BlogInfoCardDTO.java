@@ -77,37 +77,6 @@ public class BlogInfoCardDTO {
 	}
 
 	/**
-	 * @param blogId
-	 * @param title
-	 * @param description
-	 * @param status
-	 * @param slug
-	 * @param createdAt
-	 * @param userId
-	 * @param username
-	 * @param categories
-	 * @param blogEngagementDTO
-	 * @param usersLiked
-	 * @param usersReaded
-	 */
-	public BlogInfoCardDTO(Long blogId, String title, String description, BlogStatusEnum status, String slug,
-			LocalDateTime createdAt, Long userId, String username, List<CategorySmallInfoDTO> categories,
-			BlogEngagementDTO blogEngagementDTO, List<Long> usersLiked, List<Long> usersReaded) {
-		this.blogId = blogId;
-		this.title = title;
-		this.description = description;
-		this.status = status;
-		this.slug = slug;
-		this.createdAt = createdAt;
-		this.userId = userId;
-		this.username = username;
-		this.categories = categories;
-		this.blogEngagementDTO = blogEngagementDTO;
-		this.usersLiked = usersLiked;
-		this.usersReaded = usersReaded;
-	}
-
-	/**
 	 * return the value of the property blogEngagementDTO
 	 *
 	 * @return the blogEngagementDTO

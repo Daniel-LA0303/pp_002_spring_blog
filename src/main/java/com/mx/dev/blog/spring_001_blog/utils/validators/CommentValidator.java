@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.mx.dev.blog.spring_001_blog.utils.constants.regex.BlogRegex;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -16,7 +15,7 @@ public class CommentValidator implements Validator<CommentCreateRequestDTO> {
 	public Map<String, String> mapValidation = new HashMap<>();
 
 	public boolean isValidateContent(String content) {
-		return Pattern.matches(BlogRegex.ALFANUMERIC_200, content);
+		return Pattern.matches(ValidationCommentEnum.ALFANUMERIC_300.getRegex(), content);
 	}
 
 	@Override

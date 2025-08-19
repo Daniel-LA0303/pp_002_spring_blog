@@ -12,12 +12,4 @@ public enum MethodEnum {
 		this.method = method;
 	}
 
-	public String getMethod() {
-		return method;
-	}
-
-	@Override
-	public String toString() {
-		return method;
-	}
 }

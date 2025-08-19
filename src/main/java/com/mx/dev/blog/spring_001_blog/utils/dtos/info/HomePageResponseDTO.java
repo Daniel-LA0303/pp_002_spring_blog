@@ -24,15 +24,6 @@ public class HomePageResponseDTO {
 	}
 
 	/**
-	 * @param usersTop
-	 * @param categoriesTop
-	 */
-	public HomePageResponseDTO(List<UserTopDTO> usersTop, List<CategoryTopInfoDTO> categoriesTop) {
-		this.usersTop = usersTop;
-		this.categoriesTop = categoriesTop;
-	}
-
-	/**
 	 * return the value of the property categoriesTop
 	 *
 	 * @return the categoriesTop

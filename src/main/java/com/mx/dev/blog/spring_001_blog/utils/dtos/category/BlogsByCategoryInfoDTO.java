@@ -28,18 +28,6 @@ public class BlogsByCategoryInfoDTO {
 	}
 
 	/**
-	 * @param categoryFullInfoDTO
-	 * @param follewersCategory
-	 * @param usersFollowersIds
-	 */
-	public BlogsByCategoryInfoDTO(CategoryFullInfoDTO categoryFullInfoDTO,
-			List<UserSimpleResponseDTO> follewersCategory, List<Long> usersFollowersIds) {
-		this.categoryFullInfoDTO = categoryFullInfoDTO;
-		this.follewersCategory = follewersCategory;
-		this.usersFollowersIds = usersFollowersIds;
-	}
-
-	/**
 	 * return the value of the property categoryFullInfoDTO
 	 *
 	 * @return the categoryFullInfoDTO

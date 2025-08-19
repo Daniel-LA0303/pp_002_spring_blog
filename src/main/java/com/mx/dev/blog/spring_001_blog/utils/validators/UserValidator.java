@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.mx.dev.blog.spring_001_blog.utils.constants.regex.UserRegex;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -16,15 +15,15 @@ public class UserValidator implements Validator<UserCreateRequestDTO> {
 	public Map<String, String> mapValidation = new HashMap<>();
 
 	public boolean isValidateEmail(String email) {
-		return Pattern.matches(UserRegex.EMAIL, email);
+		return Pattern.matches(ValidationUserEnum.EMAIL.getRegex(), email);
 	}
 
 	public boolean isValidateUsername(String username) {
-		return Pattern.matches(UserRegex.ALFANUMERIC_150, username);
+		return Pattern.matches(ValidationUserEnum.ALFANUMERIC_150.getRegex(), username);
 	}
 
 	public boolean isValidPassword(String password) {
-		return Pattern.matches(UserRegex.ALFANUMERIC_200, password);
+		return Pattern.matches(ValidationUserEnum.ALFANUMERIC_150.getRegex(), password);
 	}
 
 	@Override

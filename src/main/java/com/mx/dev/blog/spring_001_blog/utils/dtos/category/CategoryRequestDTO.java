@@ -24,17 +24,6 @@ public class CategoryRequestDTO {
 	}
 
 	/**
-	 * @param name
-	 * @param description
-	 * @param color
-	 */
-	public CategoryRequestDTO(String name, String description, String color) {
-		this.name = name;
-		this.description = description;
-		this.color = color;
-	}
-
-	/**
 	 * return the value of the property color
 	 *
 	 * @return the color

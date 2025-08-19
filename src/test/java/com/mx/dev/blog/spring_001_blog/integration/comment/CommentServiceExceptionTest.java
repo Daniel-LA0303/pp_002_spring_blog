@@ -52,6 +52,36 @@ public class CommentServiceExceptionTest {
 	HttpHeaders headers;
 
 	@Test
+	@Order(4)
+	void createCommentInvalidDataExceptionTest() {
+
+		CommentCreateRequestDTO commentCreateRequestDTO = CommentCreateRequestDTOBuilder.withAllDummy().setContent("")
+				.setUserId(3L).setBlogId(2L).build();
+
+		HttpEntity<CommentCreateRequestDTO> requestEntity = new HttpEntity<>(commentCreateRequestDTO, headers);
+
+		ResponseEntity<ApiResponse<CommentCardDTO>> response = testRestTemplate.exchange("/api/comment",
+				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<CommentCardDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<CommentCardDTO> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
 	@Order(1)
 	void deleteCommentExceptionTest() {
 
@@ -80,7 +110,7 @@ public class CommentServiceExceptionTest {
 	}
 
 	@Test
-	@Order(1)
+	@Order(2)
 	void deleteNotFoundCommentExceptionTest() {
 
 		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -117,7 +147,7 @@ public class CommentServiceExceptionTest {
 	}
 
 	@Test
-	@Order(5)
+	@Order(3)
 	void updateCategoryExceptionTest() {
 
 		CommentCreateRequestDTO commentCreateRequestDTO = CommentCreateRequestDTOBuilder.withAllDummy()

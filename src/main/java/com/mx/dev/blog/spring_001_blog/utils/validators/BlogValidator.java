@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.mx.dev.blog.spring_001_blog.utils.constants.regex.BlogRegex;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -16,11 +15,11 @@ public class BlogValidator implements Validator<BlogCreateRequestDTO> {
 	public Map<String, String> mapValidation = new HashMap<>();
 
 	public boolean isValidateDescription(String description) {
-		return Pattern.matches(BlogRegex.ALFANUMERIC_300, description);
+		return Pattern.matches(ValidationBlogEnum.ALFANUMERIC_300.getRegex(), description);
 	}
 
 	public boolean isValidateTitle(String title) {
-		return Pattern.matches(BlogRegex.ALFANUMERIC_200, title);
+		return Pattern.matches(ValidationBlogEnum.ALFANUMERIC_200.getRegex(), title);
 	}
 
 	@Override
@@ -34,7 +33,6 @@ public class BlogValidator implements Validator<BlogCreateRequestDTO> {
 			throw new ServiceException("Validation errors", ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog",
 					MethodEnum.POST, mapValidation);
 		}
-
 	}
 
 	public void validateContent(String content) {

@@ -13,15 +13,6 @@ public class LoginDTO {
 	}
 
 	/**
-	 * @param email
-	 * @param password
-	 */
-	public LoginDTO(String email, String password) {
-		this.email = email;
-		this.password = password;
-	}
-
-	/**
 	 * return the value of the property email
 	 *
 	 * @return the email

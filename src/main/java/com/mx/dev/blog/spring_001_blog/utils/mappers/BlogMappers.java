@@ -1,10 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.utils.mappers;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
@@ -12,6 +9,10 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
 
 public class BlogMappers {
+
+    private BlogMappers() {
+        throw new IllegalStateException("Utility class");
+    }
 
 	public static BlogInfoCardDTO toBlogInfoCardDTO(BlogEntity blogEntity, String username) {
 		BlogInfoCardDTO dto = new BlogInfoCardDTO();
@@ -54,13 +55,15 @@ public class BlogMappers {
 	}
 
 	// Método para convertir Page<BlogEntity> a Page<BlogInfoCardDTO>
-	public static Page<BlogInfoCardDTO> toPageBlogInfoCardDTO(Page<BlogEntity> blogEntities,
-			Map<Long, String> usernames) {
-		return blogEntities.map(blogEntity -> toBlogInfoCardDTO(blogEntity, usernames.get(blogEntity.getUserId())));
-	}
-
-	public static Page<BlogResponseDTO> toPageBlogResponseDTO(Page<BlogEntity> blogEntities) {
-		return blogEntities.map(BlogMappers::toCategoryResponseDTO);
-	}
+	/*
+	 * public static Page<BlogInfoCardDTO> toPageBlogInfoCardDTO(Page<BlogEntity>
+	 * blogEntities, Map<Long, String> usernames) { return
+	 * blogEntities.map(blogEntity -> toBlogInfoCardDTO(blogEntity,
+	 * usernames.get(blogEntity.getUserId()))); }
+	 * 
+	 * public static Page<BlogResponseDTO> toPageBlogResponseDTO(Page<BlogEntity>
+	 * blogEntities) { return blogEntities.map(BlogMappers::toCategoryResponseDTO);
+	 * }
+	 */
 
 }

@@ -3,7 +3,12 @@ package com.mx.dev.blog.spring_001_blog.integration.comment;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +33,7 @@ import com.mx.dev.blog.spring_001_blog.builders.comment.CommentCardDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.comment.CommentCreateRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.comment.entities.CommentEntity;
 import com.mx.dev.blog.spring_001_blog.dto.PageDTO;
+import com.mx.dev.blog.spring_001_blog.utils.constants.regex.CommentRegex;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.comment.CommentCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
@@ -234,6 +240,18 @@ public class CommentServiceTest {
 		assertNotNull(commentCardDTO.getUsername());
 		assertNotNull(commentCardDTO.getUpdatedAt());
 
+	}
+
+	@Test
+	void utilityConstructorIsPrivateAndThrowsCommentRegex() throws Exception {
+		Constructor<CommentRegex> ctor = CommentRegex.class.getDeclaredConstructor();
+		assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El constructor debe ser private");
+
+		ctor.setAccessible(true);
+		InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
+
+		assertTrue(ex.getTargetException() instanceof IllegalStateException);
+		assertEquals("Utility class", ex.getTargetException().getMessage());
 	}
 
 }

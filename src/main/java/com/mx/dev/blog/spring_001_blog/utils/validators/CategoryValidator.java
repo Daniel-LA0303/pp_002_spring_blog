@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.mx.dev.blog.spring_001_blog.utils.constants.regex.CategoryRegex;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -16,15 +15,15 @@ public class CategoryValidator implements Validator<CategoryRequestDTO> {
 	public Map<String, String> mapValidation = new HashMap<>();
 
 	public boolean isValidateColor(String color) {
-		return Pattern.matches(CategoryRegex.COLOR_HEXA, color);
+		return Pattern.matches(ValidationCategoryEnum.COLOR_HEXA.getRegex(), color);
 	}
 
 	public boolean isValidateDescription(String description) {
-		return Pattern.matches(CategoryRegex.ALFANUMERIC_300, description);
+		return Pattern.matches(ValidationCategoryEnum.ALFANUMERIC_300.getRegex(), description);
 	}
 
 	public boolean isValidateName(String name) {
-		return Pattern.matches(CategoryRegex.ALFANUMERIC_150, name);
+		return Pattern.matches(ValidationCategoryEnum.ALFANUMERIC_150.getRegex(), name);
 	}
 
 	@Override

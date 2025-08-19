@@ -17,19 +17,6 @@ public class ReplyCreateRequestDTO {
 	}
 
 	/**
-	 * @param content
-	 * @param userId
-	 * @param blogId
-	 * @param commentId
-	 */
-	public ReplyCreateRequestDTO(String content, Long userId, Long blogId, Long commentId) {
-		this.content = content;
-		this.userId = userId;
-		this.blogId = blogId;
-		this.commentId = commentId;
-	}
-
-	/**
 	 * return the value of the property blogId
 	 *
 	 * @return the blogId

@@ -43,24 +43,6 @@ public class BlogCreateRequestDTO {
 	}
 
 	/**
-	 * @param title
-	 * @param description
-	 * @param content
-	 * @param userId
-	 * @param blogImage
-	 * @param categories
-	 */
-	public BlogCreateRequestDTO(String title, String description, String content, Long userId, MultipartFile blogImage,
-			List<Long> categories) {
-		this.title = title;
-		this.description = description;
-		this.content = content;
-		this.userId = userId;
-		this.blogImage = blogImage;
-		this.categories = categories;
-	}
-
-	/**
 	 * return the value of the property blogImage
 	 *
 	 * @return the blogImage

@@ -24,66 +24,6 @@ public class PageDTO<T> {
 	}
 
 	/**
-	 * @param content
-	 * @param totalPages
-	 * @param totalElements
-	 * @param number
-	 * @param size
-	 */
-	public PageDTO(List<T> content, int totalPages, long totalElements, int number, int size) {
-		this.content = content;
-		this.totalPages = totalPages;
-		this.totalElements = totalElements;
-		this.number = number;
-		this.size = size;
-	}
-
-	/**
-	 * return the value of the propertie content
-	 *
-	 * @return the content
-	 */
-	public List<T> getContent() {
-		return content;
-	}
-
-	/**
-	 * return the value of the propertie number
-	 *
-	 * @return the number
-	 */
-	public int getNumber() {
-		return number;
-	}
-
-	/**
-	 * return the value of the propertie size
-	 *
-	 * @return the size
-	 */
-	public int getSize() {
-		return size;
-	}
-
-	/**
-	 * return the value of the propertie totalElements
-	 *
-	 * @return the totalElements
-	 */
-	public long getTotalElements() {
-		return totalElements;
-	}
-
-	/**
-	 * return the value of the propertie totalPages
-	 *
-	 * @return the totalPages
-	 */
-	public int getTotalPages() {
-		return totalPages;
-	}
-
-	/**
 	 * set the value of the proppertie content
 	 *
 	 * @param content the content to set

@@ -3,7 +3,12 @@ package com.mx.dev.blog.spring_001_blog.integration.categoryService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +35,7 @@ import com.mx.dev.blog.spring_001_blog.builders.category.CategoryRequestDTOBuild
 import com.mx.dev.blog.spring_001_blog.builders.category.CategoryResponseDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.dto.PageDTO;
+import com.mx.dev.blog.spring_001_blog.utils.constants.regex.CategoryRegex;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
@@ -37,6 +43,7 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.search.MultipleSearchDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
+import com.mx.dev.blog.spring_001_blog.utils.mappers.CategoryMappers;
 import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -58,6 +65,18 @@ public class CategoryServiceTest {
 	CategoryRequestDTO categoryRequestDTOBuilder;
 
 	BlogsByCategoryInfoDTO blogsByCategoryInfoDTO;
+
+	@Test
+	void categoryMappers_constructor_isPrivate_andThrows() throws Exception {
+		Constructor<CategoryMappers> ctor = CategoryMappers.class.getDeclaredConstructor();
+		assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El ctor debe ser private");
+
+		ctor.setAccessible(true);
+		InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
+
+		assertTrue(ex.getTargetException() instanceof IllegalStateException);
+		assertEquals("Utility class", ex.getTargetException().getMessage());
+	}
 
 	@Test
 	@Order(3)
@@ -391,6 +410,18 @@ public class CategoryServiceTest {
 		assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
 
+	}
+
+	@Test
+	void utilityConstructorIsPrivateAndThrowsCategoryRegex() throws Exception {
+		Constructor<CategoryRegex> ctor = CategoryRegex.class.getDeclaredConstructor();
+		assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El constructor debe ser private");
+
+		ctor.setAccessible(true);
+		InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
+
+		assertTrue(ex.getTargetException() instanceof IllegalStateException);
+		assertEquals("Utility class", ex.getTargetException().getMessage());
 	}
 
 }

@@ -51,6 +51,37 @@ public class ReplyServiceExceptionTest {
 	 */
 	HttpHeaders headers;
 
+	ReplyCreateRequestDTO replyCreateRequestDTOBuilder;
+
+	@Test
+	@Order(2)
+	void createCommentInvalidDataExceptionTest() {
+
+		replyCreateRequestDTOBuilder = ReplyCreateRequestDTOBuilder.withAllDummy().setBlogId(2L).setCommentId(1L)
+				.setContent("").setUserId(1L).build();
+
+		HttpEntity<ReplyCreateRequestDTO> requestEntity = new HttpEntity<>(replyCreateRequestDTOBuilder, headers);
+
+		ResponseEntity<ApiResponse<ReplyCardDTO>> response = testRestTemplate.exchange("/api/reply", HttpMethod.POST,
+				requestEntity, new ParameterizedTypeReference<ApiResponse<ReplyCardDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<ReplyCardDTO> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+	}
+
 	@BeforeEach
 	void setUp() {
 
@@ -91,7 +122,7 @@ public class ReplyServiceExceptionTest {
 	}
 
 	@Test
-	@Order(1)
+	@Order(2)
 	void updateNotFoundCommentExceptionTest() {
 
 		ReplyCreateRequestDTO replyCreateRequestDTO = ReplyCreateRequestDTOBuilder.withAllDummy()

@@ -50,19 +50,4 @@ public class BlogsByCategoryInfoDTOBuilder {
 		return dto;
 	}
 
-	public BlogsByCategoryInfoDTOBuilder setCategoryFullInfoDTO(CategoryFullInfoDTO categoryFullInfoDTO) {
-		this.categoryFullInfoDTO = categoryFullInfoDTO;
-		return this;
-	}
-
-	public BlogsByCategoryInfoDTOBuilder setFollewersCategory(List<UserSimpleResponseDTO> follewersCategory) {
-		this.follewersCategory = follewersCategory;
-		return this;
-	}
-
-	public BlogsByCategoryInfoDTOBuilder setUsersFollowersIds(List<Long> usersFollowersIds) {
-		this.usersFollowersIds = usersFollowersIds;
-		return this;
-	}
-
 }

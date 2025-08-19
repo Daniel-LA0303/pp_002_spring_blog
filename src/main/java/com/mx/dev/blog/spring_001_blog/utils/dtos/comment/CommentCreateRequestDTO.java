@@ -15,17 +15,6 @@ public class CommentCreateRequestDTO {
 	}
 
 	/**
-	 * @param content
-	 * @param userId
-	 * @param blogId
-	 */
-	public CommentCreateRequestDTO(String content, Long userId, Long blogId) {
-		this.content = content;
-		this.userId = userId;
-		this.blogId = blogId;
-	}
-
-	/**
 	 * return the value of the property blogId
 	 *
 	 * @return the blogId

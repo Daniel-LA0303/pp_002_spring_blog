@@ -10,6 +10,10 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 
 public class UserMappers {
 
+	private UserMappers() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	public static List<UserSimpleResponseDTO> toListUserSimpleResponseDTO(List<UserEntity> userEntities) {
 		return userEntities.stream().map(UserMappers::toUserSimpleResponseDTO).collect(Collectors.toList());
 	}

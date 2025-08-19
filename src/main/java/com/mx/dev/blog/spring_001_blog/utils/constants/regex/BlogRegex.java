@@ -6,4 +6,8 @@ public class BlogRegex {
 
 	public static final String ALFANUMERIC_300 = "^.{1,300}$";
 
+	private BlogRegex() {
+		throw new IllegalStateException("Utility class");
+	}
+
 }

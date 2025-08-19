@@ -147,14 +147,4 @@ public class CategoryFullInfoDTOBuilder {
 		return this;
 	}
 
-	/**
-	 * set the value of the property usersFollowersIds
-	 *
-	 * @param usersFollowersIds the usersFollowersIds to set
-	 */
-	public CategoryFullInfoDTOBuilder setUsersFollowersIds(List<Long> usersFollowersIds) {
-		this.usersFollowersIds = usersFollowersIds;
-		return this;
-	}
-
 }

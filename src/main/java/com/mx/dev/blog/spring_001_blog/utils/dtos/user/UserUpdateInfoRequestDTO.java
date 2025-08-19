@@ -70,34 +70,6 @@ public class UserUpdateInfoRequestDTO {
 	}
 
 	/**
-	 * @param name
-	 * @param lastName
-	 * @param work
-	 * @param education
-	 * @param pronouns
-	 * @param website
-	 * @param address
-	 * @param city
-	 * @param skills
-	 * @param bio
-	 * @param userImage
-	 */
-	public UserUpdateInfoRequestDTO(String name, String lastName, String work, String education, String pronouns,
-			String website, String address, String city, String skills, String bio, MultipartFile userImage) {
-		this.name = name;
-		this.lastName = lastName;
-		this.work = work;
-		this.education = education;
-		this.pronouns = pronouns;
-		this.website = website;
-		this.address = address;
-		this.city = city;
-		this.skills = skills;
-		this.bio = bio;
-		this.userImage = userImage;
-	}
-
-	/**
 	 * return the value of the property address
 	 *
 	 * @return the address

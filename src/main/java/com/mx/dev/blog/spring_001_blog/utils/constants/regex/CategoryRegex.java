@@ -8,4 +8,8 @@ public class CategoryRegex {
 
 	public static final String COLOR_HEXA = "^#(?:[0-9a-fA-F]{3}){1,2}$";
 
+	private CategoryRegex() {
+		throw new IllegalStateException("Utility class");
+	}
+
 }

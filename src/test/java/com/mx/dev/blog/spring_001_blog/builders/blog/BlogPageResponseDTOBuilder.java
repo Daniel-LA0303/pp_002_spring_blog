@@ -101,8 +101,8 @@ public class BlogPageResponseDTOBuilder {
 
 		// Usuario
 		builder.userInfoCardDTO = UserInfoCardDTOBuilder.withAllDummy().setUserId(1L).setUsername("luis")
-				.setProfilePicture("pic_luis.png").setCity("Ciudad de México").setBlogsByUser(3L).setFollowers(4L)
-				.setFollowing(3L).setUsersFollowers(List.of(2L, 5L, 7L)).build();
+				.setProfilePicture("pic_luis.png").setCity("CDMX").setBlogsByUser(3L).setFollowers(4L).setFollowing(3L)
+				.setUsersFollowers(List.of(2L, 5L, 7L)).build();
 
 		// Engagement
 		builder.blogEngagementDTO = BlogEngagementDTOBuilder.withAllDummy().setBlogId(1L).setLikesNumber(1L)

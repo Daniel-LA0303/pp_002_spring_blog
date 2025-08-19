@@ -4,4 +4,8 @@ public class ReplyRegex {
 
 	public static final String ALFANUMERIC_300 = "^.{1,300}$";
 
+	private ReplyRegex() {
+		throw new IllegalStateException("Utility class");
+	}
+
 }

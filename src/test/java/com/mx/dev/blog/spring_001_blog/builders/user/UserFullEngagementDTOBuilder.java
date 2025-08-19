@@ -45,7 +45,7 @@ public class UserFullEngagementDTOBuilder {
 	 * @return a pre-filled instance of UserFullEngagementDTOBuilder
 	 */
 	public static UserFullEngagementDTOBuilder withAllDummy() {
-		return new UserFullEngagementDTOBuilder().setBlogCount(3L).setLikesCount(10L).setReadBlogsCount(10L)
+		return new UserFullEngagementDTOBuilder().setBlogCount(3L).setLikesCount(11L).setReadBlogsCount(11L)
 				.setCommentCount(2L).setFollowingUserCount(4L).setFollowersUserCount(4L).setFollowingCategoryCount(3L);
 	}
 

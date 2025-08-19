@@ -189,15 +189,6 @@ public class CategoryFullInfoDTO {
 	}
 
 	/**
-	 * set the value of the property nameString
-	 *
-	 * @param nameString the nameString to set
-	 */
-	public void setNameString(String name) {
-		this.name = name;
-	}
-
-	/**
 	 * set the value of the property postsNumber
 	 *
 	 * @param postsNumber the postsNumber to set

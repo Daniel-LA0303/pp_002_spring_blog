@@ -11,6 +11,10 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
 
 public class CategoryMappers {
 
+	private CategoryMappers() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	public static CategoryResponseDTO fromCategoryEToCategoryEntity(CategoryEntity categoryEntity) {
 
 		CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();

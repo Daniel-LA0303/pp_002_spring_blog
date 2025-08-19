@@ -79,38 +79,6 @@ public class BlogPageResponseDTO {
 	}
 
 	/**
-	 * @param blogId
-	 * @param title
-	 * @param description
-	 * @param content
-	 * @param status
-	 * @param slug
-	 * @param createdAt
-	 * @param categories
-	 * @param userInfoCardDTO
-	 * @param blogEngagementDTO
-	 * @param usersLiked
-	 * @param usersReaded
-	 */
-	public BlogPageResponseDTO(Long blogId, String title, String description, String content, BlogStatusEnum status,
-			String slug, LocalDateTime createdAt, List<CategorySmallInfoDTO> categories,
-			UserInfoCardDTO userInfoCardDTO, BlogEngagementDTO blogEngagementDTO, List<Long> usersLiked,
-			List<Long> usersReaded) {
-		this.blogId = blogId;
-		this.title = title;
-		this.description = description;
-		this.content = content;
-		this.status = status;
-		this.slug = slug;
-		this.createdAt = createdAt;
-		this.categories = categories;
-		this.userInfoCardDTO = userInfoCardDTO;
-		this.blogEngagementDTO = blogEngagementDTO;
-		this.usersLiked = usersLiked;
-		this.usersReaded = usersReaded;
-	}
-
-	/**
 	 * return the value of the property blogEngagementDTO
 	 *
 	 * @return the blogEngagementDTO

@@ -16,11 +16,6 @@ public class JWTAuthResponseDto {
 		this.accessToken = accessToken;
 	}
 
-	public JWTAuthResponseDto(String accessToken, String tokenType) {
-		this.accessToken = accessToken;
-		this.tokenType = tokenType;
-	}
-
 	public String getAccessToken() {
 		return accessToken;
 	}

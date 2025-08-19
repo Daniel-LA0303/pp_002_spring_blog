@@ -1,8 +1,8 @@
 package com.mx.dev.blog.spring_001_blog.builders.user;
 
-import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 
-public class UserUpdateInfoResponseDTOBuilder {
+public class UserUpdateInfoRequestDTOBuilder {
 
 	/**
 	 * name
@@ -57,13 +57,13 @@ public class UserUpdateInfoResponseDTOBuilder {
 	/**
 	 * Creates a builder with all dummy data for testing purposes.
 	 *
-	 * @return a pre-filled instance of UserUpdateInfoResponseDTOBuilder
+	 * @return a pre-filled instance of UserUpdateInfoRequestDTOBuilder
 	 */
-	public static UserUpdateInfoResponseDTOBuilder withAllDummy() {
-		return new UserUpdateInfoResponseDTOBuilder().setName("Luis").setLastName("Martinez")
-				.setWork("Desarrollador Backend").setEducation("Ingenieria en Sistemas").setPronouns("el")
-				.setWebsite("http://luis.dev").setAddress("Calle 1 #123").setCity("CDMX")
-				.setSkills("Java, Spring Boot, SQL").setBio("Apasionado por la tecnologia y el cafe.");
+	public static UserUpdateInfoRequestDTOBuilder withAllDummy() {
+		return new UserUpdateInfoRequestDTOBuilder().setName("Luis").setLastName("Martínez")
+				.setWork("Desarrollador Backend").setEducation("Ingeniería en Sistemas").setPronouns("él")
+				.setWebsite("http://luis.dev").setAddress("Calle 1 #123").setCity("Ciudad de México")
+				.setSkills("Java, Spring Boot, SQL").setBio("Apasionado por la tecnología y el café.");
 	}
 
 	/**
@@ -71,8 +71,8 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @return a new instance of UserUpdateInfoResponseDTO
 	 */
-	public UserUpdateInfoResponseDTO build() {
-		UserUpdateInfoResponseDTO userUpdateInfoResponseDTO = new UserUpdateInfoResponseDTO();
+	public UserUpdateInfoRequestDTO build() {
+		UserUpdateInfoRequestDTO userUpdateInfoResponseDTO = new UserUpdateInfoRequestDTO();
 		userUpdateInfoResponseDTO.setName(name);
 		userUpdateInfoResponseDTO.setLastName(lastName);
 		userUpdateInfoResponseDTO.setWork(work);
@@ -92,7 +92,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param address the address to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setAddress(String address) {
+	public UserUpdateInfoRequestDTOBuilder setAddress(String address) {
 		this.address = address;
 		return this;
 	}
@@ -102,7 +102,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param bio the bio to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setBio(String bio) {
+	public UserUpdateInfoRequestDTOBuilder setBio(String bio) {
 		this.bio = bio;
 		return this;
 	}
@@ -112,7 +112,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param city the city to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setCity(String city) {
+	public UserUpdateInfoRequestDTOBuilder setCity(String city) {
 		this.city = city;
 		return this;
 	}
@@ -122,7 +122,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param education the education to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setEducation(String education) {
+	public UserUpdateInfoRequestDTOBuilder setEducation(String education) {
 		this.education = education;
 		return this;
 	}
@@ -132,7 +132,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param lastName the lastName to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setLastName(String lastName) {
+	public UserUpdateInfoRequestDTOBuilder setLastName(String lastName) {
 		this.lastName = lastName;
 		return this;
 	}
@@ -142,7 +142,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param name the name to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setName(String name) {
+	public UserUpdateInfoRequestDTOBuilder setName(String name) {
 		this.name = name;
 		return this;
 
@@ -153,7 +153,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param pronouns the pronouns to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setPronouns(String pronouns) {
+	public UserUpdateInfoRequestDTOBuilder setPronouns(String pronouns) {
 		this.pronouns = pronouns;
 		return this;
 	}
@@ -163,7 +163,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param skills the skills to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setSkills(String skills) {
+	public UserUpdateInfoRequestDTOBuilder setSkills(String skills) {
 		this.skills = skills;
 		return this;
 	}
@@ -173,7 +173,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param website the website to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setWebsite(String website) {
+	public UserUpdateInfoRequestDTOBuilder setWebsite(String website) {
 		this.website = website;
 		return this;
 	}
@@ -183,7 +183,7 @@ public class UserUpdateInfoResponseDTOBuilder {
 	 *
 	 * @param work the work to set
 	 */
-	public UserUpdateInfoResponseDTOBuilder setWork(String work) {
+	public UserUpdateInfoRequestDTOBuilder setWork(String work) {
 		this.work = work;
 		return this;
 	}

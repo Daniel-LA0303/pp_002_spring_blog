@@ -144,6 +144,32 @@
 			                <excludes>
 			                    <exclude>com/mx/dev/blog/spring_001_blog/utils/*</exclude>
 			                    <exclude>**/entities/CategoryEntity.class</exclude>
+			                    <exclude>**/entities/CategoryBlogEntity.class</exclude>
+			                    <exclude>**/entities/CategoryBlogId.class</exclude>
+			                    <exclude>**/entities/CategoryUserFollowId.class</exclude>
+			                    <exclude>**/entities/CategoryUserFollowEntity.class</exclude>
+			                    
+			                    <exclude>**/entities/BlogEntity.class</exclude>
+			                    <exclude>**/entities/BlogUserLikeEntity.class</exclude>
+			                    <exclude>**/entities/BlogUserLikeId.class</exclude>
+			                    <exclude>**/entities/BlogUserReadEntity.class</exclude>
+			                    <exclude>**/entities/BlogUserReadId.class</exclude>
+			                    
+			                    <exclude>**/entities/CommentEntity.class</exclude>
+			                    <exclude>**/entities/ReplyEntity.class</exclude>
+			                    
+			                    <exclude>**/entities/RoleEntity.class</exclude>
+			                    <exclude>**/entities/UserEntity.class</exclude>
+			                    <exclude>**/entities/UserFollowId.class</exclude>
+			                    <exclude>**/entities/UserFollowsEntity.class</exclude>
+			                    <exclude>**/entities/UserInfoEntity.class</exclude>
+			                    
+			                    <exclude>**/config/configurations/SecurityConfig.class</exclude>
+			                    <exclude>**/config/security/JwtAuthenticationEntryPonit.class</exclude>
+			                    <exclude>**/config/security/JwtAuthenticationFilter.class</exclude>
+			                    
+			                    
+			                    
 			                    <exclude>**/BlogDevSpringApp.class</exclude>
 			                </excludes>
 			            </configuration>
@@ -156,12 +182,12 @@
 			            <configuration>
 			                <rules>
 			                    <rule>
-			                        <element>PACKAGE</element>
+			                        <element>BUNDLE</element>
 			                        <limits>
 			                            <limit>
 			                                <counter>CLASS</counter>
 			                                <value>COVEREDRATIO</value>
-			                                <minimum>0.00</minimum>
+			                                <minimum>0.85</minimum>
 			                            </limit>
 			                        </limits>
 			                    </rule>

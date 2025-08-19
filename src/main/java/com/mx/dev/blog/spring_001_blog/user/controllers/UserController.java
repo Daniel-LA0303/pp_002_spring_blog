@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
@@ -127,12 +124,15 @@ public class UserController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
-	@PutMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PutMapping(
+	// value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+	"/{userId}")
 	public ResponseEntity<?> updateUser(@PathVariable Long userId,
-			@RequestPart("userData") UserUpdateInfoRequestDTO userData,
-			@RequestPart(value = "userImage", required = false) MultipartFile userImage) throws ServiceException {
+			// @RequestPart("userData") UserUpdateInfoRequestDTO userData,
+			// @RequestPart(value = "userImage", required = false) MultipartFile userImage
+			@RequestBody UserUpdateInfoRequestDTO userData) throws ServiceException {
 
-		userData.setUserImage(userImage);
+		// userData.setUserImage(userImage);
 
 		userService.updateUserInfo(userData, userId);
 

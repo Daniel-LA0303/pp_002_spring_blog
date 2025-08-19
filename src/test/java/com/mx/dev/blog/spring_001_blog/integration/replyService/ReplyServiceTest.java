@@ -2,6 +2,12 @@ package com.mx.dev.blog.spring_001_blog.integration.replyService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -23,6 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.mx.dev.blog.spring_001_blog.builders.reply.ReplyCreateRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.dto.PageDTO;
+import com.mx.dev.blog.spring_001_blog.utils.constants.regex.ReplyRegex;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.reply.ReplyCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.reply.ReplyCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
@@ -167,6 +174,18 @@ public class ReplyServiceTest {
 		assertEquals(replyCreateRequestDTO.getBlogId(), replyCardDTO.getBlogId());
 		assertEquals(replyCreateRequestDTO.getCommentId(), replyCardDTO.getCommentId());
 
+	}
+
+	@Test
+	void utilityConstructorIsPrivateAndThrowsReplyRegex() throws Exception {
+		Constructor<ReplyRegex> ctor = ReplyRegex.class.getDeclaredConstructor();
+		assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El constructor debe ser private");
+
+		ctor.setAccessible(true);
+		InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
+
+		assertTrue(ex.getTargetException() instanceof IllegalStateException);
+		assertEquals("Utility class", ex.getTargetException().getMessage());
 	}
 
 }

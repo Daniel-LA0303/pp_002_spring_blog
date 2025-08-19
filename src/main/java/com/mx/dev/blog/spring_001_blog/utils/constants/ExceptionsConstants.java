@@ -21,5 +21,8 @@ public class ExceptionsConstants {
 
 	public static final String MESSAGE_INTERNAL_SERVER_ERROR = "There was a problem in server: %s";
 
-}
+	private ExceptionsConstants() {
+		throw new IllegalStateException("Utility class");
+	}
 
+}

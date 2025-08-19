@@ -30,18 +30,6 @@ public class MultipleSearchDTO {
 	}
 
 	/**
-	 * @param categories
-	 * @param blogs
-	 * @param users
-	 */
-	public MultipleSearchDTO(Page<BlogsByCategoryInfoDTO> categories, Page<BlogInfoCardDTO> blogs,
-			Page<UserInfoCardDTO> users) {
-		this.categories = categories;
-		this.blogs = blogs;
-		this.users = users;
-	}
-
-	/**
 	 * return the value of the property blogs
 	 *
 	 * @return the blogs

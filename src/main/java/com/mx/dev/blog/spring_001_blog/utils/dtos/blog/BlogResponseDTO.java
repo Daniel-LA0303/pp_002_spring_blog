@@ -53,28 +53,6 @@ public class BlogResponseDTO {
 	}
 
 	/**
-	 * @param blogId
-	 * @param title
-	 * @param description
-	 * @param content
-	 * @param status
-	 * @param slug
-	 * @param createdAt
-	 * @param userId
-	 */
-	public BlogResponseDTO(Long blogId, String title, String description, String content, BlogStatusEnum status,
-			String slug, LocalDateTime createdAt, Long userId) {
-		this.blogId = blogId;
-		this.title = title;
-		this.description = description;
-		this.content = content;
-		this.status = status;
-		this.slug = slug;
-		this.createdAt = createdAt;
-		this.userId = userId;
-	}
-
-	/**
 	 * return the value of the property blogId
 	 *
 	 * @return the blogId

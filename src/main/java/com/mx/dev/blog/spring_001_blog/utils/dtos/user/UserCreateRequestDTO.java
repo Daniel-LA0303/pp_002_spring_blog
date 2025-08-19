@@ -15,17 +15,6 @@ public class UserCreateRequestDTO {
 	}
 
 	/**
-	 * @param username
-	 * @param email
-	 * @param password
-	 */
-	public UserCreateRequestDTO(String username, String email, String password) {
-		this.username = username;
-		this.email = email;
-		this.password = password;
-	}
-
-	/**
 	 * return the value of the property email
 	 *
 	 * @return the email

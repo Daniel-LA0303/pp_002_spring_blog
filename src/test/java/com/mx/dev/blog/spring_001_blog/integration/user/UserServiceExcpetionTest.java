@@ -25,12 +25,14 @@ import org.springframework.test.context.ActiveProfiles;
 import com.mx.dev.blog.spring_001_blog.builders.user.LoginDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserCreateRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserInfoDTOBuilder;
+import com.mx.dev.blog.spring_001_blog.builders.user.UserUpdateInfoRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserUpdateInfoResponseDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.LoginDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserAuthSuccessDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
@@ -125,6 +127,36 @@ public class UserServiceExcpetionTest {
 	}
 
 	@Test
+	@Order(9)
+	void createUserInvalidDataExceptionTest() {
+
+		userCreateRequestDTOBuilder = UserCreateRequestDTOBuilder.withAllDummy().setEmail("").setUsername("")
+				.setPassword("").build();
+
+		HttpEntity<UserCreateRequestDTO> requestEntity = new HttpEntity<>(userCreateRequestDTOBuilder, headers);
+
+		ResponseEntity<ApiResponse<UserEntity>> response = testRestTemplate.exchange("/api/user", HttpMethod.POST,
+				requestEntity, new ParameterizedTypeReference<ApiResponse<UserEntity>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<UserEntity> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
 	@Order(5)
 	void getOneUpdateUserInfoExceptionTest() {
 
@@ -213,6 +245,35 @@ public class UserServiceExcpetionTest {
 	}
 
 	@Test
+	@Order(10)
+	void loginUserAuthSuccessTest() {
+
+		loginDTOBuilder = LoginDTOBuilder.withAllDummy().setEmail("").setPassword("").build();
+
+		HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTOBuilder, headers);
+
+		ResponseEntity<ApiResponse<UserAuthSuccessDTO>> response = testRestTemplate.exchange("/api/auth/login",
+				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<UserAuthSuccessDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<UserAuthSuccessDTO> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
 	@Order(8)
 	void loginUserNotFoundAuthExceptionTest() {
 
@@ -223,9 +284,6 @@ public class UserServiceExcpetionTest {
 		ResponseEntity<ApiResponse<UserAuthSuccessDTO>> response = testRestTemplate.exchange("/api/auth/login",
 				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<UserAuthSuccessDTO>>() {
 				});
-
-		System.out.println("*******");
-		System.out.println(response.getBody().getMessage());
 
 		// basic test
 		assertNotNull(response);
@@ -254,6 +312,36 @@ public class UserServiceExcpetionTest {
 		headers = new HttpHeaders();
 
 		headers.setContentType(MediaType.APPLICATION_JSON);
+
+	}
+
+	@Test
+	@Order(11)
+	void updateUserNotFoundExceptionTest() {
+
+		UserUpdateInfoRequestDTO userUpdateInfoRequestDTO = UserUpdateInfoRequestDTOBuilder.withAllDummy()
+				.setName("Name EDIT").build();
+
+		HttpEntity<UserUpdateInfoRequestDTO> requestEntity = new HttpEntity<>(userUpdateInfoRequestDTO, headers);
+
+		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/user/11", HttpMethod.PUT,
+				requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+		assertEquals(404, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<String> apiResponse = response.getBody();
+		assertEquals(404, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.PUT, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
 
 	}
 

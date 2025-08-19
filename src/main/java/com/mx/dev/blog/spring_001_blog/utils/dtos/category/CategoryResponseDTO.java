@@ -46,26 +46,6 @@ public class CategoryResponseDTO {
 	}
 
 	/**
-	 * @param categoryId
-	 * @param name
-	 * @param description
-	 * @param color
-	 * @param label
-	 * @param value
-	 * @param createdAt
-	 */
-	public CategoryResponseDTO(Long categoryId, String name, String description, String color, String label,
-			String value, LocalDateTime createdAt) {
-		this.categoryId = categoryId;
-		this.name = name;
-		this.description = description;
-		this.color = color;
-		this.label = label;
-		this.value = value;
-		this.createdAt = createdAt;
-	}
-
-	/**
 	 * return the value of the property categoryId
 	 *
 	 * @return the categoryId
