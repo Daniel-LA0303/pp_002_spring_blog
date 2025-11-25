@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.cloudstorage.utils.dto;
+package com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.utils.dto;
 
 import java.net.URL;
 

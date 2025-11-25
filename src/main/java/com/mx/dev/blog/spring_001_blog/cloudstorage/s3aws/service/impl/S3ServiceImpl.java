@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.cloudstorage.service.impl;
+package com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.service.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,9 +13,9 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mx.dev.blog.spring_001_blog.cloudstorage.repository.S3Repository;
-import com.mx.dev.blog.spring_001_blog.cloudstorage.service.S3Service;
-import com.mx.dev.blog.spring_001_blog.cloudstorage.utils.dto.Object;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.repository.S3Repository;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.service.S3Service;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.utils.dto.Object;
 
 @Service
 public class S3ServiceImpl implements S3Service {

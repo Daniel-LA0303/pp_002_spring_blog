@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.cloudstorage.config;
+package com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;

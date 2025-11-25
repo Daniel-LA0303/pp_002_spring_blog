@@ -1,11 +1,11 @@
-package com.mx.dev.blog.spring_001_blog.cloudstorage.repository;
+package com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.repository;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import com.mx.dev.blog.spring_001_blog.cloudstorage.utils.dto.Object;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.utils.dto.Object;
 
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;

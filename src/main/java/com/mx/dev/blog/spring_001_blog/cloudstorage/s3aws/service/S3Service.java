@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.cloudstorage.service;
+package com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.service;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mx.dev.blog.spring_001_blog.cloudstorage.utils.dto.Object;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.utils.dto.Object;
 
 public interface S3Service {
 

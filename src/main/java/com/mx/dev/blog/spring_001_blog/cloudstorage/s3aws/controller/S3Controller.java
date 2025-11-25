@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.cloudstorage.controller;
+package com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mx.dev.blog.spring_001_blog.cloudstorage.service.S3Service;
-import com.mx.dev.blog.spring_001_blog.cloudstorage.utils.dto.Object;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.service.S3Service;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.utils.dto.Object;
 
 @RestController
 @RequestMapping(value = "/s3-service")
