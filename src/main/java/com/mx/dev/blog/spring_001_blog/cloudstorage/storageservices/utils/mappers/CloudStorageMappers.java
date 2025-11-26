@@ -20,8 +20,6 @@ public class CloudStorageMappers {
 		mediaEntity.setTypeFile(ext);
 		mediaEntity.setSizeFile(imageResponseCloudinaryDTO.getSizeFile());
 		mediaEntity.setMetadata(imageResponseCloudinaryDTO.getMetadata());
-		mediaEntity.setDeleted(false);
-		mediaEntity.setDeletedBy(null);
 
 		return mediaEntity;
 

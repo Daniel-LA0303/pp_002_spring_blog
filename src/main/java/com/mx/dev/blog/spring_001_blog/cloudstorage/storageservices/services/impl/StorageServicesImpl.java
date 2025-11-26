@@ -1,9 +1,13 @@
 package com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.impl;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.service.CloudinaryService;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.utils.dto.ImageResponseS3DTO;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.entities.MediaEntity;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.repositories.MediaRepository;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.StorageServices;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.CategoryStorage;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.OwnerTypeStorage;
@@ -15,13 +19,29 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 @Service
 public class StorageServicesImpl implements StorageServices {
 
-	public StorageServicesImpl() {
+	private final CloudinaryService cloudinaryService;
 
+	private final MediaRepository mediaRepository;
+
+	public StorageServicesImpl(CloudinaryService cloudinaryService, MediaRepository mediaRepository) {
+		this.cloudinaryService = cloudinaryService;
+		this.mediaRepository = mediaRepository;
 	}
 
+	@Async
 	@Override
-	public void deleteImageCloudinary(MultipartFile file) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void deleteImageCloudinary(String ownerType, Long ownerId) throws ServiceException {
+
+		// 1. get media entity or throw
+		MediaEntity mediaEntity = mediaRepository.findByOwnerTypeAndOwnerId(ownerType, ownerId)
+				.orElseThrow(() -> new ServiceException("Not found media" + ownerType + " con ID " + ownerId, 404,
+						"/delete-image", MethodEnum.DELETE));
+
+		// 2. delete image from cloudinary
+		cloudinaryService.delete(mediaEntity.getMetadata().get("public_id").toString());
+
+		// 3. delete media from db
+		mediaRepository.delete(mediaEntity);
 
 	}
 
@@ -72,7 +92,7 @@ public class StorageServicesImpl implements StorageServices {
 			// 3. check if extension is valid and return
 			return TypeStorage.valueOf(ext);
 		} catch (IllegalArgumentException ex) {
-			// 5. extension not valid
+			// 4. extension not valid
 			throw new ServiceException("Extension " + ext + " not allowed.",
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/upload/image", MethodEnum.POST);
 		}

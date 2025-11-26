@@ -29,8 +29,10 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 			// 1. delete image from cloudinary
 			Map<String, Object> result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
 
+			// 2. get result
 			String deleteResult = result.get("result").toString();
 
+			// 3. check result
 			if (!deleteResult.equals("ok")) {
 				throw new ServiceException(String.format("Cloudinary delete error: %s", deleteResult),
 						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/upload/image-blog", MethodEnum.DELETE);
@@ -49,7 +51,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 		try {
 
-			// 1. upload image
+			// 1. upload image in a folder
 			Map<String, Object> resultUpload = cloudinary.uploader().upload(file.getBytes(),
 					ObjectUtils.asMap("folder", folder));
 
@@ -63,13 +65,11 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 			metadata.put("created_at", resultUpload.get("created_at"));
 
 			// 3. pass from bytes to megabytes
-			Double sizeBytes = resultUpload.get("bytes") != null ? Double.valueOf(resultUpload.get("bytes").toString())
-					: 0.0;
-			Double sizeMB = sizeBytes / (1024 * 1024);
+			Double sizeBytes = ((Number) resultUpload.get("bytes")).doubleValue();
 
 			// 4. build response
 			ImageResponseCloudinaryDTO res = new ImageResponseCloudinaryDTO(resultUpload.get("secure_url").toString(),
-					sizeMB, metadata);
+					sizeBytes, metadata);
 
 			return res;
 		} catch (Exception e) {

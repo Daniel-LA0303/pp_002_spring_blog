@@ -17,6 +17,11 @@ public class MediaServiceImpl implements MediaService {
 	}
 
 	@Override
+	public MediaEntity getMediaById(Long id) {
+		return mediaRepository.findById(id).get();
+	}
+
+	@Override
 	public MediaEntity getMediaByOwnerTypeAndOwnerId(String ownerType, Long ownerId) {
 		// TODO Auto-generated method stub
 		return null;

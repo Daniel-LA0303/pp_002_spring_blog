@@ -2,8 +2,8 @@ package com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services;
 
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
-public interface StorageValidationService {
+public interface OwnerValidationService {
 
-	void storageValidationUploadCloudinary(String ownerType, Long ownerId) throws ServiceException;
+	void storageValidationOwnerTypeAndOwnerId(String ownerType, Long ownerId) throws ServiceException;
 
 }

@@ -8,7 +8,7 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 public interface StorageServices {
 
-	void deleteImageCloudinary(MultipartFile file) throws ServiceException;
+	void deleteImageCloudinary(String ownerType, Long ownerId) throws ServiceException;
 
 	void deleteImageS3(MultipartFile file) throws ServiceException;
 
