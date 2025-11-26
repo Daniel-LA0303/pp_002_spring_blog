@@ -1,0 +1,310 @@
+package com.mx.dev.blog.spring_001_blog.integration.categoryService;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+
+import com.mx.dev.blog.spring_001_blog.builders.category.CategoryRequestDTOBuilder;
+import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryRequestDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryResponseDTO;
+import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
+import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@Sql(scripts = "/import.sql")
+@ActiveProfiles("test")
+public class CategoryServiceExceptionTest {
+
+	/**
+	 * rest template
+	 */
+	@Autowired
+	private TestRestTemplate testRestTemplate;
+
+	/**
+	 * port
+	 */
+	@LocalServerPort
+	private int port;
+
+	/**
+	 * headers
+	 */
+	HttpHeaders headers;
+
+	/**
+	 * valid data
+	 */
+	CategoryRequestDTO validData;
+
+	/**
+	 * invalid data
+	 */
+	CategoryRequestDTO invalidDataCategory;
+
+	/**
+	 * category
+	 */
+	CategoryRequestDTO categoryExisting;
+
+	@Test
+	@Order(1)
+	void createCategoryExistingExceptionTest() {
+
+		HttpEntity<CategoryRequestDTO> requestEntity = new HttpEntity<>(categoryExisting, headers);
+
+		ResponseEntity<ApiResponse<CategoryResponseDTO>> response = testRestTemplate.exchange("/api/category",
+				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// get api response
+		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
+	@Order(3)
+	void createCategoryInvalidDataExceptionTest() {
+
+		HttpEntity<CategoryRequestDTO> requestEntity = new HttpEntity<>(invalidDataCategory, headers);
+
+		ResponseEntity<ApiResponse<CategoryResponseDTO>> response = testRestTemplate.exchange("/api/category",
+				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// get api response
+		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
+	@Order(6)
+	void getCategoriesByIdException() {
+
+		List<Long> ids = Arrays.asList(999L, 998L);
+
+		HttpEntity<List<Long>> requestEntity = new HttpEntity<>(ids, headers);
+
+		ResponseEntity<ApiResponse<List<CategoryEntity>>> response = testRestTemplate.exchange(
+				"/api/category/get-categories-by-id", HttpMethod.POST, requestEntity,
+				new ParameterizedTypeReference<ApiResponse<List<CategoryEntity>>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		ApiResponse<List<CategoryEntity>> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@BeforeEach
+	void setUp() {
+
+		// valid data
+		validData = CategoryRequestDTOBuilder.withAllDummy().build();
+		// invalid data
+		invalidDataCategory = CategoryRequestDTOBuilder.withAllDummy().setColor("#jklsa920").setName(
+				"The rapid development of technology has enabled significant advancements across multiple fields, from artificial intelligence to personalized medicine, opening new possibilities to improve the quality of life and tackle global challenges with a more efficient and sustainable approach.")
+				.setDescription(
+						"In today's fast-paced world, technology is advancing at an unprecedented rate, revolutionizing industries and reshaping the way we live. From artificial intelligence and machine learning to robotics and biotechnology, these innovations are transforming everything from healthcare and education to transportation and entertainment, creating a future where possibilities are endless and new challenges arise at every corner.")
+				.build();
+
+		categoryExisting = CategoryRequestDTOBuilder.withAllDummy().setColor("#000").setName("Education")
+				.setDescription("A easy description.").build();
+
+		headers = new HttpHeaders();
+
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+	}
+
+	@Test
+	@Order(2)
+	void updateCategoryExistingExceptionTest() {
+
+		HttpEntity<CategoryRequestDTO> requestEntity = new HttpEntity<>(categoryExisting, headers);
+
+		ResponseEntity<ApiResponse<CategoryResponseDTO>> response = testRestTemplate.exchange("/api/category/1",
+				HttpMethod.PUT, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// get api respopse
+		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.PUT, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
+	@Order(4)
+	void updateCategoryInvalidDataExceptionTest() {
+
+		HttpEntity<CategoryRequestDTO> requestEntity = new HttpEntity<>(invalidDataCategory, headers);
+
+		ResponseEntity<ApiResponse<CategoryResponseDTO>> response = testRestTemplate.exchange("/api/category/1",
+				HttpMethod.PUT, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNotNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+	}
+
+	@Test
+	@Order(5)
+	void updateCategoryNotFoundExceptionTest() {
+
+		HttpEntity<CategoryRequestDTO> requestEntity = new HttpEntity<>(validData, headers);
+
+		ResponseEntity<ApiResponse<CategoryResponseDTO>> response = testRestTemplate.exchange("/api/category/99999",
+				HttpMethod.PUT, requestEntity, new ParameterizedTypeReference<ApiResponse<CategoryResponseDTO>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+		assertEquals(404, response.getStatusCodeValue());
+
+		ApiResponse<CategoryResponseDTO> apiResponse = response.getBody();
+		assertEquals(404, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.GET, apiResponse.getMethod());
+		assertNotNull(apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
+	@Order(8)
+	void userFollowCategoryExceptionTest() {
+
+		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/category/1/follow?userId=1",
+				HttpMethod.POST, new HttpEntity<>(null, headers),
+				new ParameterizedTypeReference<ApiResponse<String>>() {
+				});
+
+		System.out.println("**********");
+		System.out.println(response.getBody().getMessage());
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<String> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.POST, apiResponse.getMethod());
+		assertEquals("The user is already following this category.", apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+	@Test
+	@Order(7)
+	void userUnfollowCategoryExceptionTest() {
+
+		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/category/10/unfollow?userId=1",
+				HttpMethod.DELETE, new HttpEntity<>(null, headers),
+				new ParameterizedTypeReference<ApiResponse<String>>() {
+				});
+
+		// basic test
+		assertNotNull(response);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(400, response.getStatusCodeValue());
+
+		// extract api response
+		ApiResponse<String> apiResponse = response.getBody();
+		assertEquals(400, apiResponse.getStatus());
+		assertNotNull(apiResponse.getPath());
+		assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
+		assertEquals("The user is not following this category.", apiResponse.getMessage());
+		assertEquals(true, apiResponse.getError());
+		assertNull(apiResponse.getData());
+		assertNotNull(apiResponse.getTimestamp());
+
+	}
+
+}
