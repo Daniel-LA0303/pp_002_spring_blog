@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.service.CloudinaryService;
-import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.utils.dto.ImageResponseDTO;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.utils.dto.ImageResponseCloudinaryDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -40,12 +40,11 @@ public class CloudinaryController {
 
 	@PostMapping("/image-blog")
 	public ResponseEntity<?> upload(@RequestParam("image") MultipartFile file) throws ServiceException {
+		ImageResponseCloudinaryDTO response = cloudinaryService.upload(file, "blog_profile_spring");
 
-		ImageResponseDTO response = cloudinaryService.upload(file);
-
-		ApiResponse<ImageResponseDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
-				"/api/blog/image-blog", MethodEnum.POST, "Image uploaded successfully", response, // el objeto DTO real
-				false);
+		ApiResponse<ImageResponseCloudinaryDTO> apiResponse = new ApiResponse<>(
+				ResponseStatus.CREATED.getHttpStatusCode(), "/api/blog/image-blog", MethodEnum.POST,
+				"Image uploaded successfully", response, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
 	}

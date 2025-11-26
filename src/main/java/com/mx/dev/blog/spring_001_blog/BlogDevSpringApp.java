@@ -2,6 +2,7 @@ package com.mx.dev.blog.spring_001_blog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.mx.dev.blog.spring_001_blog.config.security.CustomUserDetailsService;
@@ -9,6 +10,7 @@ import com.mx.dev.blog.spring_001_blog.config.security.CustomUserDetailsService;
 import io.github.cdimascio.dotenv.Dotenv;
 
 @SpringBootApplication
+@EnableAsync
 public class BlogDevSpringApp {
 
 	private final CustomUserDetailsService customUserDetailsService;

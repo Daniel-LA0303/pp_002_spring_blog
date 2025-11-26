@@ -1,7 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.service.impl;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.service.CloudinaryService;
-import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.utils.dto.ImageResponseDTO;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.utils.dto.ImageResponseCloudinaryDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -27,7 +26,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 	@Override
 	public void delete(String publicId) throws ServiceException {
 		try {
-			// Puedes enviar más opciones si quieres, aquí usamos emptyMap()
+			// 1. delete image from cloudinary
 			Map<String, Object> result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
 
 			String deleteResult = result.get("result").toString();
@@ -46,33 +45,31 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ImageResponseDTO upload(MultipartFile file) throws ServiceException {
-		List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "webp", "avif");
-
-		String extensions = null;
-
-		if (file.getOriginalFilename() != null) {
-			String[] splitName = file.getOriginalFilename().split("\\.");
-			extensions = splitName[splitName.length - 1];
-		}
-
-		if (!allowedExtensions.contains(extensions)) {
-			// throw new BodyNotValidException(String.format("Extension %s not allowed.",
-			// extensions));
-
-			throw new ServiceException(String.format("Extension %s not allowed.", extensions),
-					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/upload/image-blog", MethodEnum.POST);
-		}
+	public ImageResponseCloudinaryDTO upload(MultipartFile file, String folder) throws ServiceException {
 
 		try {
 
+			// 1. upload image
 			Map<String, Object> resultUpload = cloudinary.uploader().upload(file.getBytes(),
-					ObjectUtils.asMap("folder", "blog_profile_spring"));
+					ObjectUtils.asMap("folder", folder));
 
-			String imageUrl = resultUpload.get("secure_url").toString();
-			String publicId = resultUpload.get("public_id").toString();
+			// 2. build metadata
+			Map<String, Object> metadata = new HashMap<>();
+			metadata.put("format", resultUpload.get("format"));
+			metadata.put("width", resultUpload.get("width"));
+			metadata.put("height", resultUpload.get("height"));
+			metadata.put("public_id", resultUpload.get("public_id"));
+			metadata.put("resource_type", resultUpload.get("resource_type"));
+			metadata.put("created_at", resultUpload.get("created_at"));
 
-			ImageResponseDTO res = new ImageResponseDTO(imageUrl, publicId);
+			// 3. pass from bytes to megabytes
+			Double sizeBytes = resultUpload.get("bytes") != null ? Double.valueOf(resultUpload.get("bytes").toString())
+					: 0.0;
+			Double sizeMB = sizeBytes / (1024 * 1024);
+
+			// 4. build response
+			ImageResponseCloudinaryDTO res = new ImageResponseCloudinaryDTO(resultUpload.get("secure_url").toString(),
+					sizeMB, metadata);
 
 			return res;
 		} catch (Exception e) {
@@ -80,5 +77,4 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 					"/upload/image-blog", MethodEnum.POST);
 		}
 	}
-
 }
