@@ -10,7 +10,7 @@ public interface StorageServices {
 
 	void deleteImageCloudinary(String ownerType, Long ownerId) throws ServiceException;
 
-	void deleteImageS3(MultipartFile file) throws ServiceException;
+	void deleteImageS3(String ownerType, Long ownerId) throws ServiceException;
 
 	ImageResponseS3DTO uploadImageS3(MultipartFile file) throws ServiceException;
 

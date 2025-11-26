@@ -2,7 +2,6 @@ package com.mx.dev.blog.spring_001_blog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.mx.dev.blog.spring_001_blog.config.security.CustomUserDetailsService;
@@ -10,7 +9,7 @@ import com.mx.dev.blog.spring_001_blog.config.security.CustomUserDetailsService;
 import io.github.cdimascio.dotenv.Dotenv;
 
 @SpringBootApplication
-@EnableAsync
+//@EnableAsync
 public class BlogDevSpringApp {
 
 	private final CustomUserDetailsService customUserDetailsService;
@@ -38,15 +37,17 @@ public class BlogDevSpringApp {
 		System.setProperty("CLOUDINARY_API_KEY", dotenv.get("CLOUDINARY_API_KEY"));
 		System.setProperty("CLOUDINARY_API_SECRET", dotenv.get("CLOUDINARY_API_SECRET"));
 
-		System.out.println("************ AWS S3 ***************");
-		System.out.println(dotenv.get("S3_ACCESS_KEY"));
-		System.out.println(dotenv.get("S3_SECRET_ACCESS_KEY"));
-		System.out.println(dotenv.get("S3_REGION"));
-
-		System.out.println("************ CLOUDINARY ***************");
-		System.out.println(dotenv.get("CLOUDINARY_CLOUD_NAME"));
-		System.out.println(dotenv.get("CLOUDINARY_API_KEY"));
-		System.out.println(dotenv.get("CLOUDINARY_API_SECRET"));
+		/*
+		 * System.out.println("************ AWS S3 ***************");
+		 * System.out.println(dotenv.get("S3_ACCESS_KEY"));
+		 * System.out.println(dotenv.get("S3_SECRET_ACCESS_KEY"));
+		 * System.out.println(dotenv.get("S3_REGION"));
+		 * 
+		 * System.out.println("************ CLOUDINARY ***************");
+		 * System.out.println(dotenv.get("CLOUDINARY_CLOUD_NAME"));
+		 * System.out.println(dotenv.get("CLOUDINARY_API_KEY"));
+		 * System.out.println(dotenv.get("CLOUDINARY_API_SECRET"));
+		 */
 
 		SpringApplication.run(BlogDevSpringApp.class, args);
 	}

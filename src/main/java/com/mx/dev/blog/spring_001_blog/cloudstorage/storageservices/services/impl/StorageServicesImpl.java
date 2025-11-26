@@ -1,10 +1,10 @@
 package com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.impl;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.service.CloudinaryService;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.service.S3Service;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.utils.dto.ImageResponseS3DTO;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.entities.MediaEntity;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.repositories.MediaRepository;
@@ -23,12 +23,16 @@ public class StorageServicesImpl implements StorageServices {
 
 	private final MediaRepository mediaRepository;
 
-	public StorageServicesImpl(CloudinaryService cloudinaryService, MediaRepository mediaRepository) {
+	private final S3Service s3Service;
+
+	public StorageServicesImpl(CloudinaryService cloudinaryService, MediaRepository mediaRepository,
+			S3Service s3Service) {
 		this.cloudinaryService = cloudinaryService;
 		this.mediaRepository = mediaRepository;
+		this.s3Service = s3Service;
 	}
 
-	@Async
+	// @Async
 	@Override
 	public void deleteImageCloudinary(String ownerType, Long ownerId) throws ServiceException {
 
@@ -45,15 +49,26 @@ public class StorageServicesImpl implements StorageServices {
 
 	}
 
+	// @Async
 	@Override
-	public void deleteImageS3(MultipartFile file) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void deleteImageS3(String ownerType, Long ownerId) throws ServiceException {
+		// 1. get media entity or throw
+		MediaEntity mediaEntity = mediaRepository.findByOwnerTypeAndOwnerId(ownerType, ownerId)
+				.orElseThrow(() -> new ServiceException("Not found media" + ownerType + " con ID " + ownerId, 404,
+						"/delete-image", MethodEnum.DELETE));
+
+		// 2. delete image from cloudinary
+		s3Service.deleteObject(mediaEntity.getMetadata().get("fileKey").toString());
+
+		// 3. delete media from db
+		mediaRepository.delete(mediaEntity);
 
 	}
 
 	@Override
 	public ImageResponseS3DTO uploadImageS3(MultipartFile file) throws ServiceException {
 		// TODO Auto-generated method stub
+
 		return null;
 	}
 

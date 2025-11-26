@@ -44,6 +44,24 @@ public class StorageController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
 	}
 
+	@PutMapping(value = "/update-upload-image-s3")
+	public ResponseEntity<?> updateUploadImageS3(@RequestParam("image") MultipartFile file,
+			@RequestParam("ownerType") String ownerType, @RequestParam("ownerId") Long ownerId,
+			@RequestParam("categoryStorage") String categoryStorage) throws ServiceException {
+
+		// orchestator
+		ImageResponseCloudinaryDTO result = orchestrator.orchestadorUpdateImageS3(ownerType, ownerId, categoryStorage,
+				file);
+
+		ApiResponse<ImageResponseCloudinaryDTO> apiResponse = new ApiResponse<>(
+				ResponseStatus.CREATED.getHttpStatusCode(),
+				"/storage/v1/uploads/upload-image-cloudinary?ownerType=" + ownerType + "&ownerId=" + ownerId
+						+ "&categoryStorage=" + categoryStorage,
+				MethodEnum.POST, "Image uploaded successfully", result, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+	}
+
 	@PostMapping(value = "/upload-image-cloudinary")
 	public ResponseEntity<?> uploadImageCloudinary(@RequestParam("image") MultipartFile file,
 			@RequestParam("ownerType") String ownerType, @RequestParam("ownerId") Long ownerId,
@@ -52,6 +70,24 @@ public class StorageController {
 		// orchestator
 		ImageResponseCloudinaryDTO result = orchestrator.orchestadorUploadCloudinary(ownerType, ownerId,
 				categoryStorage, file);
+
+		ApiResponse<ImageResponseCloudinaryDTO> apiResponse = new ApiResponse<>(
+				ResponseStatus.CREATED.getHttpStatusCode(),
+				"/storage/v1/uploads/upload-image-cloudinary?ownerType=" + ownerType + "&ownerId=" + ownerId
+						+ "&categoryStorage=" + categoryStorage,
+				MethodEnum.POST, "Image uploaded successfully", result, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+	}
+
+	@PostMapping(value = "/upload-image-s3")
+	public ResponseEntity<?> uploadImageS3(@RequestParam("image") MultipartFile file,
+			@RequestParam("ownerType") String ownerType, @RequestParam("ownerId") Long ownerId,
+			@RequestParam("categoryStorage") String categoryStorage) throws ServiceException {
+
+		// orchestator
+		ImageResponseCloudinaryDTO result = orchestrator.orchestadorUploadAWSS3(ownerType, ownerId, categoryStorage,
+				file);
 
 		ApiResponse<ImageResponseCloudinaryDTO> apiResponse = new ApiResponse<>(
 				ResponseStatus.CREATED.getHttpStatusCode(),
