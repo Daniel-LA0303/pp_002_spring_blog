@@ -1,16 +1,17 @@
-package com.mx.dev.blog.spring_001_blog.utils.dtos.blog;
+package com.mx.dev.blog.spring_001_blog.blog.utils.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
-import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 
-public class BlogInfoCardDTO {
+public class BlogPageResponseDTO {
 
 	/**
-	 * blog id
+	 * id
 	 */
 	private Long blogId;
 
@@ -23,6 +24,11 @@ public class BlogInfoCardDTO {
 	 * description
 	 */
 	private String description;
+
+	/**
+	 * content
+	 */
+	private String content;
 
 	/**
 	 * status
@@ -40,19 +46,15 @@ public class BlogInfoCardDTO {
 	private LocalDateTime createdAt;
 
 	/**
-	 * user id
-	 */
-	private Long userId;
-
-	/**
-	 * username
-	 */
-	private String username;
-
-	/**
-	 * categories
+	 * list of categories
 	 */
 	private List<CategorySmallInfoDTO> categories;
+
+	/**
+	 * user id
+	 */
+	@JsonProperty("userInfo")
+	private UserInfoCardDTO userInfoCardDTO;
 
 	/**
 	 * blog engagement
@@ -73,35 +75,36 @@ public class BlogInfoCardDTO {
 	/**
 	 * 
 	 */
-	public BlogInfoCardDTO() {
+	public BlogPageResponseDTO() {
 	}
 
 	/**
 	 * @param blogId
 	 * @param title
 	 * @param description
+	 * @param content
 	 * @param status
 	 * @param slug
 	 * @param createdAt
-	 * @param userId
-	 * @param username
 	 * @param categories
+	 * @param userInfoCardDTO
 	 * @param blogEngagementDTO
 	 * @param usersLiked
 	 * @param usersReaded
 	 */
-	public BlogInfoCardDTO(Long blogId, String title, String description, BlogStatusEnum status, String slug,
-			LocalDateTime createdAt, Long userId, String username, List<CategorySmallInfoDTO> categories,
-			BlogEngagementDTO blogEngagementDTO, List<Long> usersLiked, List<Long> usersReaded) {
+	public BlogPageResponseDTO(Long blogId, String title, String description, String content, BlogStatusEnum status,
+			String slug, LocalDateTime createdAt, List<CategorySmallInfoDTO> categories,
+			UserInfoCardDTO userInfoCardDTO, BlogEngagementDTO blogEngagementDTO, List<Long> usersLiked,
+			List<Long> usersReaded) {
 		this.blogId = blogId;
 		this.title = title;
 		this.description = description;
+		this.content = content;
 		this.status = status;
 		this.slug = slug;
 		this.createdAt = createdAt;
-		this.userId = userId;
-		this.username = username;
 		this.categories = categories;
+		this.userInfoCardDTO = userInfoCardDTO;
 		this.blogEngagementDTO = blogEngagementDTO;
 		this.usersLiked = usersLiked;
 		this.usersReaded = usersReaded;
@@ -132,6 +135,15 @@ public class BlogInfoCardDTO {
 	 */
 	public List<CategorySmallInfoDTO> getCategories() {
 		return categories;
+	}
+
+	/**
+	 * return the value of the property content
+	 *
+	 * @return the content
+	 */
+	public String getContent() {
+		return content;
 	}
 
 	/**
@@ -180,21 +192,12 @@ public class BlogInfoCardDTO {
 	}
 
 	/**
-	 * return the value of the property userId
+	 * return the value of the property userInfoCardDTO
 	 *
-	 * @return the userId
+	 * @return the userInfoCardDTO
 	 */
-	public Long getUserId() {
-		return userId;
-	}
-
-	/**
-	 * return the value of the property username
-	 *
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
+	public UserInfoCardDTO getUserInfoCardDTO() {
+		return userInfoCardDTO;
 	}
 
 	/**
@@ -243,6 +246,15 @@ public class BlogInfoCardDTO {
 	}
 
 	/**
+	 * set the value of the property content
+	 *
+	 * @param content the content to set
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	/**
 	 * set the value of the property createdAt
 	 *
 	 * @param createdAt the createdAt to set
@@ -288,21 +300,12 @@ public class BlogInfoCardDTO {
 	}
 
 	/**
-	 * set the value of the property userId
+	 * set the value of the property userInfoCardDTO
 	 *
-	 * @param userId the userId to set
+	 * @param userInfoCardDTO the userInfoCardDTO to set
 	 */
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	/**
-	 * set the value of the property username
-	 *
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserInfoCardDTO(UserInfoCardDTO userInfoCardDTO) {
+		this.userInfoCardDTO = userInfoCardDTO;
 	}
 
 	/**

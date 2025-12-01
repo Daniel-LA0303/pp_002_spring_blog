@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
-import com.mx.dev.blog.spring_001_blog.blog.services.BlogService;
+import com.mx.dev.blog.spring_001_blog.blog.services.blog.BlogService;
 import com.mx.dev.blog.spring_001_blog.comment.entities.CommentEntity;
 import com.mx.dev.blog.spring_001_blog.comment.services.CommentService;
 import com.mx.dev.blog.spring_001_blog.reply.entities.ReplyEntity;

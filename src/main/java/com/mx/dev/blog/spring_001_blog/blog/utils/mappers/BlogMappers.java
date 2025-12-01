@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.utils.mappers;
+package com.mx.dev.blog.spring_001_blog.blog.utils.mappers;
 
 import java.util.List;
 import java.util.Map;
@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
 
 public class BlogMappers {

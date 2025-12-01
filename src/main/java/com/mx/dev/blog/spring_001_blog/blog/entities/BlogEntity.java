@@ -16,8 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
-import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
 
 @Entity
 @Table(name = "blog_tbl")

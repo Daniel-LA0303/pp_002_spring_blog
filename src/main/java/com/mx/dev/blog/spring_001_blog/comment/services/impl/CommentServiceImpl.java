@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
-import com.mx.dev.blog.spring_001_blog.blog.services.BlogService;
+import com.mx.dev.blog.spring_001_blog.blog.services.blog.BlogService;
 import com.mx.dev.blog.spring_001_blog.comment.entities.CommentEntity;
 import com.mx.dev.blog.spring_001_blog.comment.repositories.CommentRepository;
 import com.mx.dev.blog.spring_001_blog.comment.services.CommentService;
