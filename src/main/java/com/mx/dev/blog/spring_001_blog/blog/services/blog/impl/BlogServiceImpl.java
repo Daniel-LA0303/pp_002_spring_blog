@@ -21,7 +21,6 @@ import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
-import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.blog.utils.mappers.BlogMappers;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.category.repositories.CategoryRepository;
@@ -164,15 +163,7 @@ public class BlogServiceImpl implements BlogService {
 		}
 
 		// 5. Now proceed with creating the Blog entity
-		BlogEntity blogEntity = new BlogEntity();
-		blogEntity.setContent(blogCreateRequestDTO.getContent());
-		blogEntity.setCreatedAt(LocalDateTime.now());
-		blogEntity.setDescription(blogCreateRequestDTO.getDescription());
-		blogEntity.setSlug(slug);
-		blogEntity.setStatus(BlogStatusEnum.PUBLISHED);
-		blogEntity.setTitle(blogCreateRequestDTO.getTitle());
-		blogEntity.setUpdatedAt(LocalDateTime.now());
-		blogEntity.setUserId(user.getUserId());
+		BlogEntity blogEntity = BlogMappers.toCreateABlog(blogCreateRequestDTO, slug, user.getUserId());
 
 		// Save and flush to make sure blog_id is generated before creating the relation
 		blogRepository.saveAndFlush(blogEntity);
@@ -503,7 +494,7 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	/**
-	 * get one blog service
+	 * get one blog service by page view blog
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -535,21 +526,8 @@ public class BlogServiceImpl implements BlogService {
 		// 6. get users tahn saved
 		List<Long> usersReaded = blogRepository.findUserIdsReadByBlogId(blogId);
 
-		BlogPageResponseDTO blogResponsePageDTO = new BlogPageResponseDTO();
-		blogResponsePageDTO.setBlogId(blogEntity.getBlogId());
-		blogResponsePageDTO.setTitle(blogEntity.getTitle());
-		blogResponsePageDTO.setDescription(blogEntity.getDescription());
-		blogResponsePageDTO.setContent(blogEntity.getContent());
-		blogResponsePageDTO.setStatus(blogEntity.getStatus());
-		blogResponsePageDTO.setSlug(blogEntity.getSlug());
-		blogResponsePageDTO.setCreatedAt(blogEntity.getCreatedAt());
-		blogResponsePageDTO.setCategories(categories);
-		blogResponsePageDTO.setUserInfoCardDTO(userInfoCardDTO);
-		blogResponsePageDTO.setBlogEngagementDTO(blogEngagementDTO);
-		blogResponsePageDTO.setUsersLiked(usersLiked);
-		blogResponsePageDTO.setUsersReaded(usersReaded);
-
-		return blogResponsePageDTO;
+		return BlogMappers.toViewBlogResponse(blogEntity, categories, userInfoCardDTO, usersLiked, usersReaded,
+				blogEngagementDTO);
 	}
 
 	@Override

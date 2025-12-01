@@ -122,7 +122,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 	List<Object[]> findUserIdsReadByBlogIds(@Param("blogIds") List<Long> blogIds);
 
 	// get engagement data from one blog by id
-	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO(" + "COALESCE(b.id, 0), "
+	@Query("SELECT new com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO(" + "COALESCE(b.id, 0), "
 			+ "COALESCE(COUNT(DISTINCT bult.id.userId), 0), " + "COALESCE(COUNT(DISTINCT c.commentId), 0), "
 			+ "COALESCE(COUNT(DISTINCT burt.id.userId), 0)) "
 			+ "FROM com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity b "
@@ -133,7 +133,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 	BlogEngagementDTO getBlogEngagementData(@Param("blogId") Long blogId);
 
 	// get engagement from multiples blogs by ids
-	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO(" + "b.blogId, "
+	@Query("SELECT new com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO(" + "b.blogId, "
 			+ "COUNT(DISTINCT bult.id.userId), " + "COUNT(DISTINCT c.commentId), " + "COUNT(DISTINCT burt.id.userId)) "
 			+ "FROM com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity b "
 			+ "LEFT JOIN com.mx.dev.blog.spring_001_blog.comment.entities.CommentEntity c ON b.blogId = c.blogId "

@@ -1,5 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.blog.utils.mappers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -7,9 +8,14 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogResponseDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 
 public class BlogMappers {
 
@@ -49,6 +55,21 @@ public class BlogMappers {
 		return blogResponseDTO;
 	}
 
+	public static BlogEntity toCreateABlog(BlogCreateRequestDTO blogCreateRequestDTO, String slug, Long userId) {
+
+		BlogEntity blogEntity = new BlogEntity();
+		blogEntity.setContent(blogCreateRequestDTO.getContent());
+		blogEntity.setCreatedAt(LocalDateTime.now());
+		blogEntity.setDescription(blogCreateRequestDTO.getDescription());
+		blogEntity.setSlug(slug);
+		blogEntity.setStatus(BlogStatusEnum.PUBLISHED);
+		blogEntity.setTitle(blogCreateRequestDTO.getTitle());
+		blogEntity.setUpdatedAt(LocalDateTime.now());
+		blogEntity.setUserId(userId);
+
+		return blogEntity;
+	}
+
 	public static List<BlogResponseDTO> toListBlogResponseDTO(List<BlogEntity> blogEntities) {
 
 		return blogEntities.stream().map(BlogMappers::toCategoryResponseDTO).collect(Collectors.toList());
@@ -62,6 +83,26 @@ public class BlogMappers {
 
 	public static Page<BlogResponseDTO> toPageBlogResponseDTO(Page<BlogEntity> blogEntities) {
 		return blogEntities.map(BlogMappers::toCategoryResponseDTO);
+	}
+
+	public static BlogPageResponseDTO toViewBlogResponse(BlogEntity blogEntity, List<CategorySmallInfoDTO> categories,
+			UserInfoCardDTO userInfoCardDTO, List<Long> usersLiked, List<Long> usersReaded,
+			BlogEngagementDTO blogEngagementDTO) {
+		BlogPageResponseDTO blogResponsePageDTO = new BlogPageResponseDTO();
+		blogResponsePageDTO.setBlogId(blogEntity.getBlogId());
+		blogResponsePageDTO.setTitle(blogEntity.getTitle());
+		blogResponsePageDTO.setDescription(blogEntity.getDescription());
+		blogResponsePageDTO.setContent(blogEntity.getContent());
+		blogResponsePageDTO.setStatus(blogEntity.getStatus());
+		blogResponsePageDTO.setSlug(blogEntity.getSlug());
+		blogResponsePageDTO.setCreatedAt(blogEntity.getCreatedAt());
+		blogResponsePageDTO.setCategories(categories);
+		blogResponsePageDTO.setUserInfoCardDTO(userInfoCardDTO);
+		blogResponsePageDTO.setBlogEngagementDTO(blogEngagementDTO);
+		blogResponsePageDTO.setUsersLiked(usersLiked);
+		blogResponsePageDTO.setUsersReaded(usersReaded);
+
+		return blogResponsePageDTO;
 	}
 
 }

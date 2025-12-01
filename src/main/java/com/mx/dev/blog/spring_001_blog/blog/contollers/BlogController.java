@@ -1,7 +1,5 @@
 package com.mx.dev.blog.spring_001_blog.blog.contollers;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +21,6 @@ import com.mx.dev.blog.spring_001_blog.blog.services.dashboard.orchestator.Dashb
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
-import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.info.HomePageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -109,22 +106,6 @@ public class BlogController {
 
 		ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.DELETED.getHttpStatusCode(), "/api/blog",
 				MethodEnum.DELETE, "Success method DELETED", "Blog deleted.", false);
-
-		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-	}
-
-	/**
-	 * get all categories with a dto
-	 * 
-	 * @return
-	 */
-	@GetMapping
-	public ResponseEntity<?> getAllBlogs() {
-
-		List<BlogResponseDTO> blogs = blogService.getAllBlogs();
-
-		ApiResponse<List<BlogResponseDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
-				"/api/blog", MethodEnum.GET, "Success method GET", blogs, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
