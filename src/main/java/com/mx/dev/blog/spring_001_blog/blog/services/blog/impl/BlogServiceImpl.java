@@ -21,7 +21,6 @@ import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
-import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.blog.utils.mappers.BlogMappers;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
@@ -85,42 +84,35 @@ public class BlogServiceImpl implements BlogService {
 		return Long.toHexString(System.nanoTime()); // Generates a random suffix based on nanoTime
 	}
 
+	// liked in a blog
 	@Override
 	@Transactional
 	public void blogLiked(Long userId, Long blogId) throws ServiceException {
-		try {
-			if (blogRepository.existsByUserIdAndBlogId(userId, blogId)) {
-				throw new ServiceException("Blog error in generate slug, please come back in a few minutes.",
-						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
-			}
 
-			blogRepository.insertBlogLike(userId, blogId, LocalDateTime.now());
-
-		} catch (Exception e) {
-			throw new ServiceException("Blog not found", ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/blog",
-					MethodEnum.GET);
+		if (blogRepository.existsByUserIdAndBlogId(userId, blogId)) {
+			throw new ServiceException("Blog error, please come back in a few minutes.",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
 		}
+
+		blogRepository.insertBlogLike(userId, blogId, LocalDateTime.now());
+
 	}
 
+	// read later in a blog
 	@Override
 	@Transactional
 	public void blogRead(Long userId, Long blogId) throws ServiceException {
-		try {
-			if (blogRepository.existsByUserIdAndBlogIdRead(userId, blogId)) {
-				throw new ServiceException("El blog ya ha sido leído por el usuario.",
-						ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog/read", MethodEnum.POST);
-			}
 
-			blogRepository.insertBlogRead(userId, blogId, LocalDateTime.now());
-			System.out.println("***hola****");
-
-		} catch (Exception e) {
-			throw new ServiceException("Error al registrar la lectura del blog",
-					ResponseStatus.INTERNAL_SERVER_ERROR.getHttpStatusCode(), "/api/blog/read", MethodEnum.POST);
+		if (blogRepository.existsByUserIdAndBlogIdRead(userId, blogId)) {
+			throw new ServiceException("Blog error, please come back in a few minutes.",
+					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog/read", MethodEnum.POST);
 		}
+
+		blogRepository.insertBlogRead(userId, blogId, LocalDateTime.now());
 
 	}
 
+	// user unlike blog
 	@Override
 	public void blogUnliked(Long userId, Long blogId) throws ServiceException {
 
@@ -132,6 +124,7 @@ public class BlogServiceImpl implements BlogService {
 		blogRepository.deleteByUserIdAndBlogId(userId, blogId);
 	}
 
+	// user unread later blog
 	@Override
 	public void blogUnread(Long userId, Long blogId) throws ServiceException {
 
@@ -140,7 +133,6 @@ public class BlogServiceImpl implements BlogService {
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog/read", MethodEnum.DELETE);
 		}
 
-		// Elimina la entrada de lectura del blog para el usuario
 		blogRepository.deleteByUserIdAndBlogIdRead(userId, blogId);
 	}
 
@@ -265,15 +257,6 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	/**
-	 * get all blog service
-	 */
-	@Override
-	public List<BlogResponseDTO> getAllBlogs() {
-
-		return BlogMappers.toListBlogResponseDTO(blogRepository.findAll());
-	}
-
-	/**
 	 * get blog by id, if blog doesn't exists we catch in a exception
 	 * 
 	 */
@@ -284,6 +267,7 @@ public class BlogServiceImpl implements BlogService {
 				ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/blog", MethodEnum.GET));
 	}
 
+	// get blog by category name paginated
 	@Override
 	public Page<BlogInfoCardDTO> getBlogsByCategoryNamePaginated(String categoryName, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
@@ -345,6 +329,7 @@ public class BlogServiceImpl implements BlogService {
 		return blogInfoCards;
 	}
 
+	// get info user to page profile
 	@Override
 	public Page<BlogInfoCardDTO> getBlogsByUserIdPaginated(Long userId, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);

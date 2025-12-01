@@ -1,7 +1,5 @@
 package com.mx.dev.blog.spring_001_blog.blog.services.blog;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,7 +7,6 @@ import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
-import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.info.HomePageResponseDTO;
@@ -42,8 +39,6 @@ public interface BlogService {
 	Page<UserEntity> dashboardGetFollowersByUserPaginated(Long userId, Pageable pageable) throws ServiceException;
 
 	void deleteBlog(Long blogId, Long userId) throws ServiceException;
-
-	List<BlogResponseDTO> getAllBlogs();
 
 	BlogEntity getBlogByIdOrThrow(Long blogId) throws ServiceException;
 
