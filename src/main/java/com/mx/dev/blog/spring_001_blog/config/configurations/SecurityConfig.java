@@ -72,6 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers(HttpMethod.GET, "/api/blog/dashboard", "/api/blog/dashboard/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/**").permitAll().antMatchers(HttpMethod.GET, "/auth-ui/**")
 				.permitAll().antMatchers("/api/auth/**").permitAll().anyRequest().authenticated().and().cors()
 				.configurationSource(corsConfigurationSource());
