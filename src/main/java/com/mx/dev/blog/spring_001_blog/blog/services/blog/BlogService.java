@@ -25,11 +25,12 @@ public interface BlogService {
 	BlogEntity createBlog(BlogCreateRequestDTO blogCreateRequestDTO) throws ServiceException;
 
 	// dash board services
-	Page<BlogEntity> dashboardGetBlogsByLikedUserPaginated(Long userId, Pageable pageable) throws ServiceException;
+	Page<BlogInfoCardDTO> dashboardGetBlogsByLikedUserPaginated(Long userId, Pageable pageable) throws ServiceException;
 
-	Page<BlogEntity> dashboardGetBlogsByReadLaterUserPaginated(Long userId, Pageable pageable) throws ServiceException;
+	Page<BlogInfoCardDTO> dashboardGetBlogsByReadLaterUserPaginated(Long userId, Pageable pageable)
+			throws ServiceException;
 
-	Page<BlogEntity> dashboardGetBlogsByUserPaginated(Long userId, Pageable pageable) throws ServiceException;
+	Page<BlogInfoCardDTO> dashboardGetBlogsByUserPaginated(Long userId, Pageable pageable) throws ServiceException;
 
 	Page<CategoryEntity> dashboardGetCategoriesFollowedByUserPaginated(Long userId, Pageable pageable)
 			throws ServiceException;

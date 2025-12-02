@@ -236,15 +236,213 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			FROM blog_tbl b
 			WHERE b.user_id = :userId
 			""", nativeQuery = true)
+	Page<Object[]> findBlogCardsByOwnerId(@Param("userId") Long userId, Pageable pageable);
+
+	@Query(value = """
+			SELECT
+			    b.blog_id,
+			    b.title,
+			    b.description,
+			    b.created_at,
+			    b.status,
+			    b.slug,
+
+			    u.user_id AS owner_id,
+			    u.username AS owner_username,
+
+			    COUNT(DISTINCT bult.user_id) AS likes,
+			    COUNT(DISTINCT c.comment_id) AS comments,
+			    COUNT(DISTINCT burt.user_id) AS reads,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(DISTINCT bult.user_id)
+			            FILTER (WHERE bult.user_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS like_user_ids,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(DISTINCT burt.user_id)
+			            FILTER (WHERE burt.user_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS read_user_ids,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(
+			                DISTINCT jsonb_build_object(
+			                    'category_id', cat.category_id,
+			                    'name', cat.name,
+			                    'description', cat.description,
+			                    'color', cat.color
+			                )
+			            ) FILTER (WHERE cat.category_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS categories
+
+			FROM blog_tbl b
+			JOIN user_tbl u ON u.user_id = b.user_id
+
+			LEFT JOIN blog_user_like_tbl bult ON b.blog_id = bult.blog_id
+			LEFT JOIN comment_tbl c ON b.blog_id = c.blog_id
+			LEFT JOIN blog_user_reada_tbl burt ON b.blog_id = burt.blog_id
+			LEFT JOIN blog_category_tbl bc ON b.blog_id = bc.blog_id
+			LEFT JOIN category_tbl cat ON bc.category_id = cat.category_id
+
+			WHERE b.user_id = :userId
+
+			GROUP BY b.blog_id, u.user_id, u.username
+			ORDER BY b.created_at DESC
+			""", countQuery = """
+			SELECT COUNT(DISTINCT b.blog_id)
+			FROM blog_tbl b
+			WHERE b.user_id = :userId
+			""", nativeQuery = true)
 	Page<Object[]> findBlogCardsByUserId(@Param("userId") Long userId, Pageable pageable);
+
+	//
+
+	@Query(value = """
+			SELECT
+			    b.blog_id,
+			    b.title,
+			    b.description,
+			    b.created_at,
+			    b.status,
+			    b.slug,
+			    u.user_id AS owner_id,
+			    u.username AS owner_username,
+			    COUNT(DISTINCT bult.user_id) AS likes,
+			    COUNT(DISTINCT c.comment_id) AS comments,
+			    COUNT(DISTINCT burt.user_id) AS reads,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(DISTINCT bult.user_id)
+			            FILTER (WHERE bult.user_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS like_user_ids,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(DISTINCT burt.user_id)
+			            FILTER (WHERE burt.user_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS read_user_ids,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(
+			                DISTINCT jsonb_build_object(
+			                    'category_id', cat.category_id,
+			                    'name', cat.name,
+			                    'description', cat.description,
+			                    'color', cat.color
+			                )
+			            ) FILTER (WHERE cat.category_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS categories
+			FROM blog_tbl b
+			JOIN user_tbl u ON u.user_id = b.user_id
+			JOIN blog_user_like_tbl bult_filter ON b.blog_id = bult_filter.blog_id
+			LEFT JOIN blog_user_like_tbl bult ON b.blog_id = bult.blog_id
+			LEFT JOIN comment_tbl c ON b.blog_id = c.blog_id
+			LEFT JOIN blog_user_reada_tbl burt ON b.blog_id = burt.blog_id
+			LEFT JOIN blog_category_tbl bc ON b.blog_id = bc.blog_id
+			LEFT JOIN category_tbl cat ON bc.category_id = cat.category_id
+			WHERE bult_filter.user_id = :userId
+			GROUP BY b.blog_id, u.user_id, u.username
+			ORDER BY b.created_at DESC
+			""", countQuery = """
+			SELECT COUNT(DISTINCT b.blog_id)
+			FROM blog_tbl b
+			JOIN blog_user_like_tbl bult_filter ON b.blog_id = bult_filter.blog_id
+			WHERE bult_filter.user_id = :userId
+			""", nativeQuery = true)
+	Page<Object[]> findBlogCardsLikedByUser(@Param("userId") Long userId, Pageable pageable);
+
+	@Query(value = """
+			SELECT
+			    b.blog_id,
+			    b.title,
+			    b.description,
+			    b.created_at,
+			    b.status,
+			    b.slug,
+
+			    u.user_id AS owner_id,
+			    u.username AS owner_username,
+
+			    COUNT(DISTINCT bult.user_id) AS likes,
+			    COUNT(DISTINCT c.comment_id) AS comments,
+			    COUNT(DISTINCT burt.user_id) AS reads,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(DISTINCT bult.user_id)
+			            FILTER (WHERE bult.user_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS like_user_ids,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(DISTINCT burt.user_id)
+			            FILTER (WHERE burt.user_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS read_user_ids,
+
+			    CAST(
+			        COALESCE(
+			            json_agg(
+			                DISTINCT jsonb_build_object(
+			                    'category_id', cat.category_id,
+			                    'name', cat.name,
+			                    'description', cat.description,
+			                    'color', cat.color
+			                )
+			            ) FILTER (WHERE cat.category_id IS NOT NULL),
+			            '[]'
+			        )
+			    AS TEXT) AS categories
+
+			FROM blog_tbl b
+			JOIN user_tbl u ON u.user_id = b.user_id
+
+			-- filtro: solo blogs leídos por el usuario
+			JOIN blog_user_reada_tbl burt_filter ON b.blog_id = burt_filter.blog_id
+
+			LEFT JOIN blog_user_like_tbl bult ON b.blog_id = bult.blog_id
+			LEFT JOIN comment_tbl c ON b.blog_id = c.blog_id
+			LEFT JOIN blog_user_reada_tbl burt ON b.blog_id = burt.blog_id
+			LEFT JOIN blog_category_tbl bc ON b.blog_id = bc.blog_id
+			LEFT JOIN category_tbl cat ON bc.category_id = cat.category_id
+
+			WHERE burt_filter.user_id = :userId
+
+			GROUP BY b.blog_id, u.user_id, u.username
+			ORDER BY burt_filter.created_at DESC
+			""", countQuery = """
+			SELECT COUNT(DISTINCT b.blog_id)
+			FROM blog_tbl b
+			JOIN blog_user_reada_tbl burt_filter ON b.blog_id = burt_filter.blog_id
+			WHERE burt_filter.user_id = :userId
+			""", nativeQuery = true)
+	Page<Object[]> findBlogCardsReadLaterByUser(@Param("userId") Long userId, Pageable pageable);
 
 	// get blogs by category pageables
 	@Query("SELECT b FROM BlogEntity b " + "JOIN CategoryBlogEntity bc ON b.blogId = bc.id.blogId "
 			+ "JOIN CategoryEntity c ON bc.id.categoryId = c.categoryId " + "WHERE c.name = :categoryName "
 			+ "ORDER BY b.createdAt DESC")
 	Page<BlogEntity> findBlogsByCategoryName(@Param("categoryName") String categoryName, Pageable pageable);
-
-	//
 
 	// get blogs by read later by user pageables
 	@Query("""
