@@ -12,16 +12,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mx.dev.blog.spring_001_blog.auth.services.auth.AuthService;
 import com.mx.dev.blog.spring_001_blog.config.security.JwtTokenProvider;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
-import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.JWTAuthResponseDto;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.LoginDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserAuthSuccessDTO;
@@ -44,17 +43,17 @@ public class AuthController {
 	private JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final AuthService authService;
 
 	private UserValidator userValidator = new UserValidator();
 
 	private AuthLoginValidator authLoginValidator = new AuthLoginValidator();
+
+	public AuthController(AuthService authService) {
+		this.authService = authService;
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO loginDTO) throws ServiceException {
@@ -104,31 +103,13 @@ public class AuthController {
 	@PostMapping("/register")
 	public ResponseEntity<?> saveUser(@RequestBody UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
 
-		// Validaciones de los datos de entrada
-		// userValidator.validate(userCreateRequestDTO);
+		// 1. call service
+		authService.registerUser(userCreateRequestDTO);
 
-		// Cifrar la contraseña del usuario
-		String pass = passwordEncoder.encode(userCreateRequestDTO.getPassword());
-		userCreateRequestDTO.setPassword(pass);
-
-		// Crear el usuario a través del servicio
-		UserEntity userEntity = userService.createUser(userCreateRequestDTO);
-
-		// Generar el token para el usuario registrado
-		String token = jwtTokenProvider.generateTokenForUser(userEntity);
-
-		// Crear el DTO de respuesta con la información del usuario y el token generado
-		UserAuthSuccessDTO userAuthLoginSuccessDTO = new UserAuthSuccessDTO(userEntity.getUserId(),
-				userEntity.getUsername(), userEntity.getEmail(), new JWTAuthResponseDto(token) // Incluye el token
-																								// generado
-		);
-
-		System.out.println("*******Login prepara salida de datos********");
-
-		// Crear la respuesta API con el DTO del usuario registrado y el token
+		// 2. build response
 		ApiResponse<UserAuthSuccessDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
-				"/api/user", MethodEnum.POST, "User successfully created and token generated", userAuthLoginSuccessDTO,
-				false);
+				"/api/user", MethodEnum.POST,
+				"User successfully registered, please check your email to confirm this account", null, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
 	}
