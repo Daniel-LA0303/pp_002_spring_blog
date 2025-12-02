@@ -38,6 +38,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	@Query("SELECT u FROM UserEntity u WHERE u.id IN :ids")
 	List<UserEntity> findByIds(@Param("ids") List<Long> ids);
 
+	// get a user by token
+	Optional<UserEntity> findByToken(String token);
+
 	// search
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO( "
 			+ "u.userId, u.username, ui.profilePicture, ui.city, "

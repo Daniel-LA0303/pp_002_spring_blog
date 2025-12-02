@@ -1,5 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.user.services.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,13 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.mail.MessagingException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mx.dev.blog.spring_001_blog.auth.services.email.EmailService;
+import com.mx.dev.blog.spring_001_blog.auth.utils.dto.EmailDataRegisterDTO;
 import com.mx.dev.blog.spring_001_blog.user.entities.RoleEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserInfoEntity;
@@ -36,18 +40,26 @@ import com.mx.dev.blog.spring_001_blog.utils.mappers.UserMappers;
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private UserInfoRepository userInfoRepository;
+	private final UserInfoRepository userInfoRepository;
 
-	@Autowired
-	private RoleRepository roleRepository;
+	private final RoleRepository roleRepository;
+
+	private final EmailService emailService;
+
+	public UserServiceImpl(UserRepository userRepository, UserInfoRepository userInfoRepository,
+			RoleRepository roleRepository, EmailService emailService) {
+		this.roleRepository = roleRepository;
+		this.userInfoRepository = userInfoRepository;
+		this.userRepository = userRepository;
+		this.emailService = emailService;
+	}
 
 	@Override
 	@Transactional
-	public UserEntity createUser(UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
+	public UserEntity createUser(UserCreateRequestDTO userCreateRequestDTO)
+			throws ServiceException, UnsupportedEncodingException, MessagingException {
 
 		Map<String, String> errorMap = new HashMap<>();
 
@@ -90,6 +102,13 @@ public class UserServiceImpl implements UserService {
 		userInfoEntity.setIsActive(false);
 
 		userInfoRepository.save(userInfoEntity);
+
+		// 7. build email data
+		EmailDataRegisterDTO emailDataRegisterDTO = new EmailDataRegisterDTO(userEntity.getEmail(),
+				userEntity.getUsername(), userEntity.getToken());
+
+		// 8. send email
+		emailService.sendRegistrationEmail(emailDataRegisterDTO);
 
 		return savedUser;
 	}
@@ -151,6 +170,12 @@ public class UserServiceImpl implements UserService {
 		userInfo.setUsersFollowers(usersFollowers);
 
 		return userInfo;
+	}
+
+	@Override
+	public Optional<UserEntity> getUserByToken(String token) {
+
+		return userRepository.findByToken(token);
 	}
 
 	@Override
