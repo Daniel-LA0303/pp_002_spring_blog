@@ -97,11 +97,16 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			LEFT JOIN blog_category_tbl bc ON b.blog_id = bc.blog_id
 			LEFT JOIN category_tbl cat ON bc.category_id = cat.category_id
 
+			WHERE b.deleted = false
+			AND b.status = 'PUBLISHED'
+
 			GROUP BY b.blog_id, u.user_id, u.username
 			ORDER BY b.created_at DESC
 			""", countQuery = """
 			SELECT COUNT(DISTINCT b.blog_id)
 			FROM blog_tbl b
+			WHERE b.deleted = false
+			AND b.status = 'PUBLISHED'
 			""", nativeQuery = true)
 	Page<Object[]> findAllBlogCards(Pageable pageable);
 
@@ -156,11 +161,16 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			JOIN blog_category_tbl bc_cat ON b.blog_id = bc_cat.blog_id
 			JOIN category_tbl cat_filter ON bc_cat.category_id = cat_filter.category_id
 			    AND cat_filter.name = :categoryName
+
 			LEFT JOIN blog_user_like_tbl bult ON b.blog_id = bult.blog_id
 			LEFT JOIN comment_tbl c ON b.blog_id = c.blog_id
 			LEFT JOIN blog_user_reada_tbl burt ON b.blog_id = burt.blog_id
 			LEFT JOIN blog_category_tbl bc ON b.blog_id = bc.blog_id
 			LEFT JOIN category_tbl cat ON bc.category_id = cat.category_id
+
+			WHERE b.deleted = false
+			AND b.status = 'PUBLISHED'
+
 			GROUP BY b.blog_id, u.user_id, u.username
 			ORDER BY b.created_at DESC
 			""", countQuery = """
@@ -169,6 +179,8 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			JOIN blog_category_tbl bc_cat ON b.blog_id = bc_cat.blog_id
 			JOIN category_tbl cat_filter ON bc_cat.category_id = cat_filter.category_id
 			WHERE cat_filter.name = :categoryName
+			AND b.deleted = false
+			AND b.status = 'PUBLISHED'
 			""", nativeQuery = true)
 	Page<Object[]> findBlogCardsByCategory(@Param("categoryName") String categoryName, Pageable pageable);
 
@@ -352,12 +364,17 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			FROM blog_tbl b
 			JOIN user_tbl u ON u.user_id = b.user_id
 			JOIN blog_user_like_tbl bult_filter ON b.blog_id = bult_filter.blog_id
+
 			LEFT JOIN blog_user_like_tbl bult ON b.blog_id = bult.blog_id
 			LEFT JOIN comment_tbl c ON b.blog_id = c.blog_id
 			LEFT JOIN blog_user_reada_tbl burt ON b.blog_id = burt.blog_id
 			LEFT JOIN blog_category_tbl bc ON b.blog_id = bc.blog_id
 			LEFT JOIN category_tbl cat ON bc.category_id = cat.category_id
+
 			WHERE bult_filter.user_id = :userId
+			AND b.deleted = false
+			AND b.status = 'PUBLISHED'
+
 			GROUP BY b.blog_id, u.user_id, u.username
 			ORDER BY b.created_at DESC
 			""", countQuery = """
@@ -365,6 +382,8 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			FROM blog_tbl b
 			JOIN blog_user_like_tbl bult_filter ON b.blog_id = bult_filter.blog_id
 			WHERE bult_filter.user_id = :userId
+			AND b.deleted = false
+			AND b.status = 'PUBLISHED'
 			""", nativeQuery = true)
 	Page<Object[]> findBlogCardsLikedByUser(@Param("userId") Long userId, Pageable pageable);
 
@@ -427,6 +446,8 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			LEFT JOIN category_tbl cat ON bc.category_id = cat.category_id
 
 			WHERE burt_filter.user_id = :userId
+			AND b.deleted = false
+			AND b.status = 'PUBLISHED'
 
 			GROUP BY b.blog_id, u.user_id, u.username
 			ORDER BY burt_filter.created_at DESC
@@ -435,38 +456,10 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			FROM blog_tbl b
 			JOIN blog_user_reada_tbl burt_filter ON b.blog_id = burt_filter.blog_id
 			WHERE burt_filter.user_id = :userId
+			AND b.deleted = false
+			AND b.status = 'PUBLISHED'
 			""", nativeQuery = true)
 	Page<Object[]> findBlogCardsReadLaterByUser(@Param("userId") Long userId, Pageable pageable);
-
-	// get blogs by category pageables
-	@Query("SELECT b FROM BlogEntity b " + "JOIN CategoryBlogEntity bc ON b.blogId = bc.id.blogId "
-			+ "JOIN CategoryEntity c ON bc.id.categoryId = c.categoryId " + "WHERE c.name = :categoryName "
-			+ "ORDER BY b.createdAt DESC")
-	Page<BlogEntity> findBlogsByCategoryName(@Param("categoryName") String categoryName, Pageable pageable);
-
-	// get blogs by read later by user pageables
-	@Query("""
-				SELECT b
-			    FROM BlogEntity b
-			    JOIN BlogUserReadEntity bure ON b.blogId = bure.id.blogId
-			    WHERE bure.id.userId = :userId
-			    ORDER BY bure.createdAt DESC
-			""")
-	Page<BlogEntity> findBlogsByReadeLaterByUser(@Param("userId") Long userId, Pageable pageable);
-
-	// get blogs by user pageables
-	@Query("SELECT b FROM BlogEntity b WHERE b.userId = :userId ORDER BY b.createdAt DESC")
-	Page<BlogEntity> findBlogsByUserId(@Param("userId") Long userId, Pageable pageable);
-
-	// get blogs liked by user pageables
-	@Query("""
-			    SELECT b
-			    FROM BlogEntity b
-			    JOIN BlogUserLikeEntity bult ON b.blogId = bult.id.blogId
-			    WHERE bult.id.userId = :userId
-			    ORDER BY bult.createdAt DESC
-			""")
-	Page<BlogEntity> findBlogsLikedByUser(@Param("userId") Long userId, Pageable pageable);
 
 	// get categories by user followed pageables
 	@Query("""

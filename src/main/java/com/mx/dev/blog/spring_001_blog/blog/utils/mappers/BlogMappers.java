@@ -112,6 +112,7 @@ public class BlogMappers {
 		blogEntity.setTitle(blogCreateRequestDTO.getTitle());
 		blogEntity.setUpdatedAt(LocalDateTime.now());
 		blogEntity.setUserId(userId);
+		blogEntity.setDeleted(false);
 
 		return blogEntity;
 	}

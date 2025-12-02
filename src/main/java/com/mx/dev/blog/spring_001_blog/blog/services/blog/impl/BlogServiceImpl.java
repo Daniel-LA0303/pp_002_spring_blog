@@ -2,9 +2,7 @@ package com.mx.dev.blog.spring_001_blog.blog.services.blog.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -40,45 +38,24 @@ import com.mx.dev.blog.spring_001_blog.utils.mappers.CategoryMappers;
 @Service
 public class BlogServiceImpl implements BlogService {
 
-	@Autowired
-	private BlogRepository blogRepository;
+	private final BlogRepository blogRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private CategoryRepository categoryRepository;
+	private final CategoryRepository categoryRepository;
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-	@Autowired
-	private CategoryService categoryService;
+	private final CategoryService categoryService;
 
-	/**
-	 * static methods of services
-	 */
-	public static String generateSlug(String title) {
+	public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository,
+			CategoryRepository categoryRepository, UserService userService, CategoryService categoryService) {
+		this.blogRepository = blogRepository;
+		this.userRepository = userRepository;
+		this.categoryRepository = categoryRepository;
+		this.userService = userService;
+		this.categoryService = categoryService;
 
-		String slug = title.toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
-
-		String randomPart = generateRandomString(8);
-
-		return slug + "-" + randomPart;
-	}
-
-	private static String generateRandomString(int length) {
-		String characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-		Random random = new Random();
-		StringBuilder sb = new StringBuilder(length);
-		for (int i = 0; i < length; i++) {
-			sb.append(characters.charAt(random.nextInt(characters.length())));
-		}
-		return sb.toString();
-	}
-
-	private static String generateRandomSuffix() {
-		return Long.toHexString(System.nanoTime()); // Generates a random suffix based on nanoTime
 	}
 
 	// liked in a blog
@@ -139,6 +116,7 @@ public class BlogServiceImpl implements BlogService {
 	@Transactional
 	@Override
 	public BlogEntity createBlog(BlogCreateRequestDTO blogCreateRequestDTO) throws ServiceException {
+
 		// 1. first check if user exists
 		UserSimpleResponseDTO user = userService.getOneUserSimpleInfo(blogCreateRequestDTO.getUserId());
 
@@ -146,34 +124,19 @@ public class BlogServiceImpl implements BlogService {
 		List<CategoryEntity> categoryEntities = categoryService.getListCategories(blogCreateRequestDTO.getCategories());
 
 		// 3. we create a unique slug
-		String slug = generateSlug(blogCreateRequestDTO.getTitle());
+		String slug = normalizeSlug(blogCreateRequestDTO.getTitle() + "-" + LocalDateTime.now());
 
-		// 4. Check if the generated slug already exists in the database
-		int attempts = 0;
-		int maxAttempts = 5; // Max attempts to avoid infinite loop
-		while (blogRepository.existsBySlug(slug) && attempts < maxAttempts) {
-			slug = generateSlug(blogCreateRequestDTO.getTitle()) + "-" + generateRandomSuffix();
-			attempts++;
-		}
-		if (attempts >= maxAttempts) {
-			throw new ServiceException("Blog error in generate slug, please come back in a few minutes.",
-					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
-		}
-
-		// 5. Now proceed with creating the Blog entity
+		// 4. Now proceed with creating the Blog entity
 		BlogEntity blogEntity = BlogMappers.toCreateABlog(blogCreateRequestDTO, slug, user.getUserId());
 
-		// Save and flush to make sure blog_id is generated before creating the relation
+		// 5. save and flush to make sure blog_id is generated before creating the
+		// relation
 		blogRepository.saveAndFlush(blogEntity);
 
-		// 6. Verificar que el blog_id está generado y asignado
-		Long blogId = blogEntity.getBlogId();
-		System.out.println("Blog ID generado: " + blogId); // Esto te asegura que el blog_id fue generado correctamente
-
-		// 7. Asignar categorías al blog
+		// 6. set categories
 		blogEntity.setCategories(categoryEntities);
 
-		// 8. Ahora guardamos el blog, incluyendo las relaciones de categorías
+		// 7. save new blog
 		blogRepository.save(blogEntity);
 
 		return blogEntity;
@@ -250,11 +213,11 @@ public class BlogServiceImpl implements BlogService {
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.DELETE);
 		}
 
-		// 3. delete or clear categories
-		blogEntity.getCategories().clear();
+		// 3. if user is same, then we delete blog soft
+		blogEntity.setDeletedAt(LocalDateTime.now());
+		blogEntity.setDeleted(true);
 
-		// 4. if user is same, then we delete blog
-		blogRepository.delete(blogEntity);
+		blogRepository.save(blogEntity);
 
 	}
 
@@ -391,6 +354,10 @@ public class BlogServiceImpl implements BlogService {
 		blogRepository.save(blogEntity);
 
 		return blogEntity;
+	}
+
+	private String normalizeSlug(String input) {
+		return input.toLowerCase().replaceAll("[^a-z0-9\\s-]", "").replaceAll("\\s+", "-").replaceAll("-+", "-");
 	}
 
 }
