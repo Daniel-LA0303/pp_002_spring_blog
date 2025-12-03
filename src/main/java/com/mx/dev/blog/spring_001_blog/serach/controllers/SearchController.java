@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mx.dev.blog.spring_001_blog.blog.services.BlogService;
+import com.mx.dev.blog.spring_001_blog.blog.services.blog.BlogService;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.category.services.CategoryService;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.search.MultipleSearchDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
