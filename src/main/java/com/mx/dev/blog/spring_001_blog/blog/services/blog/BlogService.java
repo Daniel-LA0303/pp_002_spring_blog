@@ -14,8 +14,6 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 public interface BlogService {
 
-	public HomePageResponseDTO getHomePageInfo();
-
 	void blogLiked(Long userId, Long blogId) throws ServiceException;
 
 	void blogRead(Long userId, Long blogId) throws ServiceException;
@@ -51,7 +49,7 @@ public interface BlogService {
 
 	Page<BlogInfoCardDTO> getBlogsPaginated(int page, int size);
 
-	// Page<BlogInfoCardDTO> getBlogsPaginatedByLike(int page, int size);
+	HomePageResponseDTO getHomePageInfo();
 
 	BlogPageResponseDTO getOneBlog(Long blogId) throws ServiceException;
 

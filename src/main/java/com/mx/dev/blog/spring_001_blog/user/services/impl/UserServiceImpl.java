@@ -1,5 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.user.services.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,13 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.mail.MessagingException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mx.dev.blog.spring_001_blog.auth.services.email.EmailService;
+import com.mx.dev.blog.spring_001_blog.auth.utils.dto.EmailDataRegisterDTO;
 import com.mx.dev.blog.spring_001_blog.user.entities.RoleEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserInfoEntity;
@@ -36,35 +40,40 @@ import com.mx.dev.blog.spring_001_blog.utils.mappers.UserMappers;
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private UserInfoRepository userInfoRepository;
+	private final UserInfoRepository userInfoRepository;
 
-	@Autowired
-	private RoleRepository roleRepository;
+	private final RoleRepository roleRepository;
+
+	private final EmailService emailService;
+
+	public UserServiceImpl(UserRepository userRepository, UserInfoRepository userInfoRepository,
+			RoleRepository roleRepository, EmailService emailService) {
+		this.roleRepository = roleRepository;
+		this.userInfoRepository = userInfoRepository;
+		this.userRepository = userRepository;
+		this.emailService = emailService;
+	}
 
 	@Override
 	@Transactional
-	public UserEntity createUser(UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
+	public UserEntity createUser(UserCreateRequestDTO userCreateRequestDTO)
+			throws ServiceException, UnsupportedEncodingException, MessagingException {
 
 		Map<String, String> errorMap = new HashMap<>();
 
-		System.out.println("******* paso 1********");
 		// 1. Check if username is already used
 		if (userRepository.existsByUsername(userCreateRequestDTO.getUsername())) {
 			errorMap.put("username",
 					String.format("Username '%s' is already taken", userCreateRequestDTO.getUsername()));
 		}
 
-		System.out.println("******* paso 2********");
 		// 2. Check if email is already used
 		if (userRepository.existsByEmail(userCreateRequestDTO.getEmail())) {
 			errorMap.put("email", String.format("Email '%s' is already registered", userCreateRequestDTO.getEmail()));
 		}
 
-		System.out.println("******* paso 3********");
 		if (!errorMap.isEmpty()) {
 			throw new ServiceException("User registration failed due to validation errors",
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/user", MethodEnum.POST, errorMap);
@@ -77,20 +86,29 @@ public class UserServiceImpl implements UserService {
 		userEntity.setPassword(userCreateRequestDTO.getPassword());
 		userEntity.setCreatedAt(LocalDateTime.now());
 		userEntity.setUpdatedAt(LocalDateTime.now());
+		userEntity.setConfirm(false);
+		userEntity.setToken(generateStaticToken()); // <- generate a static token to confirm account
 
-		// we asigned role
+		// 4. we asigned role
 		Optional<RoleEntity> roleEntity = roleRepository.findRoleByName("ROLE_USER");
 		userEntity.setRoles(Collections.singleton(roleEntity.get()));
 
-		// 4. Save UserEntity and get generated userId
+		// 5. Save UserEntity and get generated userId
 		UserEntity savedUser = userRepository.save(userEntity);
 
-		// 5. Create associated UserInfoEntity using userId
+		// 6. Create associated UserInfoEntity using userId
 		UserInfoEntity userInfoEntity = new UserInfoEntity();
 		userInfoEntity.setUserId(savedUser.getUserId());
 		userInfoEntity.setIsActive(false);
 
 		userInfoRepository.save(userInfoEntity);
+
+		// 7. build email data
+		EmailDataRegisterDTO emailDataRegisterDTO = new EmailDataRegisterDTO(userEntity.getEmail(),
+				userEntity.getUsername(), userEntity.getToken());
+
+		// 8. send email
+		emailService.sendRegistrationEmail(emailDataRegisterDTO);
 
 		return savedUser;
 	}
@@ -152,6 +170,20 @@ public class UserServiceImpl implements UserService {
 		userInfo.setUsersFollowers(usersFollowers);
 
 		return userInfo;
+	}
+
+	@Override
+	public UserEntity getUserByToken(String token) throws ServiceException {
+
+		Optional<UserEntity> user = userRepository.findByToken(token);
+
+		if (!user.isPresent()) { // ⬅ correcta validación sin disparar excepción
+			throw new ServiceException(
+					"User with this token not found, please check your email or send the request again.",
+					ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user-info", MethodEnum.PUT);
+		}
+
+		return user.get();
 	}
 
 	@Override
@@ -219,6 +251,12 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.deleteByFollowerIdAndFollowedId(followerId, followedId);
 
+	}
+
+	private String generateStaticToken() {
+		String random = Long.toString((long) (Math.random() * Long.MAX_VALUE), 32);
+		String date = Long.toString(System.currentTimeMillis(), 32);
+		return random + date;
 	}
 
 }

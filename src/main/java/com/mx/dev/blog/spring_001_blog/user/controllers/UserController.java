@@ -1,6 +1,9 @@
 package com.mx.dev.blog.spring_001_blog.user.controllers;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -112,7 +115,8 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> saveUser(@RequestBody UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
+	public ResponseEntity<?> saveUser(@RequestBody UserCreateRequestDTO userCreateRequestDTO)
+			throws ServiceException, UnsupportedEncodingException, MessagingException {
 
 		userValidator.validate(userCreateRequestDTO);
 
