@@ -1,8 +1,8 @@
-package com.mx.dev.blog.spring_001_blog.utils.dtos.blog;
+package com.mx.dev.blog.spring_001_blog.blog.utils.dto;
 
 import java.time.LocalDateTime;
 
-import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
+import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 
 public class BlogResponseDTO {
 

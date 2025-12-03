@@ -1,4 +1,4 @@
-package com.mx.dev.blog.spring_001_blog.utils.dtos.blog;
+package com.mx.dev.blog.spring_001_blog.blog.utils.dto;
 
 import java.util.List;
 
