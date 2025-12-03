@@ -2,7 +2,6 @@ package com.mx.dev.blog.spring_001_blog.user.services;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.mail.MessagingException;
 
@@ -37,7 +36,7 @@ public interface UserService {
 
 	UserInfoDTO getOneUserWithInfo(Long id) throws ServiceException;
 
-	Optional<UserEntity> getUserByToken(String token);
+	UserEntity getUserByToken(String token) throws ServiceException;
 
 	UserFullEngagementDTO getUserFullEngagement(Long userId) throws ServiceException;
 

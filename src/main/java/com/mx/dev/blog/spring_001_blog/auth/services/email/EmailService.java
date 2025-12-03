@@ -36,7 +36,7 @@ public class EmailService {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-		helper.setFrom(emailProperties.getFrom(), "Daniel-LA Blog");
+		helper.setFrom(new InternetAddress("app.testpro2@gmail.com", "Daniel-LA Blog"));
 		helper.setTo(datos.getEmail());
 		helper.setSubject("Daniel-LA Blog - Reset your Password");
 		helper.setText("Reset your Password in Daniel-LA Blog", htmlContent);
@@ -61,11 +61,10 @@ public class EmailService {
 		helper.setText("Check your account at Daniel-LA Blog", htmlContent);
 
 		mailSender.send(message);
-
 	}
 
 	/**
-	 * Construye el HTML para reset de password (igual que en Node.js)
+	 * Construye el HTML para reset de password
 	 */
 	private String buildPasswordResetHtml(String name, String token) {
 		String frontendUrl = emailProperties.getFrontendUrl();
@@ -81,7 +80,7 @@ public class EmailService {
 						        Follow the link below to generate a new password:
 						    </p>
 						    <p style="text-align:center; margin:20px 0;">
-						        <a href="%s/forget-password/%s"
+						        <a href="%s/new-password/%s"
 						        style="background-color:white; color:#121212; padding:10px 20px; border-radius:6px; text-decoration:none; font-weight:bold;">
 						        Reset your Password
 						        </a>
@@ -95,7 +94,7 @@ public class EmailService {
 	}
 
 	/**
-	 * Construye el HTML para registro (igual que en Node.js)
+	 * Construye el HTML para registro
 	 */
 	private String buildRegistrationHtml(String name, String token) {
 		String frontendUrl = emailProperties.getFrontendUrl();

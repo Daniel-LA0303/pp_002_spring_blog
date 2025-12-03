@@ -173,9 +173,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<UserEntity> getUserByToken(String token) {
+	public UserEntity getUserByToken(String token) throws ServiceException {
 
-		return userRepository.findByToken(token);
+		Optional<UserEntity> user = userRepository.findByToken(token);
+
+		if (!user.isPresent()) { // ⬅ correcta validación sin disparar excepción
+			throw new ServiceException(
+					"User with this token not found, please check your email or send the request again.",
+					ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user-info", MethodEnum.PUT);
+		}
+
+		return user.get();
 	}
 
 	@Override
@@ -245,7 +253,7 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	private final String generateStaticToken() {
+	private String generateStaticToken() {
 		String random = Long.toString((long) (Math.random() * Long.MAX_VALUE), 32);
 		String date = Long.toString(System.currentTimeMillis(), 32);
 		return random + date;
