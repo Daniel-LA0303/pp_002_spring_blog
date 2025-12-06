@@ -1,5 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.impl;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,15 +39,18 @@ public class StorageServicesImpl implements StorageServices {
 	public void deleteImageCloudinary(String ownerType, Long ownerId) throws ServiceException {
 
 		// 1. get media entity or throw
-		MediaEntity mediaEntity = mediaRepository.findByOwnerTypeAndOwnerId(ownerType, ownerId)
-				.orElseThrow(() -> new ServiceException("Not found media" + ownerType + " con ID " + ownerId, 404,
-						"/delete-image", MethodEnum.DELETE));
+		Optional<MediaEntity> mediaEntity = mediaRepository.findByOwnerTypeAndOwnerId(ownerType, ownerId);
+
+		// 2. there is not a previous image
+		if (mediaEntity.isEmpty()) {
+			return;
+		}
 
 		// 2. delete image from cloudinary
-		cloudinaryService.delete(mediaEntity.getMetadata().get("public_id").toString());
+		cloudinaryService.delete(mediaEntity.get().getMetadata().get("public_id").toString());
 
 		// 3. delete media from db
-		mediaRepository.delete(mediaEntity);
+		mediaRepository.delete(mediaEntity.get());
 
 	}
 

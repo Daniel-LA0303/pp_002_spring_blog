@@ -21,6 +21,12 @@ import com.mx.dev.blog.spring_001_blog.blog.utils.mappers.BlogMappers;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
 import com.mx.dev.blog.spring_001_blog.category.repositories.CategoryRepository;
 import com.mx.dev.blog.spring_001_blog.category.services.CategoryService;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.service.CloudinaryService;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.utils.dto.ImageResponseCloudinaryDTO;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.MediaService;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.StorageServices;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.TypeStorage;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.mappers.CloudStorageMappers;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
@@ -48,14 +54,23 @@ public class BlogServiceImpl implements BlogService {
 
 	private final CategoryService categoryService;
 
+	private final MediaService mediaService;
+
+	private final CloudinaryService cloudinaryService;
+
+	private final StorageServices storageServices;
+
 	public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository,
-			CategoryRepository categoryRepository, UserService userService, CategoryService categoryService) {
+			CategoryRepository categoryRepository, UserService userService, CategoryService categoryService,
+			MediaService mediaService, CloudinaryService cloudinaryService, StorageServices storageServices) {
 		this.blogRepository = blogRepository;
 		this.userRepository = userRepository;
 		this.categoryRepository = categoryRepository;
 		this.userService = userService;
 		this.categoryService = categoryService;
-
+		this.mediaService = mediaService;
+		this.cloudinaryService = cloudinaryService;
+		this.storageServices = storageServices;
 	}
 
 	// liked in a blog
@@ -117,29 +132,47 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public BlogEntity createBlog(BlogCreateRequestDTO blogCreateRequestDTO) throws ServiceException {
 
-		// 1. first check if user exists
+		// 1. check user exists
 		UserSimpleResponseDTO user = userService.getOneUserSimpleInfo(blogCreateRequestDTO.getUserId());
 
-		// 2. check if categories exists and get them
+		// 2. check categories
 		List<CategoryEntity> categoryEntities = categoryService.getListCategories(blogCreateRequestDTO.getCategories());
 
-		// 3. we create a unique slug
+		// 3. generate slug
 		String slug = normalizeSlug(blogCreateRequestDTO.getTitle() + "-" + LocalDateTime.now());
 
-		// 4. Now proceed with creating the Blog entity
-		BlogEntity blogEntity = BlogMappers.toCreateABlog(blogCreateRequestDTO, slug, user.getUserId());
+		// ==== IMAGE (OPTIONAL) ====
+		String imageUrl = null;
+		TypeStorage type = null;
+		ImageResponseCloudinaryDTO imageResponse = null;
 
-		// 5. save and flush to make sure blog_id is generated before creating the
-		// relation
+		if (blogCreateRequestDTO.getBlogImage() != null && !blogCreateRequestDTO.getBlogImage().isEmpty()) {
+
+			imageResponse = cloudinaryService.upload(blogCreateRequestDTO.getBlogImage(), "blog_profile_spring");
+
+			type = storageServices.validateExtension(blogCreateRequestDTO.getBlogImage());
+			imageUrl = imageResponse.getImageURL();
+		}
+
+		// 4. Create entity
+		BlogEntity blogEntity = BlogMappers.toCreateABlog(blogCreateRequestDTO, slug, user.getUserId(), imageUrl);
+
+		// 5. Save and flush
 		blogRepository.saveAndFlush(blogEntity);
 
-		// 6. set categories
+		// 6. Assign categories
 		blogEntity.setCategories(categoryEntities);
 
-		// 7. save new blog
-		blogRepository.save(blogEntity);
+		// 7. Save final entity
+		BlogEntity blogSaved = blogRepository.save(blogEntity);
 
-		return blogEntity;
+		// 8. Save media only if image exists
+		if (imageUrl != null) {
+			mediaService.saveMedia(CloudStorageMappers.fromObjectsToMediaEntity("BLOG", blogSaved.getBlogId(),
+					imageResponse, "BLOG_IMAGE", type.name()));
+		}
+
+		return blogSaved;
 	}
 
 	// dash board services
@@ -327,8 +360,14 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public Page<BlogInfoCardDTO> searchBlogs(String query, int page, int size) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Pageable pageable = PageRequest.of(page, size);
+
+		Page<Object[]> result = blogRepository.searchBlogCards(query, pageable);
+
+		List<BlogInfoCardDTO> content = result.getContent().stream().map(BlogMappers::mapRow).toList();
+
+		return new PageImpl<>(content, pageable, result.getTotalElements());
 	}
 
 	@Override

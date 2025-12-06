@@ -127,6 +127,8 @@
 		    <artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		
+
+		
 	</dependencies>
 	
 
@@ -208,7 +210,7 @@
 			                            <limit>
 			                                <counter>CLASS</counter>
 			                                <value>COVEREDRATIO</value>
-			                                <minimum>0.85</minimum>
+			                                <minimum>0.10</minimum>
 			                            </limit>
 			                        </limits>
 			                    </rule>

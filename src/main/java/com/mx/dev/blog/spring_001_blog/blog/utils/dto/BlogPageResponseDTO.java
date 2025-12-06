@@ -73,6 +73,11 @@ public class BlogPageResponseDTO {
 	private List<Long> usersReaded;
 
 	/**
+	 * blog image
+	 */
+	private String blogImage;
+
+	/**
 	 * 
 	 */
 	public BlogPageResponseDTO() {
@@ -94,6 +99,15 @@ public class BlogPageResponseDTO {
 	 */
 	public Long getBlogId() {
 		return blogId;
+	}
+
+	/**
+	 * return value of the property blogImage
+	 *
+	 * @return the blogImage
+	 */
+	public String getBlogImage() {
+		return blogImage;
 	}
 
 	/**
@@ -202,6 +216,15 @@ public class BlogPageResponseDTO {
 	 */
 	public void setBlogId(Long blogId) {
 		this.blogId = blogId;
+	}
+
+	/**
+	 * set value of the property blogImage
+	 *
+	 * @param blogImage the blogImage to set
+	 */
+	public void setBlogImage(String blogImage) {
+		this.blogImage = blogImage;
 	}
 
 	/**

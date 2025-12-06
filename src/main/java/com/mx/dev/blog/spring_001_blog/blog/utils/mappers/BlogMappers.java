@@ -101,7 +101,8 @@ public class BlogMappers {
 		return blogResponseDTO;
 	}
 
-	public static BlogEntity toCreateABlog(BlogCreateRequestDTO blogCreateRequestDTO, String slug, Long userId) {
+	public static BlogEntity toCreateABlog(BlogCreateRequestDTO blogCreateRequestDTO, String slug, Long userId,
+			String imageUrl) {
 
 		BlogEntity blogEntity = new BlogEntity();
 		blogEntity.setContent(blogCreateRequestDTO.getContent());
@@ -113,8 +114,24 @@ public class BlogMappers {
 		blogEntity.setUpdatedAt(LocalDateTime.now());
 		blogEntity.setUserId(userId);
 		blogEntity.setDeleted(false);
+		blogEntity.setBlogImgUrl(imageUrl);
 
 		return blogEntity;
+	}
+
+	public static BlogEntity toCreateABlogWithoutImage(BlogCreateRequestDTO dto, String slug, Long userId) {
+		BlogEntity blog = new BlogEntity();
+		blog.setContent(dto.getContent());
+		blog.setCreatedAt(LocalDateTime.now());
+		blog.setDescription(dto.getDescription());
+		blog.setSlug(slug);
+		blog.setStatus(BlogStatusEnum.PUBLISHED);
+		blog.setTitle(dto.getTitle());
+		blog.setUpdatedAt(LocalDateTime.now());
+		blog.setUserId(userId);
+		blog.setDeleted(false);
+		blog.setBlogImgUrl(null);
+		return blog;
 	}
 
 	public static List<BlogResponseDTO> toListBlogResponseDTO(List<BlogEntity> blogEntities) {
@@ -148,6 +165,7 @@ public class BlogMappers {
 		blogResponsePageDTO.setBlogEngagementDTO(blogEngagementDTO);
 		blogResponsePageDTO.setUsersLiked(usersLiked);
 		blogResponsePageDTO.setUsersReaded(usersReaded);
+		blogResponsePageDTO.setBlogImage(blogEntity.getBlogImgUrl());
 
 		return blogResponsePageDTO;
 	}

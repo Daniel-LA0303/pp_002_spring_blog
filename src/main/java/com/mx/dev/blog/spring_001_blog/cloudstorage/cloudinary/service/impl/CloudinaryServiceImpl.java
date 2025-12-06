@@ -67,6 +67,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 			// 3. pass from bytes to megabytes
 			Double sizeBytes = ((Number) resultUpload.get("bytes")).doubleValue();
 
+			System.out.println(resultUpload.get("secure_url").toString());
 			// 4. build response
 			ImageResponseCloudinaryDTO res = new ImageResponseCloudinaryDTO(resultUpload.get("secure_url").toString(),
 					sizeBytes, metadata);

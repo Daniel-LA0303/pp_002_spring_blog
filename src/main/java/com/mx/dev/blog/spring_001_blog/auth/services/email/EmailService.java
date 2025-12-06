@@ -6,7 +6,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -16,15 +15,15 @@ import com.mx.dev.blog.spring_001_blog.auth.utils.dto.EmailDataRegisterDTO;
 @Service
 public class EmailService {
 
-	@Autowired
-	private JavaMailSender mailSender;
+	private final JavaMailSender mailSender;
 
-	@Autowired
-	private EmailProperties emailProperties;
+	private final EmailProperties emailProperties;
 
-	// Opcional: Si quieres usar Thymeleaf para templates
-	// @Autowired
-	// private TemplateEngine templateEngine;
+	public EmailService(JavaMailSender mailSender, EmailProperties emailProperties) {
+		this.emailProperties = emailProperties;
+		this.mailSender = mailSender;
+
+	}
 
 	/**
 	 * Equivalente a emailNewPassword en Node.js

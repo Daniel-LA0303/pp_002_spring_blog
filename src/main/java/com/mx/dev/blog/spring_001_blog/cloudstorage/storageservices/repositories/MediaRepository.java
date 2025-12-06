@@ -12,6 +12,10 @@ import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.entities.Med
 @Repository
 public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
 
+	// get by owner id
+	@Query("SELECT m FROM MediaEntity m WHERE m.ownerId = :ownerId")
+	Optional<MediaEntity> findByOwnerId(@Param("ownerId") Long ownerId);
+
 	// boolean getMediaByOwnerTypeAndOwnerId();
 	@Query("SELECT m FROM MediaEntity m WHERE m.ownerType = :ownerType AND m.ownerId = :ownerId")
 	Optional<MediaEntity> findByOwnerTypeAndOwnerId(@Param("ownerType") String ownerType,

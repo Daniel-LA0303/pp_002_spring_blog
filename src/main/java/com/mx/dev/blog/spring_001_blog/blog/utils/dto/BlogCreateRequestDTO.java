@@ -43,7 +43,7 @@ public class BlogCreateRequestDTO {
 	}
 
 	/**
-	 * return the value of the property blogImage
+	 * return value of the property blogImage
 	 *
 	 * @return the blogImage
 	 */
@@ -97,7 +97,7 @@ public class BlogCreateRequestDTO {
 	}
 
 	/**
-	 * set the value of the property blogImage
+	 * set value of the property blogImage
 	 *
 	 * @param blogImage the blogImage to set
 	 */

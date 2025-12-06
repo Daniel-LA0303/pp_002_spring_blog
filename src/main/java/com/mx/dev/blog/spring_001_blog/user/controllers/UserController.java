@@ -1,9 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.user.controllers;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-
-import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
@@ -114,29 +109,9 @@ public class UserController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
-	@PostMapping
-	public ResponseEntity<?> saveUser(@RequestBody UserCreateRequestDTO userCreateRequestDTO)
-			throws ServiceException, UnsupportedEncodingException, MessagingException {
-
-		userValidator.validate(userCreateRequestDTO);
-
-		UserEntity userEntity = userService.createUser(userCreateRequestDTO);
-
-		ApiResponse<UserEntity> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(), "/api/user",
-				MethodEnum.POST, "Success method POST", userEntity, false);
-
-		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-	}
-
-	@PutMapping(
-	// value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-	"/{userId}")
-	public ResponseEntity<?> updateUser(@PathVariable Long userId,
-			// @RequestPart("userData") UserUpdateInfoRequestDTO userData,
-			// @RequestPart(value = "userImage", required = false) MultipartFile userImage
-			@RequestBody UserUpdateInfoRequestDTO userData) throws ServiceException {
-
-		// userData.setUserImage(userImage);
+	@PutMapping("/{userId}")
+	public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UserUpdateInfoRequestDTO userData)
+			throws ServiceException {
 
 		userService.updateUserInfo(userData, userId);
 

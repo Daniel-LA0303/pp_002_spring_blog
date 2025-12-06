@@ -30,11 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		UserEntity userEntity;
 		try {
-			// Cambiamos la lógica para buscar por email en lugar de username
-			userEntity = userService.getOneUserByEmailOrThrow(email); // Aquí debe ser un método que busque por email
+			userEntity = userService.getOneUserByEmailOrThrow(email);
 
-			System.out.println("***************");
-			System.out.println(userEntity.getEmail());
 		} catch (ServiceException e) {
 			throw new UsernameNotFoundException("User not found with email: " + email, e);
 		}

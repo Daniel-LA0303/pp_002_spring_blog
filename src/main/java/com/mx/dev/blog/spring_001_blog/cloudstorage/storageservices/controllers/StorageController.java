@@ -17,7 +17,7 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 
 @RestController
-@RequestMapping("/storage/v1")
+@RequestMapping("/api/storage/v1")
 public class StorageController {
 
 	private final MediaOrchestrator orchestrator;

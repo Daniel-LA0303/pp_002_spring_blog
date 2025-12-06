@@ -158,6 +158,7 @@ public class UserServiceImpl implements UserService {
 		return UserMappers.toUserSimpleResponseDTO(getOneUserOrThrow(id));
 	}
 
+	@Transactional
 	@Override
 	public UserInfoDTO getOneUserWithInfo(Long id) throws ServiceException {
 		// Obtener los seguidores del usuario
@@ -201,7 +202,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Page<UserInfoCardDTO> searchUsers(String query, int page, int size) {
 
-		System.out.println("**********use");
 		System.out.println(query);
 		Pageable pageable = PageRequest.of(page, size);
 		return userRepository.findByUsernameContainingIgnoreCase(query, pageable);
@@ -219,8 +219,14 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new ServiceException(String.format("User info for user ID '%d' not found", userId),
 						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user-info", MethodEnum.PUT));
 
+		System.out.println("************UPDATE USER*************");
+		System.out.println(userUpdateInfoRequestDTO.getProfilePicture());
+
 		// 3. update info
 		UserInfoEntity userEntityToUpdate = UserMappers.toUserInfoEntity(userUpdateInfoRequestDTO, userInfoEntity);
+
+		System.out.println("****IMAGE??*****");
+		System.out.println(userEntityToUpdate.getProfilePicture());
 
 		userEntity.setUpdatedAt(LocalDateTime.now());
 		userRepository.save(userEntity);

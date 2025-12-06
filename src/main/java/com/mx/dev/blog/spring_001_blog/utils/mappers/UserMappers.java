@@ -33,12 +33,14 @@ public class UserMappers {
 		userInfoEntity.setSkills(userUpdateInfoRequestDTO.getSkills());
 		userInfoEntity.setWork(userUpdateInfoRequestDTO.getWork());
 		userInfoEntity.setWebsite(userUpdateInfoRequestDTO.getWebsite());
+		userInfoEntity.setProfilePicture(userUpdateInfoRequestDTO.getProfilePicture());
+
+		System.out.println(userInfoEntity.getProfilePicture());
 
 		// no change data
 		userInfoEntity.setIsActive(userInfoEntityToMap.getIsActive());
 		userInfoEntity.setLastLogin(userInfoEntityToMap.getLastLogin());
 		userInfoEntity.setPhone(userInfoEntityToMap.getPhone());
-		userInfoEntity.setProfilePicture(userInfoEntityToMap.getProfilePicture());
 		userInfoEntity.setUserId(userInfoEntityToMap.getUserId());
 		userInfoEntity.setUserInfoId(userInfoEntityToMap.getUserInfoId());
 

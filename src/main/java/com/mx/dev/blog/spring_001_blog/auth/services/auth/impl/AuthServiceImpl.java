@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,6 +70,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public UserAuthSuccessDTO loginUser(LoginDTO loginDTO) throws ServiceException {
+
 		// 1. validate DTO
 		// authLoginValidator.validate(loginDTO);
 
@@ -83,9 +85,15 @@ public class AuthServiceImpl implements AuthService {
 					HttpStatus.UNAUTHORIZED.value(), "/api/auth", MethodEnum.POST);
 		}
 
-		// 4. authenticate credentials
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+		// 4. authenticate credentials (solo UNA VEZ y dentro del try)
+		Authentication authentication;
+		try {
+			authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+		} catch (BadCredentialsException ex) {
+			throw new ServiceException("Invalid credentials", HttpStatus.UNAUTHORIZED.value(), "/api/auth",
+					MethodEnum.POST);
+		}
 
 		// 5. generate token
 		String token = jwtTokenProvider.generateToken(authentication);
