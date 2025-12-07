@@ -40,7 +40,7 @@ public class DashboardStrategyFactory {
 		try {
 			enumType = DashboardQueryType.valueOf(type.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			return null; // o lanza una excepción
+			return null;
 		}
 
 		return strategies.get(enumType);

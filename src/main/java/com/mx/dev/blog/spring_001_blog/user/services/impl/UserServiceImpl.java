@@ -11,6 +11,7 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -202,9 +203,20 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Page<UserInfoCardDTO> searchUsers(String query, int page, int size) {
 
-		System.out.println(query);
 		Pageable pageable = PageRequest.of(page, size);
-		return userRepository.findByUsernameContainingIgnoreCase(query, pageable);
+
+		// 1. get user paginated
+		Page<UserInfoCardDTO> basePage = userRepository.findByUsernameContainingIgnoreCase(query, pageable);
+
+		// 2. mappers with id user followers
+		List<UserInfoCardDTO> enrichedUsers = basePage.getContent().stream().map(user -> {
+			List<Long> followerIds = userRepository.getFollowersIds(user.getUserId());
+			user.setUsersFollowers(followerIds);
+			return user;
+		}).toList();
+
+		// 3. return info
+		return new PageImpl<>(enrichedUsers, pageable, basePage.getTotalElements());
 	}
 
 	@Override
@@ -219,14 +231,10 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new ServiceException(String.format("User info for user ID '%d' not found", userId),
 						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user-info", MethodEnum.PUT));
 
-		System.out.println("************UPDATE USER*************");
 		System.out.println(userUpdateInfoRequestDTO.getProfilePicture());
 
 		// 3. update info
 		UserInfoEntity userEntityToUpdate = UserMappers.toUserInfoEntity(userUpdateInfoRequestDTO, userInfoEntity);
-
-		System.out.println("****IMAGE??*****");
-		System.out.println(userEntityToUpdate.getProfilePicture());
 
 		userEntity.setUpdatedAt(LocalDateTime.now());
 		userRepository.save(userEntity);

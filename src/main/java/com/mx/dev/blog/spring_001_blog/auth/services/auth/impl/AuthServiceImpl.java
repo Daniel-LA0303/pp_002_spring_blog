@@ -19,6 +19,8 @@ import com.mx.dev.blog.spring_001_blog.auth.utils.dto.EmailDataRegisterDTO;
 import com.mx.dev.blog.spring_001_blog.auth.utils.dto.EmailRecueratePasswordDTO;
 import com.mx.dev.blog.spring_001_blog.config.security.JwtTokenProvider;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
+import com.mx.dev.blog.spring_001_blog.user.entities.UserInfoEntity;
+import com.mx.dev.blog.spring_001_blog.user.repositories.UserInfoRepository;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.JWTAuthResponseDto;
@@ -44,14 +46,18 @@ public class AuthServiceImpl implements AuthService {
 
 	private final EmailService emailService;
 
+	private final UserInfoRepository userInfoRepository;
+
 	public AuthServiceImpl(PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, UserService userService,
-			UserRepository userRepository, EmailService emailService, AuthenticationManager authenticationManager) {
+			UserRepository userRepository, EmailService emailService, AuthenticationManager authenticationManager,
+			UserInfoRepository userInfoRepository) {
 		this.passwordEncoder = passwordEncoder;
 		this.jwtTokenProvider = jwtTokenProvider;
 		this.userService = userService;
 		this.userRepository = userRepository;
 		this.emailService = emailService;
 		this.authenticationManager = authenticationManager;
+		this.userInfoRepository = userInfoRepository;
 	}
 
 	@Override
@@ -98,9 +104,15 @@ public class AuthServiceImpl implements AuthService {
 		// 5. generate token
 		String token = jwtTokenProvider.generateToken(authentication);
 
+		// 6. get profile image
+		UserInfoEntity userInfoEntity = userInfoRepository.findUserInfoByUserId(user.getUserId())
+				.orElseThrow(() -> new ServiceException(
+						String.format("User info for user ID '%d' not found", user.getUserId()),
+						ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user-info", MethodEnum.PUT));
+
 		// 6. build DTO
 		return new UserAuthSuccessDTO(user.getUserId(), user.getUsername(), user.getEmail(),
-				new JWTAuthResponseDto(token));
+				new JWTAuthResponseDto(token), userInfoEntity.getProfilePicture());
 	}
 
 	@Override

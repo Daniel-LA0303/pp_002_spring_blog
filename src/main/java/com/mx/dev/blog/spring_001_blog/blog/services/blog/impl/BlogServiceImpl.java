@@ -27,9 +27,10 @@ import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.Med
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.StorageServices;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.TypeStorage;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.mappers.CloudStorageMappers;
-import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryTopInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.info.HomePageResponseDTO;
@@ -191,7 +192,7 @@ public class BlogServiceImpl implements BlogService {
 	public Page<BlogInfoCardDTO> dashboardGetBlogsByReadLaterUserPaginated(Long userId, Pageable pageable)
 			throws ServiceException {
 
-		Page<Object[]> result = blogRepository.findBlogCardsLikedByUser(userId, pageable);
+		Page<Object[]> result = blogRepository.findBlogCardsReadLaterByUser(userId, pageable);
 
 		List<BlogInfoCardDTO> content = result.getContent().stream().map(BlogMappers::mapRow).toList();
 
@@ -202,7 +203,7 @@ public class BlogServiceImpl implements BlogService {
 	public Page<BlogInfoCardDTO> dashboardGetBlogsByUserPaginated(Long userId, Pageable pageable)
 			throws ServiceException {
 
-		Page<Object[]> result = blogRepository.findBlogCardsLikedByUser(userId, pageable);
+		Page<Object[]> result = blogRepository.findBlogCardsByUserId(userId, pageable);
 
 		List<BlogInfoCardDTO> content = result.getContent().stream().map(BlogMappers::mapRow).toList();
 
@@ -210,24 +211,63 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public Page<CategoryEntity> dashboardGetCategoriesFollowedByUserPaginated(Long userId, Pageable pageable)
+	public Page<BlogsByCategoryInfoDTO> dashboardGetCategoriesFollowedByUserPaginated(Long userId, Pageable pageable)
 			throws ServiceException {
 
-		return blogRepository.findCategoriesByFollowedUser(userId, pageable);
+		// 1. get categories that user follow
+		Page<CategoryFullInfoDTO> categoryFullInfoPage = categoryRepository.findCategoriesByFollowedUser(userId,
+				pageable);
+
+		// 2. mapping info
+		Page<BlogsByCategoryInfoDTO> blogsByCategoryInfoPage = categoryFullInfoPage.map(categoryFullInfoDTO -> {
+			BlogsByCategoryInfoDTO blogsByCategoryInfoDTO = new BlogsByCategoryInfoDTO();
+
+			// 3. get users than follow this category
+			List<UserSimpleResponseDTO> userSimpleResponseDTO = categoryRepository
+					.findTopUsersByCategory(categoryFullInfoDTO.getName(), pageable);
+
+			// 4. get ids for follows
+			List<Long> usersFollowers = categoryRepository
+					.findUserFollowersIdsByCategory(categoryFullInfoDTO.getName());
+
+			// 5. build info
+			blogsByCategoryInfoDTO.setCategoryFullInfoDTO(categoryFullInfoDTO);
+			blogsByCategoryInfoDTO.setFollewersCategory(userSimpleResponseDTO);
+			blogsByCategoryInfoDTO.setUsersFollowersIds(usersFollowers);
+
+			return blogsByCategoryInfoDTO;
+		});
+		return blogsByCategoryInfoPage;
 	}
 
 	@Override
-	public Page<UserEntity> dashboardGetFollowedsByUserPaginated(Long userId, Pageable pageable)
+	public Page<UserInfoCardDTO> dashboardGetFollowedsByUserPaginated(Long userId, Pageable pageable)
 			throws ServiceException {
 
-		return blogRepository.findUserFollowedsByUserId(userId, pageable);
+		Page<UserInfoCardDTO> basePage = userRepository.findUsersFollowedByUser(userId, pageable);
+
+		List<UserInfoCardDTO> enrichedUsers = basePage.getContent().stream().map(user -> {
+			List<Long> followerIds = userRepository.getFollowersIds(user.getUserId());
+			user.setUsersFollowers(followerIds);
+			return user;
+		}).toList();
+
+		return new PageImpl<>(enrichedUsers, pageable, basePage.getTotalElements());
 	}
 
 	@Override
-	public Page<UserEntity> dashboardGetFollowersByUserPaginated(Long userId, Pageable pageable)
+	public Page<UserInfoCardDTO> dashboardGetFollowersByUserPaginated(Long userId, Pageable pageable)
 			throws ServiceException {
 
-		return blogRepository.findUserFollowersByUserId(userId, pageable);
+		Page<UserInfoCardDTO> basePage = userRepository.findUsersWhoFollowUser(userId, pageable);
+
+		List<UserInfoCardDTO> enrichedUsers = basePage.getContent().stream().map(user -> {
+			List<Long> followerIds = userRepository.getFollowersIds(user.getUserId());
+			user.setUsersFollowers(followerIds);
+			return user;
+		}).toList();
+
+		return new PageImpl<>(enrichedUsers, pageable, basePage.getTotalElements());
 	}
 
 	/**

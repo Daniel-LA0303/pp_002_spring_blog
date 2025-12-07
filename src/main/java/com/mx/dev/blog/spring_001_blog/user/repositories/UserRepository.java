@@ -89,6 +89,48 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	Optional<UserInfoDTO> findUserInfoById(@Param("userId") Long userId);
 
 	@Query("""
+			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO(
+			        u.userId,
+			        u.username,
+			        ui.profilePicture,
+			        ui.city,
+			        COUNT(DISTINCT b.blogId),
+			        COUNT(DISTINCT uf1.id.followerId),
+			        COUNT(DISTINCT uf2.id.followedId)
+			    )
+			    FROM UserFollowsEntity f
+			    JOIN UserEntity u ON u.userId = f.id.followedId
+			    JOIN UserInfoEntity ui ON u.userId = ui.userId
+			    LEFT JOIN BlogEntity b ON b.userId = u.userId AND b.status = 'PUBLISHED'
+			    LEFT JOIN UserFollowsEntity uf1 ON uf1.id.followedId = u.userId
+			    LEFT JOIN UserFollowsEntity uf2 ON uf2.id.followerId = u.userId
+			    WHERE f.id.followerId = :userId
+			    GROUP BY u.userId, u.username, ui.profilePicture, ui.city
+			""")
+	Page<UserInfoCardDTO> findUsersFollowedByUser(@Param("userId") Long userId, Pageable pageable);
+
+	@Query("""
+			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO(
+			        u.userId,
+			        u.username,
+			        ui.profilePicture,
+			        ui.city,
+			        COUNT(DISTINCT b.blogId),
+			        COUNT(DISTINCT uf1.id.followerId),
+			        COUNT(DISTINCT uf2.id.followedId)
+			    )
+			    FROM UserFollowsEntity f
+			    JOIN UserEntity u ON u.userId = f.id.followerId
+			    JOIN UserInfoEntity ui ON u.userId = ui.userId
+			    LEFT JOIN BlogEntity b ON b.userId = u.userId AND b.status = 'PUBLISHED'
+			    LEFT JOIN UserFollowsEntity uf1 ON uf1.id.followedId = u.userId
+			    LEFT JOIN UserFollowsEntity uf2 ON uf2.id.followerId = u.userId
+			    WHERE f.id.followedId = :userId
+			    GROUP BY u.userId, u.username, ui.profilePicture, ui.city
+			""")
+	Page<UserInfoCardDTO> findUsersWhoFollowUser(@Param("userId") Long userId, Pageable pageable);
+
+	@Query("""
 			    SELECT uf.id.followerId
 			    FROM UserFollowsEntity uf
 			    WHERE uf.id.followedId = :userId

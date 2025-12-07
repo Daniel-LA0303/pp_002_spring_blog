@@ -34,28 +34,29 @@ public class BlogMappers {
 		dto.setCreatedAt(((Timestamp) row[3]).toLocalDateTime());
 		dto.setStatus(BlogStatusEnum.valueOf((String) row[4]));
 		dto.setSlug((String) row[5]);
+		dto.setBlogImage((String) row[6]);
 
 		// NEW: Owner info
-		dto.setUserId(((Number) row[6]).longValue());
-		dto.setUsername((String) row[7]);
+		dto.setUserId(((Number) row[7]).longValue());
+		dto.setUsername((String) row[8]);
 
 		// Engagement
 		BlogEngagementDTO engagement = new BlogEngagementDTO();
-		engagement.setLikesNumber(((Number) row[8]).longValue());
-		engagement.setCommentsNumber(((Number) row[9]).longValue());
-		engagement.setSavedNumber(((Number) row[10]).longValue());
+		engagement.setLikesNumber(((Number) row[9]).longValue());
+		engagement.setCommentsNumber(((Number) row[10]).longValue());
+		engagement.setSavedNumber(((Number) row[11]).longValue());
 		dto.setBlogEngagementDTO(engagement);
 
 		try {
 			// JSON lists
-			dto.setUsersLiked(objectMapper.readValue(row[11].toString(), new TypeReference<List<Long>>() {
+			dto.setUsersLiked(objectMapper.readValue(row[12].toString(), new TypeReference<List<Long>>() {
 			}));
 
-			dto.setUsersReaded(objectMapper.readValue(row[12].toString(), new TypeReference<List<Long>>() {
+			dto.setUsersReaded(objectMapper.readValue(row[13].toString(), new TypeReference<List<Long>>() {
 			}));
 
 			dto.setCategories(
-					objectMapper.readValue(row[13].toString(), new TypeReference<List<CategorySmallInfoDTO>>() {
+					objectMapper.readValue(row[14].toString(), new TypeReference<List<CategorySmallInfoDTO>>() {
 					}));
 
 		} catch (Exception e) {

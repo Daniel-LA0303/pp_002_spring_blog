@@ -7,9 +7,9 @@ import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
-import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
-import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.info.HomePageResponseDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 public interface BlogService {
@@ -32,12 +32,12 @@ public interface BlogService {
 
 	Page<BlogInfoCardDTO> dashboardGetBlogsByUserPaginated(Long userId, Pageable pageable) throws ServiceException;
 
-	Page<CategoryEntity> dashboardGetCategoriesFollowedByUserPaginated(Long userId, Pageable pageable)
+	Page<BlogsByCategoryInfoDTO> dashboardGetCategoriesFollowedByUserPaginated(Long userId, Pageable pageable)
 			throws ServiceException;
 
-	Page<UserEntity> dashboardGetFollowedsByUserPaginated(Long userId, Pageable pageable) throws ServiceException;
+	Page<UserInfoCardDTO> dashboardGetFollowedsByUserPaginated(Long userId, Pageable pageable) throws ServiceException;
 
-	Page<UserEntity> dashboardGetFollowersByUserPaginated(Long userId, Pageable pageable) throws ServiceException;
+	Page<UserInfoCardDTO> dashboardGetFollowersByUserPaginated(Long userId, Pageable pageable) throws ServiceException;
 
 	void deleteBlog(Long blogId, Long userId) throws ServiceException;
 

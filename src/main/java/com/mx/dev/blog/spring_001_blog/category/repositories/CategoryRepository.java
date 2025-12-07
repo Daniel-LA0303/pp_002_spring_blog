@@ -45,6 +45,14 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 			+ "GROUP BY c.categoryId, c.name, c.description, c.color, c.longDescription, c.createdAt")
 	Page<CategoryFullInfoDTO> findByNameContainingIgnoreCase(@Param("query") String query, Pageable pageable);
 
+	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategoryFullInfoDTO( "
+			+ "c.categoryId, c.name, c.description, c.color, COUNT(cb.id.blogId), c.longDescription ,c.createdAt) "
+			+ "FROM CategoryEntity c " + "LEFT JOIN CategoryBlogEntity cb ON c.categoryId = cb.id.categoryId "
+			+ "JOIN CategoryUserFollowEntity cufe ON c.categoryId = cufe.id.categoryId "
+			+ "WHERE cufe.id.userId = :userId "
+			+ "GROUP BY c.categoryId, c.name, c.description, c.color, c.longDescription, c.createdAt")
+	Page<CategoryFullInfoDTO> findCategoriesByFollowedUser(@Param("userId") Long userId, Pageable pageable);
+
 	/**
 	 * query to get category by name
 	 * 

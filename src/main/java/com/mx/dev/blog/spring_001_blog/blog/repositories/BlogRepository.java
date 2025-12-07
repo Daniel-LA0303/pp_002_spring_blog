@@ -15,7 +15,6 @@ import org.springframework.data.repository.query.Param;
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
-import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 
 public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 
@@ -51,6 +50,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.created_at,
 			    b.status,
 			    b.slug,
+			    b.blog_img_url,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -118,6 +118,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.created_at,
 			    b.status,
 			    b.slug,
+				b.blog_img_url,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -192,6 +193,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.created_at,
 			    b.status,
 			    b.slug,
+			    b.blog_img_url,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -258,6 +260,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.created_at,
 			    b.status,
 			    b.slug,
+			    b.blog_img_url,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -324,6 +327,8 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.created_at,
 			    b.status,
 			    b.slug,
+			    b.blog_img_url,
+
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
 			    COUNT(DISTINCT bult.user_id) AS likes,
@@ -395,6 +400,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.created_at,
 			    b.status,
 			    b.slug,
+			    b.blog_img_url,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -436,7 +442,6 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			FROM blog_tbl b
 			JOIN user_tbl u ON u.user_id = b.user_id
 
-			-- filtro: solo blogs leídos por el usuario
 			JOIN blog_user_reada_tbl burt_filter ON b.blog_id = burt_filter.blog_id
 
 			LEFT JOIN blog_user_like_tbl bult ON b.blog_id = bult.blog_id
@@ -450,15 +455,18 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			AND b.status = 'PUBLISHED'
 
 			GROUP BY b.blog_id, u.user_id, u.username
-			ORDER BY burt_filter.created_at DESC
-			""", countQuery = """
-			SELECT COUNT(DISTINCT b.blog_id)
-			FROM blog_tbl b
-			JOIN blog_user_reada_tbl burt_filter ON b.blog_id = burt_filter.blog_id
-			WHERE burt_filter.user_id = :userId
-			AND b.deleted = false
-			AND b.status = 'PUBLISHED'
-			""", nativeQuery = true)
+
+			ORDER BY b.created_at DESC
+			""",
+
+			countQuery = """
+					SELECT COUNT(DISTINCT b.blog_id)
+					FROM blog_tbl b
+					JOIN blog_user_reada_tbl burt_filter ON b.blog_id = burt_filter.blog_id
+					WHERE burt_filter.user_id = :userId
+					AND b.deleted = false
+					AND b.status = 'PUBLISHED'
+					""", nativeQuery = true)
 	Page<Object[]> findBlogCardsReadLaterByUser(@Param("userId") Long userId, Pageable pageable);
 
 	// search
@@ -474,26 +482,6 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    ORDER BY cufe.createdAt DESC
 			""")
 	Page<CategoryEntity> findCategoriesByFollowedUser(@Param("userId") Long userId, Pageable pageable);
-
-	// get followed from one user by id pageable
-	@Query("""
-				SELECT u
-			    FROM UserEntity u
-			    JOIN UserFollowsEntity ufe ON u.userId = ufe.id.followedId
-			    WHERE ufe.id.followerId = :userId
-			    ORDER BY ufe.createdAt DESC
-			""")
-	Page<UserEntity> findUserFollowedsByUserId(@Param("userId") Long userId, Pageable pageable);
-
-	// get followers from one user by id pageable
-	@Query("""
-				SELECT u
-			    FROM UserEntity u
-			    JOIN UserFollowsEntity ufe ON u.userId = ufe.id.followerId
-			    WHERE ufe.id.followedId = :userId
-			    ORDER BY ufe.createdAt DESC
-			""")
-	Page<UserEntity> findUserFollowersByUserId(@Param("userId") Long userId, Pageable pageable);
 
 	@Query("SELECT b.id.userId FROM BlogUserLikeEntity b WHERE b.id.blogId = :blogId")
 	List<Long> findUserIdsLikeByBlogId(@Param("blogId") Long blogId);

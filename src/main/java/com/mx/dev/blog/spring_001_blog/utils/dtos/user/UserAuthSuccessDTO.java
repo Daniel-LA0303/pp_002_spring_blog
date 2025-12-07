@@ -26,6 +26,11 @@ public class UserAuthSuccessDTO {
 	private JWTAuthResponseDto tokenInfo;
 
 	/**
+	 * profile image
+	 */
+	private String profileImage;
+
+	/**
 	 * 
 	 */
 	public UserAuthSuccessDTO() {
@@ -36,12 +41,15 @@ public class UserAuthSuccessDTO {
 	 * @param username
 	 * @param email
 	 * @param tokenInfo
+	 * @param profileImage
 	 */
-	public UserAuthSuccessDTO(Long userId, String username, String email, JWTAuthResponseDto tokenInfo) {
+	public UserAuthSuccessDTO(Long userId, String username, String email, JWTAuthResponseDto tokenInfo,
+			String profileImage) {
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
 		this.tokenInfo = tokenInfo;
+		this.profileImage = profileImage;
 	}
 
 	/**
@@ -51,6 +59,15 @@ public class UserAuthSuccessDTO {
 	 */
 	public String getEmail() {
 		return email;
+	}
+
+	/**
+	 * return value of the property profileImage
+	 *
+	 * @return the profileImage
+	 */
+	public String getProfileImage() {
+		return profileImage;
 	}
 
 	/**
@@ -87,6 +104,15 @@ public class UserAuthSuccessDTO {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	/**
+	 * set value of the property profileImage
+	 *
+	 * @param profileImage the profileImage to set
+	 */
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
 	}
 
 	/**
