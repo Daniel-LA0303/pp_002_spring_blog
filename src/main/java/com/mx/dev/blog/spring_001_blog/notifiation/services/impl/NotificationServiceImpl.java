@@ -2,6 +2,8 @@ package com.mx.dev.blog.spring_001_blog.notifiation.services.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.mx.dev.blog.spring_001_blog.notifiation.entities.NotificationEntity;
 import com.mx.dev.blog.spring_001_blog.notifiation.repository.NotificationRepository;
 import com.mx.dev.blog.spring_001_blog.notifiation.services.NotificationService;
@@ -9,6 +11,7 @@ import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
+@Service
 public class NotificationServiceImpl implements NotificationService {
 
 	private final NotificationRepository notificationRepository;
