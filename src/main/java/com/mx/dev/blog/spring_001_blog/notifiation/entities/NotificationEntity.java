@@ -1,5 +1,7 @@
 package com.mx.dev.blog.spring_001_blog.notifiation.entities;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,8 +17,8 @@ public class NotificationEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "notifiation_id")
-	private Long noticationId;
+	@Column(name = "notification_id")
+	private Long notificationId;
 
 	@Column(name = "content")
 	private String content;
@@ -37,29 +39,46 @@ public class NotificationEntity {
 	private Boolean read;
 
 	/**
+	 * created at
+	 */
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
+	/**
+	 * updated at
+	 */
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
+
+	/**
 	 * 
 	 */
 	public NotificationEntity() {
 	}
 
 	/**
-	 * @param noticationId
+	 * @param notificationId
 	 * @param content
 	 * @param userToId
 	 * @param userFromId
 	 * @param notificationType
 	 * @param delivered
 	 * @param read
+	 * @param createdAt
+	 * @param updatedAt
 	 */
-	public NotificationEntity(Long noticationId, String content, Long userToId, Long userFromId,
-			NotificationType notificationType, Boolean delivered, Boolean read) {
-		this.noticationId = noticationId;
+	public NotificationEntity(Long notificationId, String content, Long userToId, Long userFromId,
+			NotificationType notificationType, Boolean delivered, Boolean read, LocalDateTime createdAt,
+			LocalDateTime updatedAt) {
+		this.notificationId = notificationId;
 		this.content = content;
 		this.userToId = userToId;
 		this.userFromId = userFromId;
 		this.notificationType = notificationType;
 		this.delivered = delivered;
 		this.read = read;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	/**
@@ -72,6 +91,15 @@ public class NotificationEntity {
 	}
 
 	/**
+	 * return value of the property createdAt
+	 *
+	 * @return the createdAt
+	 */
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	/**
 	 * return value of the property delivered
 	 *
 	 * @return the delivered
@@ -81,12 +109,12 @@ public class NotificationEntity {
 	}
 
 	/**
-	 * return value of the property noticationId
+	 * return value of the property notificationId
 	 *
-	 * @return the noticationId
+	 * @return the notificationId
 	 */
-	public Long getNoticationId() {
-		return noticationId;
+	public Long getNotificationId() {
+		return notificationId;
 	}
 
 	/**
@@ -105,6 +133,15 @@ public class NotificationEntity {
 	 */
 	public Boolean getRead() {
 		return read;
+	}
+
+	/**
+	 * return value of the property updatedAt
+	 *
+	 * @return the updatedAt
+	 */
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
 	}
 
 	/**
@@ -135,6 +172,15 @@ public class NotificationEntity {
 	}
 
 	/**
+	 * set value of the property createdAt
+	 *
+	 * @param createdAt the createdAt to set
+	 */
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	/**
 	 * set value of the property delivered
 	 *
 	 * @param delivered the delivered to set
@@ -144,12 +190,12 @@ public class NotificationEntity {
 	}
 
 	/**
-	 * set value of the property noticationId
+	 * set value of the property notificationId
 	 *
-	 * @param noticationId the noticationId to set
+	 * @param notificationId the notificationId to set
 	 */
-	public void setNoticationId(Long noticationId) {
-		this.noticationId = noticationId;
+	public void setNotificationId(Long notificationId) {
+		this.notificationId = notificationId;
 	}
 
 	/**
@@ -168,6 +214,15 @@ public class NotificationEntity {
 	 */
 	public void setRead(Boolean read) {
 		this.read = read;
+	}
+
+	/**
+	 * set value of the property updatedAt
+	 *
+	 * @param updatedAt the updatedAt to set
+	 */
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	/**
