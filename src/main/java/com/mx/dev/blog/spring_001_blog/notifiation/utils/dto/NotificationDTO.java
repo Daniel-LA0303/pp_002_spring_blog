@@ -2,6 +2,7 @@ package com.mx.dev.blog.spring_001_blog.notifiation.utils.dto;
 
 import java.time.LocalDateTime;
 
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationTargetType;
 import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
 
 public class NotificationDTO {
@@ -19,6 +20,10 @@ public class NotificationDTO {
 	private Boolean delivered;
 
 	private Boolean read;
+
+	private Long targetId;
+
+	private NotificationTargetType targetType;
 
 	private LocalDateTime createdAt;
 
@@ -38,12 +43,15 @@ public class NotificationDTO {
 	 * @param notificationType
 	 * @param delivered
 	 * @param read
+	 * @param targetId
+	 * @param targetType
 	 * @param createdAt
 	 * @param notificationUserInfo
 	 */
 	public NotificationDTO(Long notificationId, String content, Long userToId, Long userFromId,
-			NotificationType notificationType, Boolean delivered, Boolean read, LocalDateTime createdAt, Long uId,
-			String profileImg, String username) {
+			NotificationType notificationType, Boolean delivered, Boolean read, Long targetId,
+			NotificationTargetType targetType, LocalDateTime createdAt, Long userId, String profilePicture,
+			String username) {
 		this.notificationId = notificationId;
 		this.content = content;
 		this.userToId = userToId;
@@ -51,9 +59,10 @@ public class NotificationDTO {
 		this.notificationType = notificationType;
 		this.delivered = delivered;
 		this.read = read;
+		this.targetId = targetId;
+		this.targetType = targetType;
 		this.createdAt = createdAt;
-
-		this.notificationUserInfo = new NotificationUserInfo(uId, profileImg, username);
+		this.notificationUserInfo = new NotificationUserInfo(userId, profilePicture, username);
 	}
 
 	/**
@@ -117,6 +126,24 @@ public class NotificationDTO {
 	 */
 	public Boolean getRead() {
 		return read;
+	}
+
+	/**
+	 * return value of the property targetId
+	 *
+	 * @return the targetId
+	 */
+	public Long getTargetId() {
+		return targetId;
+	}
+
+	/**
+	 * return value of the property targetType
+	 *
+	 * @return the targetType
+	 */
+	public NotificationTargetType getTargetType() {
+		return targetType;
 	}
 
 	/**
@@ -198,6 +225,24 @@ public class NotificationDTO {
 	 */
 	public void setRead(Boolean read) {
 		this.read = read;
+	}
+
+	/**
+	 * set value of the property targetId
+	 *
+	 * @param targetId the targetId to set
+	 */
+	public void setTargetId(Long targetId) {
+		this.targetId = targetId;
+	}
+
+	/**
+	 * set value of the property targetType
+	 *
+	 * @param targetType the targetType to set
+	 */
+	public void setTargetType(NotificationTargetType targetType) {
+		this.targetType = targetType;
 	}
 
 	/**

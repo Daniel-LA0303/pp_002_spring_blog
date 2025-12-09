@@ -30,6 +30,7 @@ import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.mappers.CloudStorageMappers;
 import com.mx.dev.blog.spring_001_blog.notifiation.entities.NotificationEntity;
 import com.mx.dev.blog.spring_001_blog.notifiation.services.NotificationService;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationTargetType;
 import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
@@ -104,7 +105,7 @@ public class BlogServiceImpl implements BlogService {
 		if (userId != blogEntity.get().getUserId()) {
 			// build notification
 			NotificationEntity notification = new NotificationEntity();
-			notification.setContent("like from " + userEntity.get().getUsername());
+			notification.setContent(userEntity.get().getUsername() + " liked your post " + blogEntity.get().getTitle());
 			notification.setDelivered(false);
 			notification.setCreatedAt(LocalDateTime.now());
 			notification.setNotificationType(NotificationType.LIKE);
@@ -112,6 +113,11 @@ public class BlogServiceImpl implements BlogService {
 			notification.setUserFromId(userId);
 			notification.setUserToId(blogEntity.get().getUserId());
 			notification.setUpdatedAt(LocalDateTime.now());
+
+			// set type of notification in base of the type (blog, comment, follow etc)
+			notification.setTargetId(blogEntity.get().getBlogId());
+			notification.setTargetType(NotificationTargetType.BLOG);
+			notification.setTargetExtra(null);
 
 			notificationService.createNotificationStorage(notification);
 		}

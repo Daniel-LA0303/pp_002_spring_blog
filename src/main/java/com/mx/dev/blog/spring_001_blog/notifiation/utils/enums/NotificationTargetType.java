@@ -1,11 +1,11 @@
 package com.mx.dev.blog.spring_001_blog.notifiation.utils.enums;
 
-public enum NotificationType {
-	LIKE("LIKE"), COMMENT("COMMENT"), SHARE("SHARE"), NEW_POST("NEW_POST"), FOLLOW("FOLLOW"), REPLY("REPLY");
+public enum NotificationTargetType {
+	BLOG("BLOG"), USER("USER"), COMMENT("COMMENT"), REPLY("REPLY");
 
 	private final String text;
 
-	NotificationType(final String text) {
+	NotificationTargetType(final String text) {
 		this.text = text;
 	}
 

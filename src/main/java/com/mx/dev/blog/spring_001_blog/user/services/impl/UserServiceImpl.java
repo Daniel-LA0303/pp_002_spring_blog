@@ -19,6 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mx.dev.blog.spring_001_blog.auth.services.email.EmailService;
 import com.mx.dev.blog.spring_001_blog.auth.utils.dto.EmailDataRegisterDTO;
+import com.mx.dev.blog.spring_001_blog.notifiation.entities.NotificationEntity;
+import com.mx.dev.blog.spring_001_blog.notifiation.services.NotificationService;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationTargetType;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
 import com.mx.dev.blog.spring_001_blog.user.entities.RoleEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserInfoEntity;
@@ -49,12 +53,15 @@ public class UserServiceImpl implements UserService {
 
 	private final EmailService emailService;
 
+	private final NotificationService notificationService;
+
 	public UserServiceImpl(UserRepository userRepository, UserInfoRepository userInfoRepository,
-			RoleRepository roleRepository, EmailService emailService) {
+			RoleRepository roleRepository, EmailService emailService, NotificationService notificationService) {
 		this.roleRepository = roleRepository;
 		this.userInfoRepository = userInfoRepository;
 		this.userRepository = userRepository;
 		this.emailService = emailService;
+		this.notificationService = notificationService;
 	}
 
 	@Override
@@ -246,11 +253,42 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void userFollowed(Long followerId, Long followedId) throws ServiceException {
 
+		// 1. checks no duplicate follow
 		if (userRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
 			throw new ServiceException("User is already following this user.",
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/follow", MethodEnum.POST);
 		}
 
+		// 2. checks if exits users
+		UserEntity follower = getOneUserOrThrow(followerId);
+
+		UserEntity followed = getOneUserOrThrow(followedId);
+
+		// 3. valid not follow yourself
+		if (followerId.equals(followedId)) { // this will never be true
+			throw new ServiceException("You cannot follow yourself.", ResponseStatus.NOT_FOUND.getHttpStatusCode(),
+					"/api/users", MethodEnum.GET);
+		}
+
+		// 4. build notification
+		NotificationEntity notification = new NotificationEntity();
+		notification.setContent(follower.getUsername() + " start to follow you.");
+		notification.setDelivered(false);
+		notification.setCreatedAt(LocalDateTime.now());
+		notification.setNotificationType(NotificationType.FOLLOW);
+		notification.setRead(false);
+		notification.setUserFromId(follower.getUserId());
+		notification.setUserToId(followed.getUserId());
+		notification.setUpdatedAt(LocalDateTime.now());
+
+		// set type of notification in base of the type (blog, comment, follow etc)
+		notification.setTargetId(follower.getUserId());
+		notification.setTargetType(NotificationTargetType.USER);
+		notification.setTargetExtra(null);
+
+		notificationService.createNotificationStorage(notification);
+
+		// 5. insert follow
 		userRepository.insertUserFollow(followerId, followedId, LocalDateTime.now());
 
 	}

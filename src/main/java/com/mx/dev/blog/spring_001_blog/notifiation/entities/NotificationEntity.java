@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationTargetType;
 import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
 
 @Table(name = "notification_tbl")
@@ -42,6 +43,19 @@ public class NotificationEntity {
 	private Boolean read;
 
 	/**
+	 * to save id, can be blog, comment, user etc
+	 */
+	@Column(name = "target_id")
+	private Long targetId;
+
+	@Column(name = "target_type")
+	@Enumerated(EnumType.STRING)
+	private NotificationTargetType targetType;
+
+	@Column(name = "target_extra")
+	private Long targetExtra;
+
+	/**
 	 * created at
 	 */
 	@Column(name = "created_at")
@@ -67,12 +81,15 @@ public class NotificationEntity {
 	 * @param notificationType
 	 * @param delivered
 	 * @param read
+	 * @param targetId
+	 * @param targetType
+	 * @param targetExtra
 	 * @param createdAt
 	 * @param updatedAt
 	 */
 	public NotificationEntity(Long notificationId, String content, Long userToId, Long userFromId,
-			NotificationType notificationType, Boolean delivered, Boolean read, LocalDateTime createdAt,
-			LocalDateTime updatedAt) {
+			NotificationType notificationType, Boolean delivered, Boolean read, Long targetId,
+			NotificationTargetType targetType, Long targetExtra, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.notificationId = notificationId;
 		this.content = content;
 		this.userToId = userToId;
@@ -80,6 +97,9 @@ public class NotificationEntity {
 		this.notificationType = notificationType;
 		this.delivered = delivered;
 		this.read = read;
+		this.targetId = targetId;
+		this.targetType = targetType;
+		this.targetExtra = targetExtra;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
@@ -136,6 +156,33 @@ public class NotificationEntity {
 	 */
 	public Boolean getRead() {
 		return read;
+	}
+
+	/**
+	 * return value of the property targetExtra
+	 *
+	 * @return the targetExtra
+	 */
+	public Long getTargetExtra() {
+		return targetExtra;
+	}
+
+	/**
+	 * return value of the property targetId
+	 *
+	 * @return the targetId
+	 */
+	public Long getTargetId() {
+		return targetId;
+	}
+
+	/**
+	 * return value of the property targetType
+	 *
+	 * @return the targetType
+	 */
+	public NotificationTargetType getTargetType() {
+		return targetType;
 	}
 
 	/**
@@ -217,6 +264,33 @@ public class NotificationEntity {
 	 */
 	public void setRead(Boolean read) {
 		this.read = read;
+	}
+
+	/**
+	 * set value of the property targetExtra
+	 *
+	 * @param targetExtra the targetExtra to set
+	 */
+	public void setTargetExtra(Long targetExtra) {
+		this.targetExtra = targetExtra;
+	}
+
+	/**
+	 * set value of the property targetId
+	 *
+	 * @param targetId the targetId to set
+	 */
+	public void setTargetId(Long targetId) {
+		this.targetId = targetId;
+	}
+
+	/**
+	 * set value of the property targetType
+	 *
+	 * @param targetType the targetType to set
+	 */
+	public void setTargetType(NotificationTargetType targetType) {
+		this.targetType = targetType;
 	}
 
 	/**
