@@ -2,6 +2,7 @@ package com.mx.dev.blog.spring_001_blog.blog.services.blog.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,6 +28,10 @@ import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.Med
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.StorageServices;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.TypeStorage;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.mappers.CloudStorageMappers;
+import com.mx.dev.blog.spring_001_blog.notifiation.entities.NotificationEntity;
+import com.mx.dev.blog.spring_001_blog.notifiation.services.NotificationService;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
+import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
@@ -61,9 +66,12 @@ public class BlogServiceImpl implements BlogService {
 
 	private final StorageServices storageServices;
 
+	private final NotificationService notificationService;
+
 	public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository,
 			CategoryRepository categoryRepository, UserService userService, CategoryService categoryService,
-			MediaService mediaService, CloudinaryService cloudinaryService, StorageServices storageServices) {
+			MediaService mediaService, CloudinaryService cloudinaryService, StorageServices storageServices,
+			NotificationService notificationService) {
 		this.blogRepository = blogRepository;
 		this.userRepository = userRepository;
 		this.categoryRepository = categoryRepository;
@@ -72,6 +80,7 @@ public class BlogServiceImpl implements BlogService {
 		this.mediaService = mediaService;
 		this.cloudinaryService = cloudinaryService;
 		this.storageServices = storageServices;
+		this.notificationService = notificationService;
 	}
 
 	// liked in a blog
@@ -84,7 +93,28 @@ public class BlogServiceImpl implements BlogService {
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
 		}
 
+		System.out.println("**********LIKE BLOG*********");
+
+		Optional<BlogEntity> blogEntity = blogRepository.findById(blogId);
+
+		Optional<UserEntity> userEntity = userRepository.findById(userId);
+
 		blogRepository.insertBlogLike(userId, blogId, LocalDateTime.now());
+
+		if (userId != blogEntity.get().getUserId()) {
+			// build notification
+			NotificationEntity notification = new NotificationEntity();
+			notification.setContent("like from " + userEntity.get().getUsername());
+			notification.setDelivered(false);
+			notification.setCreatedAt(LocalDateTime.now());
+			notification.setNotificationType(NotificationType.LIKE);
+			notification.setRead(false);
+			notification.setUserFromId(userId);
+			notification.setUserToId(blogEntity.get().getUserId());
+			notification.setUpdatedAt(LocalDateTime.now());
+
+			notificationService.createNotificationStorage(notification);
+		}
 
 	}
 

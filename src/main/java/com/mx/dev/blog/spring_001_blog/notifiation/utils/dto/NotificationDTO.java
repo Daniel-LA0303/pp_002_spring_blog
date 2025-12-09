@@ -1,62 +1,33 @@
-package com.mx.dev.blog.spring_001_blog.notifiation.entities;
+package com.mx.dev.blog.spring_001_blog.notifiation.utils.dto;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
 
-@Table(name = "notification_tbl")
-@Entity
-public class NotificationEntity {
+public class NotificationDTO {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "notification_id")
 	private Long notificationId;
 
-	@Column(name = "content")
 	private String content;
 
-	@Column(name = "user_to_id")
 	private Long userToId;
 
-	@Column(name = "user_from_id")
 	private Long userFromId;
 
-	@Column(name = "notification_type")
-	@Enumerated(EnumType.STRING)
 	private NotificationType notificationType;
 
-	@Column(name = "delivered")
 	private Boolean delivered;
 
-	@Column(name = "read")
 	private Boolean read;
 
-	/**
-	 * created at
-	 */
-	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
-	/**
-	 * updated at
-	 */
-	@Column(name = "updated_at")
-	private LocalDateTime updatedAt;
+	private NotificationUserInfo notificationUserInfo;
 
 	/**
 	 * 
 	 */
-	public NotificationEntity() {
+	public NotificationDTO() {
 	}
 
 	/**
@@ -68,11 +39,11 @@ public class NotificationEntity {
 	 * @param delivered
 	 * @param read
 	 * @param createdAt
-	 * @param updatedAt
+	 * @param notificationUserInfo
 	 */
-	public NotificationEntity(Long notificationId, String content, Long userToId, Long userFromId,
-			NotificationType notificationType, Boolean delivered, Boolean read, LocalDateTime createdAt,
-			LocalDateTime updatedAt) {
+	public NotificationDTO(Long notificationId, String content, Long userToId, Long userFromId,
+			NotificationType notificationType, Boolean delivered, Boolean read, LocalDateTime createdAt, Long uId,
+			String profileImg, String username) {
 		this.notificationId = notificationId;
 		this.content = content;
 		this.userToId = userToId;
@@ -81,7 +52,8 @@ public class NotificationEntity {
 		this.delivered = delivered;
 		this.read = read;
 		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+
+		this.notificationUserInfo = new NotificationUserInfo(uId, profileImg, username);
 	}
 
 	/**
@@ -130,21 +102,21 @@ public class NotificationEntity {
 	}
 
 	/**
+	 * return value of the property notificationUserInfo
+	 *
+	 * @return the notificationUserInfo
+	 */
+	public NotificationUserInfo getNotificationUserInfo() {
+		return notificationUserInfo;
+	}
+
+	/**
 	 * return value of the property read
 	 *
 	 * @return the read
 	 */
 	public Boolean getRead() {
 		return read;
-	}
-
-	/**
-	 * return value of the property updatedAt
-	 *
-	 * @return the updatedAt
-	 */
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
 	}
 
 	/**
@@ -211,21 +183,21 @@ public class NotificationEntity {
 	}
 
 	/**
+	 * set value of the property notificationUserInfo
+	 *
+	 * @param notificationUserInfo the notificationUserInfo to set
+	 */
+	public void setNotificationUserInfo(NotificationUserInfo notificationUserInfo) {
+		this.notificationUserInfo = notificationUserInfo;
+	}
+
+	/**
 	 * set value of the property read
 	 *
 	 * @param read the read to set
 	 */
 	public void setRead(Boolean read) {
 		this.read = read;
-	}
-
-	/**
-	 * set value of the property updatedAt
-	 *
-	 * @param updatedAt the updatedAt to set
-	 */
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
 	}
 
 	/**
