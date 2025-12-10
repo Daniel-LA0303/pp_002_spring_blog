@@ -1,11 +1,17 @@
 package com.mx.dev.blog.spring_001_blog.auth.controllers;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,6 +61,26 @@ public class AuthController {
 				false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/system/ram/app")
+	public Map<String, String> getAppRamUsage() {
+		Map<String, String> ramInfo = new HashMap<>();
+
+		// JVM memory usage
+		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+		MemoryUsage heapMemory = memoryMXBean.getHeapMemoryUsage();
+		MemoryUsage nonHeapMemory = memoryMXBean.getNonHeapMemoryUsage();
+
+		long heapUsedMB = heapMemory.getUsed() / 1024 / 1024;
+		long nonHeapUsedMB = nonHeapMemory.getUsed() / 1024 / 1024;
+		long totalJVMUsedMB = heapUsedMB + nonHeapUsedMB;
+
+		ramInfo.put("heapUsed", heapUsedMB + " MB");
+		ramInfo.put("nonHeapUsed", nonHeapUsedMB + " MB");
+		ramInfo.put("totalAppMemoryUsed", totalJVMUsedMB + " MB");
+
+		return ramInfo;
 	}
 
 	@PostMapping("/reset-password-confirm")

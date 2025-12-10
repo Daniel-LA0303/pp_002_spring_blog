@@ -2,6 +2,7 @@ package com.mx.dev.blog.spring_001_blog.blog.services.blog.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,6 +28,12 @@ import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.Med
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.StorageServices;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.TypeStorage;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.mappers.CloudStorageMappers;
+import com.mx.dev.blog.spring_001_blog.notifiation.entities.NotificationEntity;
+import com.mx.dev.blog.spring_001_blog.notifiation.repository.NotificationRepository;
+import com.mx.dev.blog.spring_001_blog.notifiation.services.NotificationService;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationTargetType;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
+import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.BlogsByCategoryInfoDTO;
@@ -61,9 +68,14 @@ public class BlogServiceImpl implements BlogService {
 
 	private final StorageServices storageServices;
 
+	private final NotificationService notificationService;
+
+	private final NotificationRepository notificationRepository;
+
 	public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository,
 			CategoryRepository categoryRepository, UserService userService, CategoryService categoryService,
-			MediaService mediaService, CloudinaryService cloudinaryService, StorageServices storageServices) {
+			MediaService mediaService, CloudinaryService cloudinaryService, StorageServices storageServices,
+			NotificationService notificationService, NotificationRepository notificationRepository) {
 		this.blogRepository = blogRepository;
 		this.userRepository = userRepository;
 		this.categoryRepository = categoryRepository;
@@ -72,6 +84,8 @@ public class BlogServiceImpl implements BlogService {
 		this.mediaService = mediaService;
 		this.cloudinaryService = cloudinaryService;
 		this.storageServices = storageServices;
+		this.notificationService = notificationService;
+		this.notificationRepository = notificationRepository;
 	}
 
 	// liked in a blog
@@ -79,13 +93,43 @@ public class BlogServiceImpl implements BlogService {
 	@Transactional
 	public void blogLiked(Long userId, Long blogId) throws ServiceException {
 
+		// Check if user already liked this blog (prevents duplicate likes)
 		if (blogRepository.existsByUserIdAndBlogId(userId, blogId)) {
 			throw new ServiceException("Blog error, please come back in a few minutes.",
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/blog", MethodEnum.GET);
 		}
 
-		blogRepository.insertBlogLike(userId, blogId, LocalDateTime.now());
+		// Fetch blog and user entities
+		BlogEntity blogEntity = getBlogByIdOrThrow(blogId);
+		UserEntity userEntity = userService.getOneUserOrThrow(userId);
 
+		// Check if a notification already exists for this like
+		Optional<NotificationEntity> notificationExists = notificationRepository
+				.findNotificationByUserFromIdAndTargetId(userId, blogId);
+
+		if (!notificationExists.isPresent() && !userId.equals(blogEntity.getUserId())) {
+			// Build a new notification for the blog owner
+			NotificationEntity notification = new NotificationEntity();
+			notification.setContent(userEntity.getUsername() + " liked your post " + blogEntity.getTitle());
+			notification.setDelivered(false);
+			notification.setCreatedAt(LocalDateTime.now());
+			notification.setNotificationType(NotificationType.LIKE);
+			notification.setRead(false);
+			notification.setUserFromId(userId);
+			notification.setUserToId(blogEntity.getUserId());
+			notification.setUpdatedAt(LocalDateTime.now());
+
+			// Set target type and ID for the notification
+			notification.setTargetId(blogEntity.getBlogId());
+			notification.setTargetType(NotificationTargetType.BLOG);
+			notification.setTargetExtra(null);
+
+			// Persist the notification
+			notificationService.createNotificationStorage(notification);
+		}
+
+		// Insert the like in the database
+		blogRepository.insertBlogLike(userId, blogId, LocalDateTime.now());
 	}
 
 	// read later in a blog
