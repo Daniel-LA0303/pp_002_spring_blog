@@ -16,7 +16,7 @@ public class ChatMapper {
 		response.setUnreadCount(chat.getUnreadMessages(senderId));
 		response.setLastMessage(chat.getLastMessage());
 		response.setLastMessageTime(chat.getLastMessageTime());
-		// response.setIsRecipientOnline(chat.getRecipient().isUserOnline());
+		response.setRecipientOnline(chat.getRecipient().isUserOnline());
 		response.setSenderId(chat.getSender().getUserId());
 		response.setReceiverId(chat.getRecipient().getUserId());
 		return response;
