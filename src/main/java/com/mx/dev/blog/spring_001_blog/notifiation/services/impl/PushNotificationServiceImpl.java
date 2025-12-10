@@ -19,7 +19,6 @@ import com.mx.dev.blog.spring_001_blog.notifiation.utils.dto.NotificationDTO;
 import com.mx.dev.blog.spring_001_blog.notifiation.utils.dto.NotificationsSSEResponseDTO;
 
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
 
 @Service
 public class PushNotificationServiceImpl implements PushNotificationService {
@@ -59,18 +58,9 @@ public class PushNotificationServiceImpl implements PushNotificationService {
 	 */
 	@Override
 	public Flux<ServerSentEvent<NotificationsSSEResponseDTO>> getNotificationsByUserToId(Long userId) {
-
-		// case without user id
-		if (userId == null) {
-			return Flux.interval(Duration.ofSeconds(15))
-					.map(sequence -> ServerSentEvent.<NotificationsSSEResponseDTO>builder().id(String.valueOf(sequence))
-							.event("user-list-event").data(new NotificationsSSEResponseDTO()).build());
-		}
-
-		// case with userId
-		return Flux.interval(Duration.ofSeconds(15)).publishOn(Schedulers.boundedElastic()).map(sequence -> {
+		return Flux.interval(Duration.ofSeconds(5)).map(seq -> {
 			NotificationsSSEResponseDTO payload = getNotifiations(userId);
-			return ServerSentEvent.<NotificationsSSEResponseDTO>builder().id(String.valueOf(sequence))
+			return ServerSentEvent.<NotificationsSSEResponseDTO>builder().id(String.valueOf(seq))
 					.event("user-list-event").data(payload).build();
 		});
 	}

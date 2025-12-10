@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mx.dev.blog.spring_001_blog.auth.services.email.EmailService;
 import com.mx.dev.blog.spring_001_blog.auth.utils.dto.EmailDataRegisterDTO;
 import com.mx.dev.blog.spring_001_blog.notifiation.entities.NotificationEntity;
+import com.mx.dev.blog.spring_001_blog.notifiation.repository.NotificationRepository;
 import com.mx.dev.blog.spring_001_blog.notifiation.services.NotificationService;
 import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationTargetType;
 import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
@@ -55,13 +56,17 @@ public class UserServiceImpl implements UserService {
 
 	private final NotificationService notificationService;
 
+	private final NotificationRepository notificationRepository;
+
 	public UserServiceImpl(UserRepository userRepository, UserInfoRepository userInfoRepository,
-			RoleRepository roleRepository, EmailService emailService, NotificationService notificationService) {
+			RoleRepository roleRepository, EmailService emailService, NotificationService notificationService,
+			NotificationRepository notificationRepository) {
 		this.roleRepository = roleRepository;
 		this.userInfoRepository = userInfoRepository;
 		this.userRepository = userRepository;
 		this.emailService = emailService;
 		this.notificationService = notificationService;
+		this.notificationRepository = notificationRepository;
 	}
 
 	@Override
@@ -186,7 +191,7 @@ public class UserServiceImpl implements UserService {
 
 		Optional<UserEntity> user = userRepository.findByToken(token);
 
-		if (!user.isPresent()) { // ⬅ correcta validación sin disparar excepción
+		if (!user.isPresent()) {
 			throw new ServiceException(
 					"User with this token not found, please check your email or send the request again.",
 					ResponseStatus.NOT_FOUND.getHttpStatusCode(), "/api/user-info", MethodEnum.PUT);
@@ -253,44 +258,49 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void userFollowed(Long followerId, Long followedId) throws ServiceException {
 
-		// 1. checks no duplicate follow
+		// 1. Prevent duplicate follow
 		if (userRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
 			throw new ServiceException("User is already following this user.",
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/api/follow", MethodEnum.POST);
 		}
 
-		// 2. checks if exits users
+		// 2. Fetch follower and followed users
 		UserEntity follower = getOneUserOrThrow(followerId);
-
 		UserEntity followed = getOneUserOrThrow(followedId);
 
-		// 3. valid not follow yourself
-		if (followerId.equals(followedId)) { // this will never be true
+		// 3. Prevent following yourself
+		if (followerId.equals(followedId)) {
 			throw new ServiceException("You cannot follow yourself.", ResponseStatus.NOT_FOUND.getHttpStatusCode(),
 					"/api/users", MethodEnum.GET);
 		}
 
-		// 4. build notification
-		NotificationEntity notification = new NotificationEntity();
-		notification.setContent(follower.getUsername() + " start to follow you.");
-		notification.setDelivered(false);
-		notification.setCreatedAt(LocalDateTime.now());
-		notification.setNotificationType(NotificationType.FOLLOW);
-		notification.setRead(false);
-		notification.setUserFromId(follower.getUserId());
-		notification.setUserToId(followed.getUserId());
-		notification.setUpdatedAt(LocalDateTime.now());
+		// 4. Check if follow notification already exists
+		Optional<NotificationEntity> notificationExists = notificationRepository
+				.findNotificationByUserFromIdAndTargetId(followerId, followedId);
 
-		// set type of notification in base of the type (blog, comment, follow etc)
-		notification.setTargetId(follower.getUserId());
-		notification.setTargetType(NotificationTargetType.USER);
-		notification.setTargetExtra(null);
+		if (!notificationExists.isPresent()) {
+			// Build new notification
+			NotificationEntity notification = new NotificationEntity();
+			notification.setContent(follower.getUsername() + " started following you.");
+			notification.setDelivered(false);
+			notification.setCreatedAt(LocalDateTime.now());
+			notification.setNotificationType(NotificationType.FOLLOW);
+			notification.setRead(false);
+			notification.setUserFromId(follower.getUserId());
+			notification.setUserToId(followed.getUserId());
+			notification.setUpdatedAt(LocalDateTime.now());
 
-		notificationService.createNotificationStorage(notification);
+			// Set target type and ID
+			notification.setTargetId(follower.getUserId());
+			notification.setTargetType(NotificationTargetType.USER);
+			notification.setTargetExtra(null);
 
-		// 5. insert follow
+			// Persist the notification
+			notificationService.createNotificationStorage(notification);
+		}
+
+		// 5. Insert follow in database
 		userRepository.insertUserFollow(followerId, followedId, LocalDateTime.now());
-
 	}
 
 	@Override

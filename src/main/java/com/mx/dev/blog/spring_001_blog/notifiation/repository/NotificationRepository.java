@@ -56,6 +56,10 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
 	@Query("SELECT n from NotificationEntity n WHERE n.userToId = :userToId AND n.delivered = false ORDER BY n.createdAt DESC")
 	List<NotificationEntity> findByUserToIdAndDeliveredFalse(@Param("userToId") Long userToId);
 
+	@Query("SELECT n FROM NotificationEntity n WHERE n.userFromId = :userFromId AND n.targetId = :targetId")
+	Optional<NotificationEntity> findNotificationByUserFromIdAndTargetId(@Param("userFromId") Long userFromId,
+			@Param("targetId") Long targetId);
+
 	@Query("""
 			    SELECT new com.mx.dev.blog.spring_001_blog.notifiation.utils.dto.NotificationDTO(
 			        n.notificationId,
