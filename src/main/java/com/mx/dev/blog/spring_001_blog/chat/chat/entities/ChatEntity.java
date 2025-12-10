@@ -144,7 +144,7 @@ public class ChatEntity extends BaseAuditingEntity {
 	// If the sender is the same as the given userId, it returns the sender's
 	// username, otherwise the recipient's username.
 	@Transient
-	public String getTargetChatName(String senderId) {
+	public String getTargetChatName(Long senderId) {
 		if (sender.getUserId().equals(senderId)) {
 			return sender.getUsername();
 		}
