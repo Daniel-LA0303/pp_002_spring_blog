@@ -29,19 +29,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogResponseDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.builders.blog.BlogCreateRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.blog.BlogPageResponseDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.blog.BlogResponseDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.dto.PageDTO;
 import com.mx.dev.blog.spring_001_blog.utils.constants.regex.BlogRegex;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.info.HomePageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
-import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.mappers.BlogMappers;
 import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
@@ -255,36 +255,6 @@ public class BlogServiceTest {
 		assertEquals("Success method DELETED", apiResponse.getMessage());
 		assertEquals("Blog deleted.", apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
-
-	}
-
-	/**
-	 * get all categories test
-	 */
-	@Test
-	@Order(1)
-	void getAllBlogsSuccessTest() {
-
-		ResponseEntity<ApiResponse> response = testRestTemplate.getForEntity("/api/blog", ApiResponse.class);
-
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
-
-		// extract api response
-		ApiResponse<List<BlogResponseDTO>> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.GET, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
-
-		List<BlogResponseDTO> blogs = apiResponse.getData();
-		assertNotNull(blogs);
-		assertEquals(20, blogs.size());
 
 	}
 

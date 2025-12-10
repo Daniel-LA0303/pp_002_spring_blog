@@ -16,8 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.category.entities.CategoryEntity;
-import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
 
 @Entity
 @Table(name = "blog_tbl")
@@ -86,6 +86,18 @@ public class BlogEntity {
 	private LocalDateTime updatedAt;
 
 	/**
+	 * deleted at
+	 */
+	@Column(name = "deleted_at")
+	private LocalDateTime deletedAt;
+
+	/**
+	 * deleted
+	 */
+	@Column(name = "deleted")
+	private Boolean deleted;
+
+	/**
 	 * user id
 	 */
 	@Column(name = "user_id")
@@ -126,6 +138,37 @@ public class BlogEntity {
 		this.slug = slug;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.userId = userId;
+		this.categories = categories;
+	}
+
+	/**
+	 * @param blogId
+	 * @param title
+	 * @param description
+	 * @param content
+	 * @param status
+	 * @param slug
+	 * @param createdAt
+	 * @param updatedAt
+	 * @param deletedAt
+	 * @param deteled
+	 * @param userId
+	 * @param categories
+	 */
+	public BlogEntity(Long blogId, String title, String description, String content, BlogStatusEnum status, String slug,
+			LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, Boolean deleted, Long userId,
+			List<CategoryEntity> categories) {
+		this.blogId = blogId;
+		this.title = title;
+		this.description = description;
+		this.content = content;
+		this.status = status;
+		this.slug = slug;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
+		this.deleted = deleted;
 		this.userId = userId;
 		this.categories = categories;
 	}
@@ -223,6 +266,24 @@ public class BlogEntity {
 	 */
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
+	}
+
+	/**
+	 * return value of the property deteled
+	 *
+	 * @return the deteled
+	 */
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * return value of the property deletedAt
+	 *
+	 * @return the deletedAt
+	 */
+	public LocalDateTime getDeletedAt() {
+		return deletedAt;
 	}
 
 	/**
@@ -331,6 +392,24 @@ public class BlogEntity {
 	 */
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	/**
+	 * set value of the property deteled
+	 *
+	 * @param deteled the deteled to set
+	 */
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	/**
+	 * set value of the property deletedAt
+	 *
+	 * @param deletedAt the deletedAt to set
+	 */
+	public void setDeletedAt(LocalDateTime deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
 	/**

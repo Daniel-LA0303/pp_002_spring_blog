@@ -25,12 +25,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.builders.blog.BlogCreateRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.dto.PageDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 

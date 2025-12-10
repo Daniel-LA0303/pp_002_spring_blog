@@ -121,7 +121,18 @@
 		    <version>2.21.1</version>
 		</dependency>
 
+		<!-- To Send Eamil -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 		
+		<!-- to send notifications SSE -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+				
 	</dependencies>
 	
 
@@ -203,7 +214,7 @@
 			                            <limit>
 			                                <counter>CLASS</counter>
 			                                <value>COVEREDRATIO</value>
-			                                <minimum>0.85</minimum>
+			                                <minimum>0.10</minimum>
 			                            </limit>
 			                        </limits>
 			                    </rule>

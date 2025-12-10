@@ -1,9 +1,15 @@
 package com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.impl;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mx.dev.blog.spring_001_blog.cloudstorage.cloudinary.service.CloudinaryService;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.service.S3Service;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.s3aws.utils.dto.ImageResponseS3DTO;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.entities.MediaEntity;
+import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.repositories.MediaRepository;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.services.StorageServices;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.CategoryStorage;
 import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.enums.OwnerTypeStorage;
@@ -15,25 +21,59 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 @Service
 public class StorageServicesImpl implements StorageServices {
 
-	public StorageServicesImpl() {
+	private final CloudinaryService cloudinaryService;
+
+	private final MediaRepository mediaRepository;
+
+	private final S3Service s3Service;
+
+	public StorageServicesImpl(CloudinaryService cloudinaryService, MediaRepository mediaRepository,
+			S3Service s3Service) {
+		this.cloudinaryService = cloudinaryService;
+		this.mediaRepository = mediaRepository;
+		this.s3Service = s3Service;
+	}
+
+	// @Async
+	@Override
+	public void deleteImageCloudinary(String ownerType, Long ownerId) throws ServiceException {
+
+		// 1. get media entity or throw
+		Optional<MediaEntity> mediaEntity = mediaRepository.findByOwnerTypeAndOwnerId(ownerType, ownerId);
+
+		// 2. there is not a previous image
+		if (mediaEntity.isEmpty()) {
+			return;
+		}
+
+		// 2. delete image from cloudinary
+		cloudinaryService.delete(mediaEntity.get().getMetadata().get("public_id").toString());
+
+		// 3. delete media from db
+		mediaRepository.delete(mediaEntity.get());
 
 	}
 
+	// @Async
 	@Override
-	public void deleteImageCloudinary(MultipartFile file) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void deleteImageS3(String ownerType, Long ownerId) throws ServiceException {
+		// 1. get media entity or throw
+		MediaEntity mediaEntity = mediaRepository.findByOwnerTypeAndOwnerId(ownerType, ownerId)
+				.orElseThrow(() -> new ServiceException("Not found media" + ownerType + " con ID " + ownerId, 404,
+						"/delete-image", MethodEnum.DELETE));
 
-	}
+		// 2. delete image from cloudinary
+		s3Service.deleteObject(mediaEntity.getMetadata().get("fileKey").toString());
 
-	@Override
-	public void deleteImageS3(MultipartFile file) throws ServiceException {
-		// TODO Auto-generated method stub
+		// 3. delete media from db
+		mediaRepository.delete(mediaEntity);
 
 	}
 
 	@Override
 	public ImageResponseS3DTO uploadImageS3(MultipartFile file) throws ServiceException {
 		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -72,7 +112,7 @@ public class StorageServicesImpl implements StorageServices {
 			// 3. check if extension is valid and return
 			return TypeStorage.valueOf(ext);
 		} catch (IllegalArgumentException ex) {
-			// 5. extension not valid
+			// 4. extension not valid
 			throw new ServiceException("Extension " + ext + " not allowed.",
 					ResponseStatus.BAD_REQUEST.getHttpStatusCode(), "/upload/image", MethodEnum.POST);
 		}

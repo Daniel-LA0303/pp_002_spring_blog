@@ -16,6 +16,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfoEntity, Long> 
 
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO("
 			+ "u.name, u.lastName, u.work, u.education, u.pronouns, u.website, "
-			+ "u.direction as address, u.city, u.skills, u.bio) " + "FROM UserInfoEntity u WHERE u.userId = :userId")
+			+ "u.direction as address, u.city, u.skills, u.bio, u.profilePicture) "
+			+ "FROM UserInfoEntity u WHERE u.userId = :userId")
 	UserUpdateInfoResponseDTO findUserUpdateInfoByUserId(@Param("userId") Long userId);
 }

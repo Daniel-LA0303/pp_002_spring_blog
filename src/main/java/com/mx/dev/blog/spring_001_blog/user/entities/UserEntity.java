@@ -46,6 +46,18 @@ public class UserEntity {
 	private String password;
 
 	/**
+	 * token to confirm
+	 */
+	@Column(name = "token")
+	private String token;
+
+	/**
+	 * confirm with a boolean
+	 */
+	@Column(name = "confirm")
+	private Boolean confirm;
+
+	/**
 	 * created at
 	 */
 	@Column(name = "created_at")
@@ -72,19 +84,32 @@ public class UserEntity {
 	 * @param username
 	 * @param email
 	 * @param password
+	 * @param token
+	 * @param confirm
 	 * @param createdAt
 	 * @param updatedAt
 	 * @param roles
 	 */
-	public UserEntity(Long userId, String username, String email, String password, LocalDateTime createdAt,
-			LocalDateTime updatedAt, Set<RoleEntity> roles) {
+	public UserEntity(Long userId, String username, String email, String password, String token, Boolean confirm,
+			LocalDateTime createdAt, LocalDateTime updatedAt, Set<RoleEntity> roles) {
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.token = token;
+		this.confirm = confirm;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.roles = roles;
+	}
+
+	/**
+	 * return value of the property confirm
+	 *
+	 * @return the confirm
+	 */
+	public Boolean getConfirm() {
+		return confirm;
 	}
 
 	/**
@@ -124,6 +149,15 @@ public class UserEntity {
 	}
 
 	/**
+	 * return value of the property token
+	 *
+	 * @return the token
+	 */
+	public String getToken() {
+		return token;
+	}
+
+	/**
 	 * return the value of the property updatedAt
 	 *
 	 * @return the updatedAt
@@ -148,6 +182,15 @@ public class UserEntity {
 	 */
 	public String getUsername() {
 		return username;
+	}
+
+	/**
+	 * set value of the property confirm
+	 *
+	 * @param confirm the confirm to set
+	 */
+	public void setConfirm(Boolean confirm) {
+		this.confirm = confirm;
 	}
 
 	/**
@@ -184,6 +227,15 @@ public class UserEntity {
 	 */
 	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
+	}
+
+	/**
+	 * set value of the property token
+	 *
+	 * @param token the token to set
+	 */
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	/**

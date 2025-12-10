@@ -1,13 +1,14 @@
 package com.mx.dev.blog.spring_001_blog.blog.contollers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
-import com.mx.dev.blog.spring_001_blog.blog.services.BlogService;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
+import com.mx.dev.blog.spring_001_blog.blog.services.blog.BlogService;
+import com.mx.dev.blog.spring_001_blog.blog.services.dashboard.orchestator.DashboardOrchestratorService;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.info.HomePageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.enums.MethodEnum;
 import com.mx.dev.blog.spring_001_blog.utils.enums.ResponseStatus;
@@ -33,13 +34,19 @@ import com.mx.dev.blog.spring_001_blog.utils.validators.BlogValidator;
 @RequestMapping("/api/blog")
 public class BlogController {
 
-	@Autowired
-	private BlogService blogService;
+	private final BlogService blogService;
+
+	private final DashboardOrchestratorService dashboardOrchestratorService;
 
 	/**
 	 * validator blog
 	 */
 	private final BlogValidator blogValidator = new BlogValidator();
+
+	public BlogController(BlogService blogService, DashboardOrchestratorService dashboardOrchestratorService) {
+		this.blogService = blogService;
+		this.dashboardOrchestratorService = dashboardOrchestratorService;
+	}
 
 	@PostMapping("/{blogId}/like")
 	public ResponseEntity<?> blogLiked(@PathVariable Long blogId, @RequestParam Long userId) throws ServiceException {
@@ -105,22 +112,6 @@ public class BlogController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
-	/**
-	 * get all categories with a dto
-	 * 
-	 * @return
-	 */
-	@GetMapping
-	public ResponseEntity<?> getAllBlogs() {
-
-		List<BlogResponseDTO> blogs = blogService.getAllBlogs();
-
-		ApiResponse<List<BlogResponseDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
-				"/api/blog", MethodEnum.GET, "Success method GET", blogs, false);
-
-		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-	}
-
 	@GetMapping("/{categoryName}/blogs")
 	public ResponseEntity<ApiResponse<Page<BlogInfoCardDTO>>> getBlogsByCategoryName(@PathVariable String categoryName,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
@@ -156,6 +147,23 @@ public class BlogController {
 		// Crear respuesta con los blogs y metadatos de éxito
 		ApiResponse<Page<BlogInfoCardDTO>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
 				"/api/blog", MethodEnum.GET, "Success method GET", blogsPage, false);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	/**
+	 * example to use this endpoint -> GET
+	 * /api/blog/dashboard?userId=1&type=FOLLOWERS&page=0&size=10
+	 */
+	@GetMapping("/dashboard")
+	public ResponseEntity<?> getDashboard(@RequestParam Long userId, @RequestParam String type, @RequestParam int page,
+			@RequestParam int size) throws ServiceException {
+		Pageable pageable = PageRequest.of(page, size);
+
+		Page<?> res = dashboardOrchestratorService.executeDashboardQuery(userId, type, pageable);
+
+		ApiResponse<Page<?>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(), "/api/blog",
+				MethodEnum.GET, "Success method GET", res, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
@@ -196,23 +204,14 @@ public class BlogController {
 	 * @return
 	 * @throws ServiceException
 	 */
-	@PostMapping(
-	// consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-	)
-	public ResponseEntity<?> saveBlog(@RequestBody BlogCreateRequestDTO blogCreateRequestDTO
-	// @RequestPart(value = "blogImage", required = false) MultipartFile blogImage
-	) throws ServiceException {
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> saveBlog(@ModelAttribute BlogCreateRequestDTO blogCreateRequestDTO)
+			throws ServiceException {
 
-		// Asignar la imagen al DTO
-		// blogCreateRequestDTO.setBlogImage(blogImage);
-
-		// Validar el DTO
 		blogValidator.validate(blogCreateRequestDTO);
 
-		// Crear el blog
 		BlogEntity blogEntity = blogService.createBlog(blogCreateRequestDTO);
 
-		// Crear la respuesta
 		ApiResponse<BlogEntity> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(), "/api/blog",
 				MethodEnum.POST, "Success method POST", blogEntity, false);
 

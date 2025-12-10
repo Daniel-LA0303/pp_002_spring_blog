@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogPageResponseDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.enums.BlogStatusEnum;
 import com.mx.dev.blog.spring_001_blog.builders.category.CategorySmallInfoDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserInfoCardDTOBuilder;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogPageResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
-import com.mx.dev.blog.spring_001_blog.utils.enums.BlogStatusEnum;
 
 public class BlogPageResponseDTOBuilder {
 
