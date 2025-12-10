@@ -23,7 +23,7 @@ public interface ChatRepository extends JpaRepository<ChatEntity, String> {
 	@Query("""
 			SELECT c FROM ChatEntity c
 			WHERE c.sender.userId = :userId
-			   OR c.recipient.userId = :userId
+			   OR c.recipient.userId = :userId ORDER BY createdDate DESC
 			""")
 	List<ChatEntity> findChatsByUserId(@Param("userId") Long userId);
 

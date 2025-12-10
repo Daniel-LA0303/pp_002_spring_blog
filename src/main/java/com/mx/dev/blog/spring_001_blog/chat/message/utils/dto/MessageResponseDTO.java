@@ -15,9 +15,9 @@ public class MessageResponseDTO {
 
 	private MessageState state;
 
-	private String senderId;
+	private Long senderId;
 
-	private String receiverId;
+	private Long receiverId;
 
 	private LocalDateTime createdAt;
 
@@ -39,8 +39,8 @@ public class MessageResponseDTO {
 	 * @param createdAt
 	 * @param media
 	 */
-	public MessageResponseDTO(Long id, String content, MessageType type, MessageState state, String senderId,
-			String receiverId, LocalDateTime createdAt, byte[] media) {
+	public MessageResponseDTO(Long id, String content, MessageType type, MessageState state, Long senderId,
+			Long receiverId, LocalDateTime createdAt, byte[] media) {
 		this.id = id;
 		this.content = content;
 		this.type = type;
@@ -92,7 +92,7 @@ public class MessageResponseDTO {
 	 *
 	 * @return the receiverId
 	 */
-	public String getReceiverId() {
+	public Long getReceiverId() {
 		return receiverId;
 	}
 
@@ -101,7 +101,7 @@ public class MessageResponseDTO {
 	 *
 	 * @return the senderId
 	 */
-	public String getSenderId() {
+	public Long getSenderId() {
 		return senderId;
 	}
 
@@ -164,7 +164,7 @@ public class MessageResponseDTO {
 	 *
 	 * @param receiverId the receiverId to set
 	 */
-	public void setReceiverId(String receiverId) {
+	public void setReceiverId(Long receiverId) {
 		this.receiverId = receiverId;
 	}
 
@@ -173,7 +173,7 @@ public class MessageResponseDTO {
 	 *
 	 * @param senderId the senderId to set
 	 */
-	public void setSenderId(String senderId) {
+	public void setSenderId(Long senderId) {
 		this.senderId = senderId;
 	}
 

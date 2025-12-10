@@ -81,7 +81,7 @@ public class ChatEntity extends BaseAuditingEntity {
 	// If the current user is the recipient, it returns the sender's username,
 	// otherwise the recipient's username.
 	@Transient
-	public String getChatName(String senderId) {
+	public String getChatName(Long senderId) {
 		if (recipient.getUserId().equals(senderId)) {
 			return sender.getUsername();
 		}
@@ -154,7 +154,7 @@ public class ChatEntity extends BaseAuditingEntity {
 	// Returns the number of unread messages for the given user.
 	// Counts messages where the user is the receiver and the message state is SENT.
 	@Transient
-	public long getUnreadMessages(String senderId) {
+	public long getUnreadMessages(Long senderId) {
 		return this.messages.stream().filter(m -> m.getReceiverId().equals(senderId))
 				.filter(m -> MessageState.SENT == m.getState()).count();
 	}

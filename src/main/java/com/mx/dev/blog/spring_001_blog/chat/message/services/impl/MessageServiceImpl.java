@@ -21,6 +21,7 @@ import com.mx.dev.blog.spring_001_blog.chat.message.utils.enums.MessageType;
 import com.mx.dev.blog.spring_001_blog.chat.notificationmessage.services.NotificationMessageService;
 import com.mx.dev.blog.spring_001_blog.chat.notificationmessage.utils.dto.NotificationMessageDTO;
 import com.mx.dev.blog.spring_001_blog.chat.notificationmessage.utils.enums.NotificationMessageType;
+import com.mx.dev.blog.spring_001_blog.chat.notificationmessage.utils.mappers.MessageMapper;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
@@ -37,20 +38,22 @@ public class MessageServiceImpl implements MessageService {
 
 	private final FileService fileService;
 
+	private final MessageMapper mapper;
+
 	public MessageServiceImpl(UserService userService, ChatRepository chatRepository,
 			MessageRepository messageRepository, NotificationMessageService notificationMessageService,
-			FileService fileService) {
+			FileService fileService, MessageMapper mapper) {
 		this.userService = userService;
 		this.chatRepository = chatRepository;
 		this.messageRepository = messageRepository;
 		this.notificationMessageService = notificationMessageService;
 		this.fileService = fileService;
+		this.mapper = mapper;
 	}
 
 	@Override
 	public List<MessageResponseDTO> findChatMessages(String chatId) {
-		// TODO Auto-generated method stub
-		return null;
+		return messageRepository.findMessagesByChatId(chatId).stream().map(mapper::toMessageResponse).toList();
 	}
 
 	@Override
