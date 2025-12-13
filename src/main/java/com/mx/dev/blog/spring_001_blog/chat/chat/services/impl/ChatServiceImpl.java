@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 import com.mx.dev.blog.spring_001_blog.chat.chat.entities.ChatEntity;
 import com.mx.dev.blog.spring_001_blog.chat.chat.repositories.ChatRepository;
@@ -15,6 +16,7 @@ import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
+@Service
 public class ChatServiceImpl implements ChatService {
 
 	private final ChatRepository chatRepository;

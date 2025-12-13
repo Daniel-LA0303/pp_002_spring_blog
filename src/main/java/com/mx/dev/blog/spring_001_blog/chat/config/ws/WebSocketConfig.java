@@ -86,7 +86,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		// register websocket endpoint with sockjs fallback options
 		// and configure allowed origin for cors
-		registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:5173").withSockJS();
+		registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:5173", "http://localhost:4200/").withSockJS();
 	}
 
 }

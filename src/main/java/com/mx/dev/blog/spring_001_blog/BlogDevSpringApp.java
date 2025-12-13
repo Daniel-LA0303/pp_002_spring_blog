@@ -2,6 +2,7 @@ package com.mx.dev.blog.spring_001_blog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.mx.dev.blog.spring_001_blog.config.security.CustomUserDetailsService;
@@ -10,6 +11,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 @SpringBootApplication
 //@EnableAsync
+@EnableJpaAuditing
 public class BlogDevSpringApp {
 
 	private final CustomUserDetailsService customUserDetailsService;

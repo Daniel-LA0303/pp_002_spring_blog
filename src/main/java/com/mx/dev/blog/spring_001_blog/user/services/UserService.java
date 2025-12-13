@@ -6,12 +6,14 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserResponse;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
@@ -21,6 +23,8 @@ public interface UserService {
 
 	UserEntity createUser(UserCreateRequestDTO userCreateRequestDTO)
 			throws ServiceException, UnsupportedEncodingException, MessagingException;
+
+	List<UserResponse> finAllUsersExceptSelf(Authentication connectedUser);
 
 	List<UserSimpleResponseDTO> getAllUsers();
 

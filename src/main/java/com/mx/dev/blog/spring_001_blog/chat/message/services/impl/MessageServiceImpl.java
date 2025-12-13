@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mx.dev.blog.spring_001_blog.chat.chat.entities.ChatEntity;
@@ -26,6 +27,7 @@ import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
+@Service
 public class MessageServiceImpl implements MessageService {
 
 	private final UserService userService;

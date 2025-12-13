@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserResponse;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
@@ -124,6 +126,14 @@ public class UserServiceImpl implements UserService {
 		emailService.sendRegistrationEmail(emailDataRegisterDTO);
 
 		return savedUser;
+	}
+
+	@Override
+	public List<UserResponse> finAllUsersExceptSelf(Authentication connectedUser) {
+
+		String userEmail = connectedUser.getName();
+
+		return userRepository.findAllUsersExceptSelf(userEmail).stream().map(UserMappers::toUserResponse).toList();
 	}
 
 	@Override

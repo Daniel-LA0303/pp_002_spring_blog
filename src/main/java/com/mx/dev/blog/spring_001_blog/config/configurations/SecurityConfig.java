@@ -49,7 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.setAllowedOrigins(Arrays.asList("http://192.168.100.3:5173"));
+		corsConfiguration.setAllowedOrigins(
+				Arrays.asList("http://192.168.100.3:5173", "http://localhost:5173", "http://localhost:4200"));
 		corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
 		corsConfiguration.setAllowCredentials(true);
@@ -74,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers("/ws/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/blog/dashboard", "/api/blog/dashboard/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/**").permitAll().antMatchers(HttpMethod.GET, "/auth-ui/**")
 				.permitAll().antMatchers("/api/auth/**").permitAll().antMatchers("/upload/**").permitAll().anyRequest()
