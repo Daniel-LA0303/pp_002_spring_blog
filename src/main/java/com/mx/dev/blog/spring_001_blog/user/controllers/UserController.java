@@ -20,6 +20,7 @@ import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserResponse;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSearchChatDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
@@ -112,6 +113,18 @@ public class UserController {
 				"/api/user", MethodEnum.GET, "Success method GET", userFullEngagementDTO, false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/search/chat")
+	public ResponseEntity<List<UserSearchChatDTO>> searchUsersForChat(@RequestParam String query,
+			Authentication authentication) throws ServiceException {
+
+		// get email from token authentication
+		String email = authentication.getName();
+
+		List<UserSearchChatDTO> results = userService.getUserSearchToCreateAChat(query, email);
+
+		return ResponseEntity.ok(results);
 	}
 
 	@PutMapping("/{userId}")

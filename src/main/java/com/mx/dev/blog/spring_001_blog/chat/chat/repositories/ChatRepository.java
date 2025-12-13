@@ -14,10 +14,17 @@ public interface ChatRepository extends JpaRepository<ChatEntity, String> {
 	// Search a chat between two users (bidirectional)
 	@Query("""
 			SELECT c FROM ChatEntity c
-			WHERE (c.sender.userId = :senderId AND c.recipient.userId = :recipientId)
-			   OR (c.sender.userId = :recipientId AND c.recipient.userId = :senderId)
+			WHERE (c.sender.userId = :userId1 AND c.recipient.userId = :userId2)
+			   OR (c.sender.userId = :userId2 AND c.recipient.userId = :userId1)
 			""")
-	Optional<ChatEntity> findChatBetweenUsers(@Param("senderId") Long senderId, @Param("recipientId") Long recipientId);
+	Optional<ChatEntity> findChatBetweenUsers(@Param("userId1") Long userId1, @Param("userId2") Long userId2);
+
+	// O mejor, ordenar siempre los IDs
+	@Query("""
+			SELECT c FROM ChatEntity c
+			WHERE c.sender.userId = :minUserId AND c.recipient.userId = :maxUserId
+			""")
+	Optional<ChatEntity> findChatBySortedUsers(@Param("minUserId") Long minUserId, @Param("maxUserId") Long maxUserId);
 
 	// Find all chats for a given user (chats where the user participates)
 	@Query("""

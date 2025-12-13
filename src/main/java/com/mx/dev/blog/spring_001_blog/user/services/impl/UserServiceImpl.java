@@ -37,6 +37,7 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserResponse;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSearchChatDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
@@ -220,6 +221,14 @@ public class UserServiceImpl implements UserService {
 		UserFullEngagementDTO userFullEngagementDTO = userRepository.getUserEngagementData(userEntity.getUserId());
 
 		return userFullEngagementDTO;
+	}
+
+	@Override
+	public List<UserSearchChatDTO> getUserSearchToCreateAChat(String query, String excludeUserId) {
+
+		Pageable pageable = PageRequest.of(0, 8);
+
+		return userRepository.searchUsersForChat(query, excludeUserId, pageable).stream().toList();
 	}
 
 	@Override

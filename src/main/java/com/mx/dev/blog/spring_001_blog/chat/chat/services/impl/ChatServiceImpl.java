@@ -1,5 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.chat.chat.services.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import com.mx.dev.blog.spring_001_blog.chat.chat.repositories.ChatRepository;
 import com.mx.dev.blog.spring_001_blog.chat.chat.services.ChatService;
 import com.mx.dev.blog.spring_001_blog.chat.chat.utils.dto.ChatResponseDTO;
 import com.mx.dev.blog.spring_001_blog.chat.chat.utils.mapper.ChatMapper;
+import com.mx.dev.blog.spring_001_blog.chat.message.utils.enums.MessageState;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
@@ -36,26 +38,66 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public String createChat(Long senderId, Long receiverId) throws ServiceException {
-		// search a chat
-		Optional<ChatEntity> existingChat = chatRepository.findChatBetweenUsers(senderId, receiverId);
+	public ChatResponseDTO createChat(Long senderId, Long receiverId) throws ServiceException {
+		// 1. Sort IDs for consistency
+		Long minUserId = Math.min(senderId, receiverId);
+		Long maxUserId = Math.max(senderId, receiverId);
+
+		// 2. Check for existing chat
+		Optional<ChatEntity> existingChat = chatRepository.findChatBySortedUsers(minUserId, maxUserId);
+		ChatEntity chat;
+
 		if (existingChat.isPresent()) {
-			return existingChat.get().getChatId();
+			chat = existingChat.get();
+			System.out.println("EXISTING CHAT - ID: " + chat.getChatId());
+		} else {
+			// 3. Create new chat
+			UserEntity sender = userService.getOneUserOrThrow(minUserId);
+			UserEntity receiver = userService.getOneUserOrThrow(maxUserId);
+
+			chat = new ChatEntity();
+			chat.setSender(sender);
+			chat.setRecipient(receiver);
+			chat = chatRepository.save(chat);
+			System.out.println("NEW CHAT CREATED - ID: " + chat.getChatId());
 		}
 
-		// find user that want to send a message with a new user
-		UserEntity sender = userService.getOneUserOrThrow(senderId);
+		// 4. Validate ID generation
+		if (chat.getChatId() == null) {
+			throw new RuntimeException("Chat ID is null after save");
+		}
 
-		// find user that receive message
-		UserEntity receiver = userService.getOneUserOrThrow(receiverId);
+		// 5. Build response DTO
+		ChatResponseDTO response = new ChatResponseDTO();
+		response.setId(chat.getChatId());
 
-		// create chat
-		ChatEntity chat = new ChatEntity();
-		chat.setSender(sender);
-		chat.setRecipient(receiver);
+		// 6. Set other participant's name
+		response.setName(chat.getTargetChatName(receiverId));
 
-		ChatEntity savedChat = chatRepository.save(chat);
-		return savedChat.getChatId();
+		response.setLastMessage(chat.getLastMessage());
+		response.setLastMessageTime(chat.getLastMessageTime());
+
+		// 7. Check other user's online status
+		UserEntity otherUser = senderId.equals(chat.getSender().getUserId()) ? chat.getRecipient() : chat.getSender();
+		boolean isOnline = otherUser.getLastSeen() != null
+				&& otherUser.getLastSeen().isAfter(LocalDateTime.now().minusMinutes(5));
+		response.setRecipientOnline(isOnline);
+
+		// 8. Count unread messages
+		Long unreadCount = 0L;
+		if (chat.getMessages() != null) {
+			unreadCount = chat.getMessages().stream()
+					.filter(msg -> msg.getState() == MessageState.SENT && msg.getReceiverId().equals(senderId)).count();
+		}
+		response.setUnreadCount(unreadCount);
+
+		// 9. Set participant IDs
+		response.setSenderId(chat.getSender().getUserId());
+		response.setReceiverId(chat.getRecipient().getUserId());
+
+		System.out.println("RETURNING DTO - ID: " + response.getId());
+
+		return response;
 	}
 
 	@Override
@@ -68,6 +110,46 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	public ChatResponseDTO getChatById(String chatId, Long currentUserId) {
+		// 1. Fetch chat entity
+		ChatEntity chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found"));
+
+		ChatResponseDTO response = new ChatResponseDTO();
+		response.setId(chat.getChatId());
+
+		// 2. Get other participant's name
+		Long otherUserId = currentUserId.equals(chat.getSender().getUserId()) ? chat.getRecipient().getUserId()
+				: chat.getSender().getUserId();
+		response.setName(chat.getTargetChatName(otherUserId));
+
+		// 3. Count unread messages
+		Long unreadCount = 0L;
+		if (chat.getMessages() != null) {
+			unreadCount = chat.getMessages().stream()
+					.filter(msg -> msg.getState() == MessageState.SENT && msg.getReceiverId().equals(currentUserId))
+					.count();
+		}
+		response.setUnreadCount(unreadCount);
+
+		// 4. Set last message info
+		response.setLastMessage(chat.getLastMessage());
+		response.setLastMessageTime(chat.getLastMessageTime());
+
+		// 5. Check if other user is online
+		UserEntity otherUser = currentUserId.equals(chat.getSender().getUserId()) ? chat.getRecipient()
+				: chat.getSender();
+		boolean isOnline = otherUser.getLastSeen() != null
+				&& otherUser.getLastSeen().isAfter(LocalDateTime.now().minusMinutes(5));
+		response.setRecipientOnline(isOnline);
+
+		// 6. Set participant IDs
+		response.setSenderId(chat.getSender().getUserId());
+		response.setReceiverId(chat.getRecipient().getUserId());
+
+		return response;
+	}
+
+	@Override
 	public List<ChatResponseDTO> getChatsByReceiverId(Authentication currentUser) throws ServiceException {
 
 		Long currentUserId = getAuthenticatedUserId(currentUser);
@@ -75,5 +157,4 @@ public class ChatServiceImpl implements ChatService {
 		return chatRepository.findChatsByUserId(currentUserId).stream()
 				.map(chat -> mapper.toChatResponse(chat, currentUserId)).toList();
 	}
-
 }

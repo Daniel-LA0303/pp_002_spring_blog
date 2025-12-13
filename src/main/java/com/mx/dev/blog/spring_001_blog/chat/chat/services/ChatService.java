@@ -9,9 +9,11 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 public interface ChatService {
 
-	String createChat(Long senderId, Long receiverId) throws ServiceException;
+	ChatResponseDTO createChat(Long senderId, Long receiverId) throws ServiceException;
 
 	Long getAuthenticatedUserId(Authentication authentication) throws ServiceException;
+
+	ChatResponseDTO getChatById(String chatId, Long currentUserId);
 
 	List<ChatResponseDTO> getChatsByReceiverId(Authentication currentUser) throws ServiceException;
 

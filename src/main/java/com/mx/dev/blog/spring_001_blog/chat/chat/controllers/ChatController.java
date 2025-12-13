@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.dev.blog.spring_001_blog.chat.chat.services.ChatService;
 import com.mx.dev.blog.spring_001_blog.chat.chat.utils.dto.ChatResponseDTO;
-import com.mx.dev.blog.spring_001_blog.chat.common.StringResponse;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 @RestController
@@ -35,14 +35,22 @@ public class ChatController {
 
 	// create a chat
 	@PostMapping
-	public ResponseEntity<StringResponse> createChat(@RequestParam(name = "sender-id") Long senderId,
-			@RequestParam(name = "receiver-id") Long receiverId) throws ServiceException {
-		final String chatId = chatService.createChat(senderId, receiverId);
+	public ResponseEntity<ChatResponseDTO> createChat(@RequestParam(name = "receiver-id") Long receiverId,
+			Authentication authentication) throws ServiceException {
 
-		StringResponse response = new StringResponse();
-		response.setResponse(chatId);
+		Long senderId = chatService.getAuthenticatedUserId(authentication);
+		ChatResponseDTO chat = chatService.createChat(senderId, receiverId);
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(chat);
+	}
+
+	@GetMapping("/{chatId}")
+	public ResponseEntity<ChatResponseDTO> getChatById(@PathVariable String chatId, Authentication authentication)
+			throws ServiceException {
+
+		Long currentUserId = chatService.getAuthenticatedUserId(authentication);
+		ChatResponseDTO chat = chatService.getChatById(chatId, currentUserId);
+		return ResponseEntity.ok(chat);
 	}
 
 	// get chats by user

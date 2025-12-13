@@ -58,7 +58,7 @@ public class PushNotificationServiceImpl implements PushNotificationService {
 	 */
 	@Override
 	public Flux<ServerSentEvent<NotificationsSSEResponseDTO>> getNotificationsByUserToId(Long userId) {
-		return Flux.interval(Duration.ofSeconds(5)).map(seq -> {
+		return Flux.interval(Duration.ofSeconds(3000)).map(seq -> {
 			NotificationsSSEResponseDTO payload = getNotifiations(userId);
 			return ServerSentEvent.<NotificationsSSEResponseDTO>builder().id(String.valueOf(seq))
 					.event("user-list-event").data(payload).build();

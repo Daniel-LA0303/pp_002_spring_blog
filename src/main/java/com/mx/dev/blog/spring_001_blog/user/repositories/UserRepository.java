@@ -17,6 +17,7 @@ import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSearchChatDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserTopDTO;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
@@ -201,5 +202,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	@Modifying
 	void insertUserFollow(@Param("followerId") Long followerId, @Param("followedId") Long followedId,
 			@Param("createdAt") LocalDateTime createdAt);
+
+	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSearchChatDTO(u.userId, u.username, ui.profilePicture) "
+			+ "FROM UserEntity u " + "LEFT JOIN UserInfoEntity ui ON u.userId = ui.userId "
+			+ "WHERE (u.username LIKE %:query% OR u.email LIKE %:query%) " + "AND u.email != :excludeUserId "
+			+ "ORDER BY u.username")
+	Page<UserSearchChatDTO> searchUsersForChat(@Param("query") String query,
+			@Param("excludeUserId") String excludeUserId, Pageable pageable);
 
 }

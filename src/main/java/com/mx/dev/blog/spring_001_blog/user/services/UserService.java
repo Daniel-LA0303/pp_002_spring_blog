@@ -14,6 +14,7 @@ import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserResponse;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSearchChatDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
@@ -43,6 +44,8 @@ public interface UserService {
 	UserEntity getUserByToken(String token) throws ServiceException;
 
 	UserFullEngagementDTO getUserFullEngagement(Long userId) throws ServiceException;
+
+	List<UserSearchChatDTO> getUserSearchToCreateAChat(String query, String excludeUserId);
 
 	Page<UserInfoCardDTO> searchUsers(String query, int page, int size);
 
