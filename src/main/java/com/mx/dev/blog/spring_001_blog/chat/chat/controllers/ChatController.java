@@ -26,9 +26,6 @@ public class ChatController {
 
 	private final ChatService chatService;
 
-	// -----------------------
-	// Constructor
-	// -----------------------
 	public ChatController(ChatService chatService) {
 		this.chatService = chatService;
 	}

@@ -25,35 +25,55 @@ import com.mx.dev.blog.spring_001_blog.chat.message.utils.enums.MessageType;
 @NamedQuery(name = MessageConstants.SET_MESSAGES_TO_SEEN_BY_CHAT, query = "UPDATE MessageEntity SET state = :newState WHERE chat.id = :chatId")
 public class MessageEntity extends BaseAuditingEntity {
 
+	// pagination extremely efficient with @SequenceGenerator
 	@Id
-	@SequenceGenerator(name = "msg_seq", sequenceName = "msg_seq", allocationSize = 1) // <- pagination extremely
-																						// efficient
-
+	@SequenceGenerator(name = "msg_seq", sequenceName = "msg_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "msg_seq")
 	@Column(name = "message_id")
 	private Long messageId;
 
+	/**
+	 * content
+	 */
 	@Column(name = "content")
 	private String content;
 
+	/**
+	 * state message
+	 */
 	@Column(name = "state")
 	@Enumerated(EnumType.STRING)
 	private MessageState state;
 
+	/**
+	 * type message
+	 */
 	@Column(name = "type")
 	@Enumerated(EnumType.STRING)
 	private MessageType type;
 
+	/**
+	 * chat
+	 */
 	@ManyToOne
 	@JoinColumn(name = "chat_id")
 	private ChatEntity chat;
 
+	/**
+	 * sender
+	 */
 	@Column(name = "sender_id")
 	private Long senderId;
 
+	/**
+	 * receiver
+	 */
 	@Column(name = "receiver_id")
 	private Long receiverId;
 
+	/**
+	 * media
+	 */
 	@Column(name = "media")
 	private String media;
 
@@ -86,7 +106,7 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * return value of the property chat
+	 * return the value of the property chat
 	 *
 	 * @return the chat
 	 */
@@ -95,7 +115,7 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * return value of the property content
+	 * return the value of the property content
 	 *
 	 * @return the content
 	 */
@@ -104,7 +124,7 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * return value of the property media
+	 * return the value of the property media
 	 *
 	 * @return the media
 	 */
@@ -113,7 +133,7 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * return value of the property messageId
+	 * return the value of the property messageId
 	 *
 	 * @return the messageId
 	 */
@@ -122,7 +142,7 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * return value of the property receiverId
+	 * return the value of the property receiverId
 	 *
 	 * @return the receiverId
 	 */
@@ -131,7 +151,7 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * return value of the property senderId
+	 * return the value of the property senderId
 	 *
 	 * @return the senderId
 	 */
@@ -140,7 +160,7 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * return value of the property state
+	 * return the value of the property state
 	 *
 	 * @return the state
 	 */
@@ -149,7 +169,7 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * return value of the property type
+	 * return the value of the property type
 	 *
 	 * @return the type
 	 */
@@ -158,72 +178,72 @@ public class MessageEntity extends BaseAuditingEntity {
 	}
 
 	/**
-	 * set value of the property chat
+	 * set the value of the property chat
 	 *
-	 * @param chat the chat to set
+	 * chat the chat to set
 	 */
 	public void setChat(ChatEntity chat) {
 		this.chat = chat;
 	}
 
 	/**
-	 * set value of the property content
+	 * set the value of the property content
 	 *
-	 * @param content the content to set
+	 * content the content to set
 	 */
 	public void setContent(String content) {
 		this.content = content;
 	}
 
 	/**
-	 * set value of the property media
+	 * set the value of the property media
 	 *
-	 * @param media the media to set
+	 * media the media to set
 	 */
 	public void setMedia(String media) {
 		this.media = media;
 	}
 
 	/**
-	 * set value of the property messageId
+	 * set the value of the property messageId
 	 *
-	 * @param messageId the messageId to set
+	 * messageId the messageId to set
 	 */
 	public void setMessageId(Long messageId) {
 		this.messageId = messageId;
 	}
 
 	/**
-	 * set value of the property receiverId
+	 * set the value of the property receiverId
 	 *
-	 * @param receiverId the receiverId to set
+	 * receiverId the receiverId to set
 	 */
 	public void setReceiverId(Long receiverId) {
 		this.receiverId = receiverId;
 	}
 
 	/**
-	 * set value of the property senderId
+	 * set the value of the property senderId
 	 *
-	 * @param senderId the senderId to set
+	 * senderId the senderId to set
 	 */
 	public void setSenderId(Long senderId) {
 		this.senderId = senderId;
 	}
 
 	/**
-	 * set value of the property state
+	 * set the value of the property state
 	 *
-	 * @param state the state to set
+	 * state the state to set
 	 */
 	public void setState(MessageState state) {
 		this.state = state;
 	}
 
 	/**
-	 * set value of the property type
+	 * set the value of the property type
 	 *
-	 * @param type the type to set
+	 * type the type to set
 	 */
 	public void setType(MessageType type) {
 		this.type = type;

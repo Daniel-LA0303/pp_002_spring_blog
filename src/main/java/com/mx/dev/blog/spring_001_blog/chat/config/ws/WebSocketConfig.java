@@ -8,17 +8,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.converter.DefaultContentTypeResolver;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
-import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.security.messaging.context.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -41,27 +35,24 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 		argumentResolvers.add(new AuthenticationPrincipalArgumentResolver());
 	}
 
-	@Override
-	public void configureClientInboundChannel(ChannelRegistration registration) {
-		registration.interceptors(new ChannelInterceptor() {
-			@Override
-			public Message<?> preSend(Message<?> message, MessageChannel channel) {
-				StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-
-				if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-					int current = activeConnections.incrementAndGet();
-					System.out.println("User connected. Active connections: " + current);
-				}
-
-				if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
-					int current = activeConnections.decrementAndGet();
-					System.out.println("User disconnected. Active connections: " + current);
-				}
-
-				return message;
-			}
-		});
-	}
+	// view in console of connections
+	/*
+	 * @Override public void configureClientInboundChannel(ChannelRegistration
+	 * registration) { registration.interceptors(new ChannelInterceptor() {
+	 * 
+	 * @Override public Message<?> preSend(Message<?> message, MessageChannel
+	 * channel) { StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+	 * 
+	 * if (StompCommand.CONNECT.equals(accessor.getCommand())) { int current =
+	 * activeConnections.incrementAndGet();
+	 * System.out.println("User connected. Active connections: " + current); }
+	 * 
+	 * if (StompCommand.DISCONNECT.equals(accessor.getCommand())) { int current =
+	 * activeConnections.decrementAndGet();
+	 * System.out.println("User disconnected. Active connections: " + current); }
+	 * 
+	 * return message; } }); }
+	 */
 
 	/*
 	 * (non-Javadoc)
@@ -117,7 +108,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		// register websocket endpoint with sockjs fallback options
 		// and configure allowed origin for cors
-		registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:5173", "http://localhost:4200/").withSockJS();
+		registry.addEndpoint("/ws")
+				.setAllowedOrigins("http://localhost:5173", "http://localhost:4200/", "http://192.168.100.3:5173")
+				.withSockJS();
 	}
 
 }

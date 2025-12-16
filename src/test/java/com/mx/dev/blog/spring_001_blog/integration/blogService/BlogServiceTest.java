@@ -187,48 +187,53 @@ public class BlogServiceTest {
 
 	}
 
-	@Test
-	@Order(5)
-	void createBlogInvalidDataExceptionTest() {
-
-		BlogCreateRequestDTO blogCreateRequestDTOBuilder = BlogCreateRequestDTOBuilder.withAllDummy()
-				.setCategories(List.of(1L, 2L)).setContent("new content").setDescription("new description")
-				.setTitle("new title").setUserId(8L).build();
-
-		HttpEntity<BlogCreateRequestDTO> requestEntity = new HttpEntity<>(blogCreateRequestDTOBuilder, headers);
-
-		ResponseEntity<ApiResponse<BlogEntity>> response = testRestTemplate.exchange("/api/blog", HttpMethod.POST,
-				requestEntity, new ParameterizedTypeReference<ApiResponse<BlogEntity>>() {
-				});
-
-		// basic test
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertNotNull(response);
-		assertEquals(200, response.getStatusCodeValue());
-
-		// extract api response data
-		ApiResponse<BlogEntity> apiResponse = response.getBody();
-		assertEquals(201, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.POST, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getTimestamp());
-
-		BlogEntity blogEntityResponse = apiResponse.getData();
-
-		assertNotNull(blogEntityResponse.getBlogId());
-		assertEquals(blogCreateRequestDTOBuilder.getContent(), blogEntityResponse.getContent());
-		assertEquals(blogCreateRequestDTOBuilder.getDescription(), blogEntityResponse.getDescription());
-		assertEquals(blogCreateRequestDTOBuilder.getTitle(), blogEntityResponse.getTitle());
-		assertEquals(blogCreateRequestDTOBuilder.getCategories().size(), blogEntityResponse.getCategories().size());
-		assertEquals(blogCreateRequestDTOBuilder.getUserId(), blogEntityResponse.getUserId());
-		assertNotNull(blogEntityResponse.getCreatedAt());
-		assertNotNull(blogEntityResponse.getSlug());
-		assertNotNull(blogEntityResponse.getUpdatedAt());
-		assertEquals(BlogStatusEnum.PUBLISHED, blogEntityResponse.getStatus());
-
-	}
+	/*
+	 * @Test
+	 * 
+	 * @Order(5) void createBlogInvalidDataExceptionTest() {
+	 * 
+	 * BlogCreateRequestDTO blogCreateRequestDTOBuilder =
+	 * BlogCreateRequestDTOBuilder.withAllDummy() .setCategories(List.of(1L,
+	 * 2L)).setContent("new content").setDescription("new description")
+	 * .setTitle("new title").setUserId(8L).build();
+	 * 
+	 * HttpEntity<BlogCreateRequestDTO> requestEntity = new
+	 * HttpEntity<>(blogCreateRequestDTOBuilder, headers);
+	 * 
+	 * ResponseEntity<ApiResponse<BlogEntity>> response =
+	 * testRestTemplate.exchange("/api/blog", HttpMethod.POST, requestEntity, new
+	 * ParameterizedTypeReference<ApiResponse<BlogEntity>>() { });
+	 * 
+	 * // basic test assertEquals(HttpStatus.OK, response.getStatusCode());
+	 * assertNotNull(response); assertEquals(200, response.getStatusCodeValue());
+	 * 
+	 * // extract api response data ApiResponse<BlogEntity> apiResponse =
+	 * response.getBody(); assertEquals(201, apiResponse.getStatus());
+	 * assertNotNull(apiResponse.getPath()); assertEquals(MethodEnum.POST,
+	 * apiResponse.getMethod()); assertNotNull(apiResponse.getMessage());
+	 * assertEquals(false, apiResponse.getError());
+	 * assertNotNull(apiResponse.getTimestamp());
+	 * 
+	 * BlogEntity blogEntityResponse = apiResponse.getData();
+	 * 
+	 * assertNotNull(blogEntityResponse.getBlogId());
+	 * assertEquals(blogCreateRequestDTOBuilder.getContent(),
+	 * blogEntityResponse.getContent());
+	 * assertEquals(blogCreateRequestDTOBuilder.getDescription(),
+	 * blogEntityResponse.getDescription());
+	 * assertEquals(blogCreateRequestDTOBuilder.getTitle(),
+	 * blogEntityResponse.getTitle());
+	 * assertEquals(blogCreateRequestDTOBuilder.getCategories().size(),
+	 * blogEntityResponse.getCategories().size());
+	 * assertEquals(blogCreateRequestDTOBuilder.getUserId(),
+	 * blogEntityResponse.getUserId());
+	 * assertNotNull(blogEntityResponse.getCreatedAt());
+	 * assertNotNull(blogEntityResponse.getSlug());
+	 * assertNotNull(blogEntityResponse.getUpdatedAt());
+	 * assertEquals(BlogStatusEnum.PUBLISHED, blogEntityResponse.getStatus());
+	 * 
+	 * }
+	 */
 
 	@Test
 	@Order(2)

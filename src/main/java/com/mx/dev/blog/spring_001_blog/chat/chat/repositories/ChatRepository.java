@@ -19,7 +19,7 @@ public interface ChatRepository extends JpaRepository<ChatEntity, String> {
 			""")
 	Optional<ChatEntity> findChatBetweenUsers(@Param("userId1") Long userId1, @Param("userId2") Long userId2);
 
-	// O mejor, ordenar siempre los IDs
+	// find chat by users order
 	@Query("""
 			SELECT c FROM ChatEntity c
 			WHERE c.sender.userId = :minUserId AND c.recipient.userId = :maxUserId

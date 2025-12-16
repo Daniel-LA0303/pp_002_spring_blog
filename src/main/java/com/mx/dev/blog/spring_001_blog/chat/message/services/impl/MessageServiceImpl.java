@@ -85,53 +85,64 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public void saveMessage(MessageRequestDTO messageRequest) {
-		// find chat by id
+
+		// 1. search chat
 		ChatEntity chat = chatRepository.findById(messageRequest.getChatId())
 				.orElseThrow(() -> new EntityNotFoundException("Chat not found"));
 
-		// create body chat entity
+		Long senderId = messageRequest.getSenderId();
+
+		// 2. get receiver
+		Long receiverId;
+		if (chat.getSender().getUserId().equals(senderId)) {
+			receiverId = chat.getRecipient().getUserId();
+		} else {
+			receiverId = chat.getSender().getUserId();
+		}
+
+		if (receiverId == null || receiverId <= 0) {
+			throw new IllegalStateException("Invalid receiverId calculated");
+		}
+
+		// 3. build message and save
 		MessageEntity message = new MessageEntity();
 		message.setContent(messageRequest.getContent());
 		message.setChat(chat);
-		message.setSenderId(messageRequest.getSenderId());
-		message.setReceiverId(messageRequest.getReceiverId());
+		message.setSenderId(senderId);
+		message.setReceiverId(receiverId);
 		message.setType(messageRequest.getType());
 		message.setState(MessageState.SENT);
 
-		// save message
 		messageRepository.save(message);
 
-		// create body notification entity
+		// 4. build notification message
 		NotificationMessageDTO notification = new NotificationMessageDTO();
 		notification.setChatId(chat.getChatId());
 		notification.setMessageType(messageRequest.getType());
 		notification.setContent(messageRequest.getContent());
-		notification.setSenderId(messageRequest.getSenderId());
-		notification.setReceiverId(messageRequest.getReceiverId());
+		notification.setSenderId(senderId);
+		notification.setReceiverId(receiverId);
 		notification.setType(NotificationMessageType.MESSAGE);
-		notification.setChatName(chat.getTargetChatName(messageRequest.getSenderId()));
+		notification.setChatName(chat.getTargetChatName(senderId));
 
-		// send notification via web socket to sender
-		notificationMessageService.sendNotification(messageRequest.getSenderId(), notification);
-
-		// send notification via web socket to receiver
-		notificationMessageService.sendNotification(messageRequest.getReceiverId(), notification);
-
+		// send message to two users
+		notificationMessageService.sendNotification(senderId, notification);
+		notificationMessageService.sendNotification(receiverId, notification);
 	}
 
 	@Override
 	public void setMessagesToSeen(String chatId, Authentication authentication) throws ServiceException {
-		// find chat by id
+		// 1. find chat by id
 		ChatEntity chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found"));
 
-		// get id of sender and receiver
+		// 2. get id of sender and receiver
 		Long recipientId = getRecipientId(chat, authentication);
 		Long senderId = getSenderId(chat, authentication);
 
-		// set message to seen or readed
+		// 3. set message to seen or readed
 		messageRepository.setMessagesToSeenByChatId(chatId, MessageState.SEEN);
 
-		// create a notification
+		// 4. create a notification
 		NotificationMessageDTO notification = new NotificationMessageDTO();
 		notification.setChatId(chat.getChatId());
 		notification.setType(NotificationMessageType.SEEN);
@@ -148,17 +159,17 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public void uploadMediaMessage(String chatId, MultipartFile file, Authentication authentication)
 			throws ServiceException {
-		// find chat by id
+		// 1. find chat by id
 		ChatEntity chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found"));
 
-		// get id of sender and reciver
+		// 2. get id of sender and recepient
 		Long recipientId = getRecipientId(chat, authentication);
 		Long senderId = getSenderId(chat, authentication);
 
-		// save file in sever
+		// 3. save file in sever
 		final String filePath = fileService.saveFile(file, senderId);
 
-		// create body message
+		// 4. create body message
 		MessageEntity message = new MessageEntity();
 		message.setReceiverId(recipientId);
 		message.setSenderId(senderId);
@@ -167,10 +178,10 @@ public class MessageServiceImpl implements MessageService {
 		message.setMedia(filePath);
 		message.setChat(chat);
 
-		// save message with file uploaded
+		// 5. save message with file uploaded
 		messageRepository.save(message);
 
-		// create a notification
+		// 6. create a notification
 		NotificationMessageDTO notification = new NotificationMessageDTO();
 		notification.setChatId(chat.getChatId());
 		notification.setType(NotificationMessageType.IMAGE);

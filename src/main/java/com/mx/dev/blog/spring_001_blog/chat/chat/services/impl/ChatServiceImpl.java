@@ -14,7 +14,6 @@ import com.mx.dev.blog.spring_001_blog.chat.chat.utils.dto.ChatResponseDTO;
 import com.mx.dev.blog.spring_001_blog.chat.chat.utils.mapper.ChatMapper;
 import com.mx.dev.blog.spring_001_blog.chat.message.utils.enums.MessageState;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
-import com.mx.dev.blog.spring_001_blog.user.repositories.UserRepository;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
@@ -23,16 +22,12 @@ public class ChatServiceImpl implements ChatService {
 
 	private final ChatRepository chatRepository;
 
-	private final UserRepository userRepository;
-
 	private final UserService userService;
 
 	private final ChatMapper mapper;
 
-	public ChatServiceImpl(ChatRepository chatRepository, UserRepository userRepository, UserService userService,
-			ChatMapper mapper) {
+	public ChatServiceImpl(ChatRepository chatRepository, UserService userService, ChatMapper mapper) {
 		this.chatRepository = chatRepository;
-		this.userRepository = userRepository;
 		this.userService = userService;
 		this.mapper = mapper;
 	}
@@ -47,11 +42,11 @@ public class ChatServiceImpl implements ChatService {
 		Optional<ChatEntity> existingChat = chatRepository.findChatBySortedUsers(minUserId, maxUserId);
 		ChatEntity chat;
 
+		// if exists chat return
 		if (existingChat.isPresent()) {
 			chat = existingChat.get();
-			System.out.println("EXISTING CHAT - ID: " + chat.getChatId());
 		} else {
-			// 3. Create new chat
+			// 3. Create new chat if does not exists
 			UserEntity sender = userService.getOneUserOrThrow(minUserId);
 			UserEntity receiver = userService.getOneUserOrThrow(maxUserId);
 
@@ -59,7 +54,6 @@ public class ChatServiceImpl implements ChatService {
 			chat.setSender(sender);
 			chat.setRecipient(receiver);
 			chat = chatRepository.save(chat);
-			System.out.println("NEW CHAT CREATED - ID: " + chat.getChatId());
 		}
 
 		// 4. Validate ID generation
@@ -94,8 +88,6 @@ public class ChatServiceImpl implements ChatService {
 		// 9. Set participant IDs
 		response.setSenderId(chat.getSender().getUserId());
 		response.setReceiverId(chat.getRecipient().getUserId());
-
-		System.out.println("RETURNING DTO - ID: " + response.getId());
 
 		return response;
 	}
@@ -149,6 +141,7 @@ public class ChatServiceImpl implements ChatService {
 		return response;
 	}
 
+	// get chat by user
 	@Override
 	public List<ChatResponseDTO> getChatsByReceiverId(Authentication currentUser) throws ServiceException {
 

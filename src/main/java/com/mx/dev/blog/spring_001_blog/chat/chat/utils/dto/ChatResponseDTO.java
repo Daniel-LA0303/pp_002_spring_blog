@@ -4,20 +4,44 @@ import java.time.LocalDateTime;
 
 public class ChatResponseDTO {
 
+	/**
+	 * chat id
+	 */
 	private String id;
 
+	/**
+	 * name
+	 */
 	private String name;
 
+	/**
+	 * unread messages count
+	 */
 	private long unreadCount;
 
+	/**
+	 * last message
+	 */
 	private String lastMessage;
 
+	/**
+	 * last message time
+	 */
 	private LocalDateTime lastMessageTime;
 
+	/**
+	 * is online
+	 */
 	private boolean isRecipientOnline;
 
+	/**
+	 * sender
+	 */
 	private Long senderId;
 
+	/**
+	 * receiver
+	 */
 	private Long receiverId;
 
 	/**
