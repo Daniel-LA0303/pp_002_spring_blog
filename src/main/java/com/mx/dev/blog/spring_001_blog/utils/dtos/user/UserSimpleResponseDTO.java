@@ -2,6 +2,8 @@ package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class UserSimpleResponseDTO {
 
 	/**
@@ -27,6 +29,7 @@ public class UserSimpleResponseDTO {
 	/**
 	 * created at
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
 	private LocalDateTime createdAt;
 
 	/**

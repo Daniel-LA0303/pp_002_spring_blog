@@ -76,6 +76,11 @@ public class BlogInfoCardDTO {
 	private String blogImage;
 
 	/**
+	 * blog minutes to read
+	 */
+	private Integer minRead;
+
+	/**
 	 * 
 	 */
 	public BlogInfoCardDTO() {
@@ -133,6 +138,15 @@ public class BlogInfoCardDTO {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * return the value of the property minRead
+	 *
+	 * @return the minRead
+	 */
+	public Integer getMinRead() {
+		return minRead;
 	}
 
 	/**
@@ -250,6 +264,15 @@ public class BlogInfoCardDTO {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * set the value of the property minRead
+	 *
+	 * minRead the minRead to set
+	 */
+	public void setMinRead(Integer minRead) {
+		this.minRead = minRead;
 	}
 
 	/**

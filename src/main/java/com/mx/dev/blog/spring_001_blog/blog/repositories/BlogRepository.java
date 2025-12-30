@@ -51,6 +51,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.status,
 			    b.slug,
 			    b.blog_img_url,
+			    b.min_read,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -119,6 +120,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.status,
 			    b.slug,
 				b.blog_img_url,
+				b.min_read,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -194,6 +196,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.status,
 			    b.slug,
 			    b.blog_img_url,
+			    b.min_read,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -261,6 +264,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.status,
 			    b.slug,
 			    b.blog_img_url,
+			    b.min_read,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -328,6 +332,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.status,
 			    b.slug,
 			    b.blog_img_url,
+			    b.min_read,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -401,6 +406,7 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.status,
 			    b.slug,
 			    b.blog_img_url,
+			    b.min_read,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,
@@ -541,6 +547,8 @@ public interface BlogRepository extends JpaRepository<BlogEntity, Long> {
 			    b.created_at,
 			    b.status,
 			    b.slug,
+			    b.blog_img_url,
+			    b.min_read,
 
 			    u.user_id AS owner_id,
 			    u.username AS owner_username,

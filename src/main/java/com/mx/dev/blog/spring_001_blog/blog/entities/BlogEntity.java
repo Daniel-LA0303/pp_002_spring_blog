@@ -59,7 +59,7 @@ public class BlogEntity {
 	 * minutes to read
 	 */
 	@Column(name = "min_read")
-	private Long minRead;
+	private Integer minRead;
 
 	/**
 	 * image url
@@ -126,7 +126,7 @@ public class BlogEntity {
 	 * @param categories
 	 */
 	public BlogEntity(Long blogId, String title, String description, String content, BlogStatusEnum status,
-			Long minRead, String blogImgUrl, String slug, LocalDateTime createdAt, LocalDateTime updatedAt, Long userId,
+			Integer minRead, String blogImgUrl, String slug, LocalDateTime createdAt, LocalDateTime updatedAt, Long userId,
 			List<CategoryEntity> categories) {
 		this.blogId = blogId;
 		this.title = title;
@@ -300,7 +300,7 @@ public class BlogEntity {
 	 *
 	 * @return the minRead
 	 */
-	public Long getMinRead() {
+	public Integer getMinRead() {
 		return minRead;
 	}
 
@@ -426,7 +426,7 @@ public class BlogEntity {
 	 *
 	 * @param minRead the minRead to set
 	 */
-	public void setMinRead(Long minRead) {
+	public void setMinRead(Integer minRead) {
 		this.minRead = minRead;
 	}
 

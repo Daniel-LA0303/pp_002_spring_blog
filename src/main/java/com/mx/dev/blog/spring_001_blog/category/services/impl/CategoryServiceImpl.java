@@ -1,7 +1,10 @@
 package com.mx.dev.blog.spring_001_blog.category.services.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -9,6 +12,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -99,33 +103,34 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Page<BlogsByCategoryInfoDTO> getCategoriesPaginated(int page, int size) {
-		// Crear el objeto Pageable para la paginación de categorías
 		Pageable pageable = PageRequest.of(page, size);
 
-		// Obtener las categorías paginadas con la información completa de la categoría
 		Page<CategoryFullInfoDTO> categoryFullInfoPage = categoryRepository.findAllCategoryFullInfo(pageable);
 
-		// Mapear las categorías paginadas a BlogsByCategoryInfoDTO
-		Page<BlogsByCategoryInfoDTO> blogsByCategoryInfoPage = categoryFullInfoPage.map(categoryFullInfoDTO -> {
-			BlogsByCategoryInfoDTO blogsByCategoryInfoDTO = new BlogsByCategoryInfoDTO();
+		// Usar LinkedHashMap para mantener orden y eliminar duplicados por categoryId
+		Map<Long, BlogsByCategoryInfoDTO> uniqueCategories = new LinkedHashMap<>();
 
-			// Obtener los seguidores de la categoría
-			List<UserSimpleResponseDTO> userSimpleResponseDTO = categoryRepository
-					.findTopUsersByCategory(categoryFullInfoDTO.getName(), pageable);
+		categoryFullInfoPage.getContent().forEach(categoryFullInfoDTO -> {
+			if (!uniqueCategories.containsKey(categoryFullInfoDTO.getCategoryId())) {
+				BlogsByCategoryInfoDTO dto = new BlogsByCategoryInfoDTO();
 
-			// Obtener los IDs de los seguidores
-			List<Long> usersFollowers = categoryRepository
-					.findUserFollowersIdsByCategory(categoryFullInfoDTO.getName());
+				List<UserSimpleResponseDTO> followers = categoryRepository
+						.findTopUsersByCategory(categoryFullInfoDTO.getName(), pageable);
 
-			// Establecer los valores en el DTO
-			blogsByCategoryInfoDTO.setCategoryFullInfoDTO(categoryFullInfoDTO);
-			blogsByCategoryInfoDTO.setFollewersCategory(userSimpleResponseDTO);
-			blogsByCategoryInfoDTO.setUsersFollowersIds(usersFollowers);
+				List<Long> followersIds = categoryRepository
+						.findUserFollowersIdsByCategory(categoryFullInfoDTO.getName());
 
-			return blogsByCategoryInfoDTO;
+				dto.setCategoryFullInfoDTO(categoryFullInfoDTO);
+				dto.setFollewersCategory(followers);
+				dto.setUsersFollowersIds(followersIds);
+
+				uniqueCategories.put(categoryFullInfoDTO.getCategoryId(), dto);
+			}
 		});
 
-		return blogsByCategoryInfoPage;
+		List<BlogsByCategoryInfoDTO> content = new ArrayList<>(uniqueCategories.values());
+
+		return new PageImpl<>(content, pageable, categoryFullInfoPage.getTotalElements());
 	}
 
 	/**

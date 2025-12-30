@@ -27,6 +27,11 @@ public class BlogCreateRequestDTO {
 	private Long userId;
 
 	/**
+	 * minutes to read
+	 */
+	private Integer minRead;
+
+	/**
 	 * image
 	 */
 	private MultipartFile blogImage;
@@ -76,6 +81,15 @@ public class BlogCreateRequestDTO {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * return the value of the property minRead
+	 *
+	 * @return the minRead
+	 */
+	public Integer getMinRead() {
+		return minRead;
 	}
 
 	/**
@@ -130,6 +144,15 @@ public class BlogCreateRequestDTO {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * set the value of the property minRead
+	 *
+	 * minRead the minRead to set
+	 */
+	public void setMinRead(Integer minRead) {
+		this.minRead = minRead;
 	}
 
 	/**
