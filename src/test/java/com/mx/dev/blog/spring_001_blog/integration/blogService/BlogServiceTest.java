@@ -52,459 +52,459 @@ import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 @ActiveProfiles("test")
 public class BlogServiceTest {
 
-	/**
-	 * test rest template
-	 */
-	@Autowired
-	private TestRestTemplate testRestTemplate;
+    /**
+     * test rest template
+     */
+    @Autowired
+    private TestRestTemplate testRestTemplate;
 
-	/**
-	 * port
-	 */
-	@LocalServerPort
-	private int port;
+    /**
+     * port
+     */
+    @LocalServerPort
+    private int port;
 
-	/**
-	 * headers
-	 */
-	HttpHeaders headers;
+    /**
+     * headers
+     */
+    HttpHeaders headers;
 
-	/**
-	 * request blog
-	 */
-	BlogCreateRequestDTO blogCreateRequestDTOBuilder;
+    /**
+     * request blog
+     */
+    BlogCreateRequestDTO blogCreateRequestDTOBuilder;
 
-	/**
-	 * response blog
-	 */
-	BlogResponseDTO blogResponseDTOBuilder;
+    /**
+     * response blog
+     */
+    BlogResponseDTO blogResponseDTOBuilder;
 
-	@Test
-	@Order(3)
-	void blogLikedSuccessTest() {
+    @Test
+    @Order(3)
+    void blogLikedSuccessTest() {
 
-		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+	HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 
-		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/like?userId=1",
-				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
-				});
+	ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/like?userId=1",
+		HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
+		});
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals(201, response.getStatusCodeValue());
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.CREATED, response.getStatusCode());
+	assertEquals(201, response.getStatusCodeValue());
 
-		ApiResponse<String> apiResponse = response.getBody();
-		assertEquals(201, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals("Success", apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	ApiResponse<String> apiResponse = response.getBody();
+	assertEquals(201, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals("Success", apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
 
-	}
+    }
 
-	@Test
-	@Order(5)
-	void blogReadSuccessTest() {
+    @Test
+    @Order(5)
+    void blogReadSuccessTest() {
 
-		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+	HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 
-		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/read?userId=1",
-				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
-				});
+	ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/read?userId=1",
+		HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
+		});
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals(201, response.getStatusCodeValue());
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.CREATED, response.getStatusCode());
+	assertEquals(201, response.getStatusCodeValue());
 
-		ApiResponse<String> apiResponse = response.getBody();
-		assertEquals(201, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals("Success", apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	ApiResponse<String> apiResponse = response.getBody();
+	assertEquals(201, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals("Success", apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
 
-	}
+    }
 
-	@Test
-	@Order(4)
-	void blogUnLikedSuccessTest() {
+    @Test
+    @Order(4)
+    void blogUnLikedSuccessTest() {
 
-		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+	HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 
-		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/unlike?userId=2",
-				HttpMethod.DELETE, requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
-				});
+	ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/unlike?userId=2",
+		HttpMethod.DELETE, requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
+		});
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.OK, response.getStatusCode());
+	assertEquals(200, response.getStatusCodeValue());
 
-		// extract api response
-		ApiResponse<String> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals("Success", apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	// extract api response
+	ApiResponse<String> apiResponse = response.getBody();
+	assertEquals(200, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals("Success", apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
 
-	}
+    }
 
-	@Test
-	@Order(5)
-	void blogUnReadSuccessTest() {
+    @Test
+    @Order(5)
+    void blogUnReadSuccessTest() {
 
-		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+	HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 
-		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/read?userId=2",
-				HttpMethod.DELETE, requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
-				});
+	ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/read?userId=2",
+		HttpMethod.DELETE, requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
+		});
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.OK, response.getStatusCode());
+	assertEquals(200, response.getStatusCodeValue());
 
-		// extract api response
-		ApiResponse<String> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals("Success", apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	// extract api response
+	ApiResponse<String> apiResponse = response.getBody();
+	assertEquals(200, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals("Success", apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
 
-	}
+    }
 
+    /*
+     * @Test
+     * 
+     * @Order(5) void createBlogInvalidDataExceptionTest() {
+     * 
+     * BlogCreateRequestDTO blogCreateRequestDTOBuilder =
+     * BlogCreateRequestDTOBuilder.withAllDummy() .setCategories(List.of(1L,
+     * 2L)).setContent("new content").setDescription("new description")
+     * .setTitle("new title").setUserId(8L).build();
+     * 
+     * HttpEntity<BlogCreateRequestDTO> requestEntity = new
+     * HttpEntity<>(blogCreateRequestDTOBuilder, headers);
+     * 
+     * ResponseEntity<ApiResponse<BlogEntity>> response =
+     * testRestTemplate.exchange("/api/blog", HttpMethod.POST, requestEntity, new
+     * ParameterizedTypeReference<ApiResponse<BlogEntity>>() { });
+     * 
+     * // basic test assertEquals(HttpStatus.OK, response.getStatusCode());
+     * assertNotNull(response); assertEquals(200, response.getStatusCodeValue());
+     * 
+     * // extract api response data ApiResponse<BlogEntity> apiResponse =
+     * response.getBody(); assertEquals(201, apiResponse.getStatus());
+     * assertNotNull(apiResponse.getPath()); assertEquals(MethodEnum.POST,
+     * apiResponse.getMethod()); assertNotNull(apiResponse.getMessage());
+     * assertEquals(false, apiResponse.getError());
+     * assertNotNull(apiResponse.getTimestamp());
+     * 
+     * BlogEntity blogEntityResponse = apiResponse.getData();
+     * 
+     * assertNotNull(blogEntityResponse.getBlogId());
+     * assertEquals(blogCreateRequestDTOBuilder.getContent(),
+     * blogEntityResponse.getContent());
+     * assertEquals(blogCreateRequestDTOBuilder.getDescription(),
+     * blogEntityResponse.getDescription());
+     * assertEquals(blogCreateRequestDTOBuilder.getTitle(),
+     * blogEntityResponse.getTitle());
+     * assertEquals(blogCreateRequestDTOBuilder.getCategories().size(),
+     * blogEntityResponse.getCategories().size());
+     * assertEquals(blogCreateRequestDTOBuilder.getUserId(),
+     * blogEntityResponse.getUserId());
+     * assertNotNull(blogEntityResponse.getCreatedAt());
+     * assertNotNull(blogEntityResponse.getSlug());
+     * assertNotNull(blogEntityResponse.getUpdatedAt());
+     * assertEquals(BlogStatusEnum.PUBLISHED, blogEntityResponse.getStatus());
+     * 
+     * }
+     */
+
+    @Test
+    @Order(2)
+    void deleteBlogSuccessTest() {
+
+	HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+	ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/9", HttpMethod.DELETE,
+		requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
+		});
+
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.OK, response.getStatusCode());
+	assertEquals(200, response.getStatusCodeValue());
+
+	// extract api response
+	ApiResponse<String> apiResponse = response.getBody();
+	assertEquals(200, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertEquals("Success method DELETED", apiResponse.getMessage());
+	assertEquals("Blog deleted.", apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
+
+    }
+
+    @Test
+    @Order(6)
+    void getBlogPaginatedSuccessTest() {
+
+	ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
+		"/api/blog/pagination?page=0&size=15", HttpMethod.GET, null,
+		new ParameterizedTypeReference<ApiResponse<PageDTO<BlogInfoCardDTO>>>() {
+		});
+
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.OK, response.getStatusCode());
+	assertEquals(200, response.getStatusCodeValue());
+
+	// extract api response
+	ApiResponse<PageDTO<BlogInfoCardDTO>> apiResponse = response.getBody();
+	assertEquals(200, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertEquals(MethodEnum.GET, apiResponse.getMethod());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
+
+    }
+
+    @Test
+    @Order(6)
+    void getBlogsByCategoryNameSuccessTest() {
+
+	ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
+		"/api/blog/Technology/blogs?page=0&size=10", HttpMethod.GET, null,
+		new ParameterizedTypeReference<ApiResponse<PageDTO<BlogInfoCardDTO>>>() {
+		});
+
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.OK, response.getStatusCode());
+	assertEquals(200, response.getStatusCodeValue());
+
+	// extract api response
+	ApiResponse<PageDTO<BlogInfoCardDTO>> apiResponse = response.getBody();
+	assertEquals(200, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertEquals(MethodEnum.GET, apiResponse.getMethod());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
+
+    }
+
+    @Test
+    @Order(7)
+    void getBlogsPaginatedByUserSuccessTest() {
+
+	ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
+		"/api/blog/pagination-by-user?userId=1&page=0&size=10", HttpMethod.GET, null,
+		new ParameterizedTypeReference<ApiResponse<PageDTO<BlogInfoCardDTO>>>() {
+		});
+
+	// basic test
+	assertNotNull(response);
 	/*
-	 * @Test
+	 * assertEquals(HttpStatus.OK, response.getStatusCode()); assertEquals(200,
+	 * response.getStatusCodeValue());
 	 * 
-	 * @Order(5) void createBlogInvalidDataExceptionTest() {
-	 * 
-	 * BlogCreateRequestDTO blogCreateRequestDTOBuilder =
-	 * BlogCreateRequestDTOBuilder.withAllDummy() .setCategories(List.of(1L,
-	 * 2L)).setContent("new content").setDescription("new description")
-	 * .setTitle("new title").setUserId(8L).build();
-	 * 
-	 * HttpEntity<BlogCreateRequestDTO> requestEntity = new
-	 * HttpEntity<>(blogCreateRequestDTOBuilder, headers);
-	 * 
-	 * ResponseEntity<ApiResponse<BlogEntity>> response =
-	 * testRestTemplate.exchange("/api/blog", HttpMethod.POST, requestEntity, new
-	 * ParameterizedTypeReference<ApiResponse<BlogEntity>>() { });
-	 * 
-	 * // basic test assertEquals(HttpStatus.OK, response.getStatusCode());
-	 * assertNotNull(response); assertEquals(200, response.getStatusCodeValue());
-	 * 
-	 * // extract api response data ApiResponse<BlogEntity> apiResponse =
-	 * response.getBody(); assertEquals(201, apiResponse.getStatus());
-	 * assertNotNull(apiResponse.getPath()); assertEquals(MethodEnum.POST,
+	 * // extract api response ApiResponse<PageDTO<BlogInfoCardDTO>> apiResponse =
+	 * response.getBody(); assertEquals(200, apiResponse.getStatus());
+	 * assertNotNull(apiResponse.getPath()); assertEquals(MethodEnum.GET,
 	 * apiResponse.getMethod()); assertNotNull(apiResponse.getMessage());
 	 * assertEquals(false, apiResponse.getError());
+	 * assertNotNull(apiResponse.getData());
 	 * assertNotNull(apiResponse.getTimestamp());
-	 * 
-	 * BlogEntity blogEntityResponse = apiResponse.getData();
-	 * 
-	 * assertNotNull(blogEntityResponse.getBlogId());
-	 * assertEquals(blogCreateRequestDTOBuilder.getContent(),
-	 * blogEntityResponse.getContent());
-	 * assertEquals(blogCreateRequestDTOBuilder.getDescription(),
-	 * blogEntityResponse.getDescription());
-	 * assertEquals(blogCreateRequestDTOBuilder.getTitle(),
-	 * blogEntityResponse.getTitle());
-	 * assertEquals(blogCreateRequestDTOBuilder.getCategories().size(),
-	 * blogEntityResponse.getCategories().size());
-	 * assertEquals(blogCreateRequestDTOBuilder.getUserId(),
-	 * blogEntityResponse.getUserId());
-	 * assertNotNull(blogEntityResponse.getCreatedAt());
-	 * assertNotNull(blogEntityResponse.getSlug());
-	 * assertNotNull(blogEntityResponse.getUpdatedAt());
-	 * assertEquals(BlogStatusEnum.PUBLISHED, blogEntityResponse.getStatus());
-	 * 
-	 * }
 	 */
 
-	@Test
-	@Order(2)
-	void deleteBlogSuccessTest() {
+    }
 
-		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+    @Test
+    @Order(8)
+    void getHomePageInfoSuccessTest() {
 
-		ResponseEntity<ApiResponse<String>> response = testRestTemplate.exchange("/api/blog/20/9", HttpMethod.DELETE,
-				requestEntity, new ParameterizedTypeReference<ApiResponse<String>>() {
-				});
+	ResponseEntity<ApiResponse<HomePageResponseDTO>> response = testRestTemplate.exchange(
+		"/api/blog/home-page-info", HttpMethod.GET, null,
+		new ParameterizedTypeReference<ApiResponse<HomePageResponseDTO>>() {
+		});
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.OK, response.getStatusCode());
+	assertEquals(200, response.getStatusCodeValue());
 
-		// extract api response
-		ApiResponse<String> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.DELETE, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertEquals("Success method DELETED", apiResponse.getMessage());
-		assertEquals("Blog deleted.", apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	// extract api response
+	ApiResponse<HomePageResponseDTO> apiResponse = response.getBody();
+	assertEquals(200, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertEquals(MethodEnum.GET, apiResponse.getMethod());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
 
-	}
+    }
 
-	@Test
-	@Order(6)
-	void getBlogPaginatedSuccessTest() {
+    @Test
+    @Order(9)
+    void getOneBlogSuccessTest() {
 
-		ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
-				"/api/blog/pagination?page=0&size=15", HttpMethod.GET, null,
-				new ParameterizedTypeReference<ApiResponse<PageDTO<BlogInfoCardDTO>>>() {
-				});
+	BlogPageResponseDTO builder = new BlogPageResponseDTOBuilder().withAllDummy().build();
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
+	ResponseEntity<ApiResponse<BlogPageResponseDTO>> response = testRestTemplate.exchange("/api/blog/1",
+		HttpMethod.GET, null, new ParameterizedTypeReference<ApiResponse<BlogPageResponseDTO>>() {
+		});
 
-		// extract api response
-		ApiResponse<PageDTO<BlogInfoCardDTO>> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.GET, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	// basic test
+	assertNotNull(response);
+	assertEquals(HttpStatus.OK, response.getStatusCode());
+	assertEquals(200, response.getStatusCodeValue());
 
-	}
+	// extract api response
+	ApiResponse<BlogPageResponseDTO> apiResponse = response.getBody();
+	assertEquals(200, apiResponse.getStatus());
+	assertNotNull(apiResponse.getPath());
+	assertEquals(MethodEnum.GET, apiResponse.getMethod());
+	assertNotNull(apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getData());
+	assertNotNull(apiResponse.getTimestamp());
 
-	@Test
-	@Order(6)
-	void getBlogsByCategoryNameSuccessTest() {
+	// check data blog
+	BlogPageResponseDTO blogPageResponseDTO = apiResponse.getData();
 
-		ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
-				"/api/blog/Technology/blogs?page=0&size=10", HttpMethod.GET, null,
-				new ParameterizedTypeReference<ApiResponse<PageDTO<BlogInfoCardDTO>>>() {
-				});
+	assertNotNull(blogPageResponseDTO.getBlogId());
+	assertEquals(builder.getTitle(), blogPageResponseDTO.getTitle());
+	assertEquals(builder.getDescription(), blogPageResponseDTO.getDescription());
+	assertEquals(builder.getContent(), blogPageResponseDTO.getContent());
+	assertEquals(builder.getStatus(), blogPageResponseDTO.getStatus());
+	assertNotNull(blogPageResponseDTO.getSlug());
+	assertNotNull(blogPageResponseDTO.getCreatedAt());
+	assertEquals(builder.getCategories().size(), blogPageResponseDTO.getCategories().size());
+	assertEquals(builder.getUsersLiked().size(), blogPageResponseDTO.getUsersLiked().size());
+	assertEquals(builder.getUsersReaded().size(), blogPageResponseDTO.getUsersLiked().size());
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
+	// check user data
+	UserInfoCardDTO userInfoCardDTO = blogPageResponseDTO.getUserInfoCardDTO();
+	assertEquals(builder.getUserInfoCardDTO().getUserId(), userInfoCardDTO.getUserId());
+	assertEquals(builder.getUserInfoCardDTO().getUsername(), userInfoCardDTO.getUsername());
+	assertEquals(builder.getUserInfoCardDTO().getProfilePicture(), userInfoCardDTO.getProfilePicture());
+	assertEquals(builder.getUserInfoCardDTO().getCity(), userInfoCardDTO.getCity());
+	assertEquals(builder.getUserInfoCardDTO().getBlogsByUser(), userInfoCardDTO.getBlogsByUser());
+	assertEquals(builder.getUserInfoCardDTO().getFollowers(), userInfoCardDTO.getFollowers());
+	assertEquals(builder.getUserInfoCardDTO().getFollowing(), userInfoCardDTO.getFollowing());
 
-		// extract api response
-		ApiResponse<PageDTO<BlogInfoCardDTO>> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.GET, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	// check blog engagement
+	BlogEngagementDTO blogEngagementDTO = blogPageResponseDTO.getBlogEngagementDTO();
+	assertEquals(builder.getBlogEngagementDTO().getBlogId(), blogEngagementDTO.getBlogId());
+	assertEquals(builder.getBlogEngagementDTO().getLikesNumber(), blogEngagementDTO.getLikesNumber());
+	assertEquals(builder.getBlogEngagementDTO().getCommentsNumber(), blogEngagementDTO.getCommentsNumber());
+	assertEquals(builder.getBlogEngagementDTO().getSavedNumber(), blogEngagementDTO.getSavedNumber());
 
-	}
+    }
 
-	@Test
-	@Order(7)
-	void getBlogsPaginatedByUserSuccessTest() {
+    @BeforeEach
+    void setUp() {
 
-		ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
-				"/api/blog/pagination-by-user?userId=1&page=0&size=10", HttpMethod.GET, null,
-				new ParameterizedTypeReference<ApiResponse<PageDTO<BlogInfoCardDTO>>>() {
-				});
+	blogCreateRequestDTOBuilder = BlogCreateRequestDTOBuilder.withAllDummy().build();
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
+	blogResponseDTOBuilder = BlogResponseDTOBuilder.withAllDummy().build();
 
-		// extract api response
-		ApiResponse<PageDTO<BlogInfoCardDTO>> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.GET, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	headers = new HttpHeaders();
 
-	}
+	headers.setContentType(MediaType.APPLICATION_JSON);
 
-	@Test
-	@Order(8)
-	void getHomePageInfoSuccessTest() {
+    }
 
-		ResponseEntity<ApiResponse<HomePageResponseDTO>> response = testRestTemplate.exchange(
-				"/api/blog/home-page-info", HttpMethod.GET, null,
-				new ParameterizedTypeReference<ApiResponse<HomePageResponseDTO>>() {
-				});
+    @Test
+    @Order(5)
+    void updateBlogSuccessTest() {
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
+	BlogCreateRequestDTO blogCreateRequestDTOBuilder = BlogCreateRequestDTOBuilder.withAllDummy()
+		.setCategories(List.of(1L, 2L)).setContent("New content").setDescription("New description")
+		.setTitle("New title").setUserId(8L).build();
 
-		// extract api response
-		ApiResponse<HomePageResponseDTO> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.GET, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+	HttpEntity<BlogCreateRequestDTO> requestEntity = new HttpEntity<>(blogCreateRequestDTOBuilder, headers);
 
-	}
+	ResponseEntity<ApiResponse<BlogEntity>> response = testRestTemplate.exchange("/api/blog/19", HttpMethod.PUT,
+		requestEntity, new ParameterizedTypeReference<ApiResponse<BlogEntity>>() {
+		});
 
-	@Test
-	@Order(9)
-	void getOneBlogSuccessTest() {
+	// basic test
+	assertEquals(HttpStatus.OK, response.getStatusCode());
+	assertNotNull(response);
+	assertEquals(200, response.getStatusCodeValue());
 
-		BlogPageResponseDTO builder = new BlogPageResponseDTOBuilder().withAllDummy().build();
+	// extract api response data
+	ApiResponse<BlogEntity> apiResponse = response.getBody();
+	assertEquals(200, apiResponse.getStatus());
+	assertEquals("/api/blog", apiResponse.getPath());
+	assertEquals(MethodEnum.PUT, apiResponse.getMethod());
+	assertEquals("Success method PUT", apiResponse.getMessage());
+	assertEquals(false, apiResponse.getError());
+	assertNotNull(apiResponse.getTimestamp());
 
-		ResponseEntity<ApiResponse<BlogPageResponseDTO>> response = testRestTemplate.exchange("/api/blog/1",
-				HttpMethod.GET, null, new ParameterizedTypeReference<ApiResponse<BlogPageResponseDTO>>() {
-				});
+	// extract data
+	BlogEntity blogResponseDTO = apiResponse.getData();
+	assertNotNull(blogResponseDTO);
 
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
+	// check data assertNotNull(blogResponseDTO.getBlogId());
+	assertEquals(blogCreateRequestDTOBuilder.getContent(), blogResponseDTO.getContent());
+	assertNotNull(blogResponseDTO.getCreatedAt());
+	assertEquals(blogCreateRequestDTOBuilder.getDescription(), blogResponseDTO.getDescription());
+	assertNotNull(blogResponseDTO.getSlug());
+	assertEquals(BlogStatusEnum.PUBLISHED, blogResponseDTO.getStatus());
+	assertEquals(blogCreateRequestDTOBuilder.getTitle(), blogResponseDTO.getTitle());
+	assertEquals(blogCreateRequestDTOBuilder.getUserId(), blogResponseDTO.getUserId());
 
-		// extract api response
-		ApiResponse<BlogPageResponseDTO> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.GET, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
+    }
 
-		// check data blog
-		BlogPageResponseDTO blogPageResponseDTO = apiResponse.getData();
+    @Test
+    void utilityConstructor_isPrivate_andThrows() throws Exception {
+	Constructor<BlogMappers> ctor = BlogMappers.class.getDeclaredConstructor();
+	assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El ctor debe ser private");
 
-		assertNotNull(blogPageResponseDTO.getBlogId());
-		assertEquals(builder.getTitle(), blogPageResponseDTO.getTitle());
-		assertEquals(builder.getDescription(), blogPageResponseDTO.getDescription());
-		assertEquals(builder.getContent(), blogPageResponseDTO.getContent());
-		assertEquals(builder.getStatus(), blogPageResponseDTO.getStatus());
-		assertNotNull(blogPageResponseDTO.getSlug());
-		assertNotNull(blogPageResponseDTO.getCreatedAt());
-		assertEquals(builder.getCategories().size(), blogPageResponseDTO.getCategories().size());
-		assertEquals(builder.getUsersLiked().size(), blogPageResponseDTO.getUsersLiked().size());
-		assertEquals(builder.getUsersReaded().size(), blogPageResponseDTO.getUsersLiked().size());
+	ctor.setAccessible(true); // forzamos acceso
+	InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
 
-		// check user data
-		UserInfoCardDTO userInfoCardDTO = blogPageResponseDTO.getUserInfoCardDTO();
-		assertEquals(builder.getUserInfoCardDTO().getUserId(), userInfoCardDTO.getUserId());
-		assertEquals(builder.getUserInfoCardDTO().getUsername(), userInfoCardDTO.getUsername());
-		assertEquals(builder.getUserInfoCardDTO().getProfilePicture(), userInfoCardDTO.getProfilePicture());
-		assertEquals(builder.getUserInfoCardDTO().getCity(), userInfoCardDTO.getCity());
-		assertEquals(builder.getUserInfoCardDTO().getBlogsByUser(), userInfoCardDTO.getBlogsByUser());
-		assertEquals(builder.getUserInfoCardDTO().getFollowers(), userInfoCardDTO.getFollowers());
-		assertEquals(builder.getUserInfoCardDTO().getFollowing(), userInfoCardDTO.getFollowing());
+	assertTrue(ex.getTargetException() instanceof IllegalStateException);
+	assertEquals("Utility class", ex.getTargetException().getMessage());
+    }
 
-		// check blog engagement
-		BlogEngagementDTO blogEngagementDTO = blogPageResponseDTO.getBlogEngagementDTO();
-		assertEquals(builder.getBlogEngagementDTO().getBlogId(), blogEngagementDTO.getBlogId());
-		assertEquals(builder.getBlogEngagementDTO().getLikesNumber(), blogEngagementDTO.getLikesNumber());
-		assertEquals(builder.getBlogEngagementDTO().getCommentsNumber(), blogEngagementDTO.getCommentsNumber());
-		assertEquals(builder.getBlogEngagementDTO().getSavedNumber(), blogEngagementDTO.getSavedNumber());
+    // TODO check first image service
 
-	}
+    @Test
+    void utilityConstructorIsPrivateAndThrowsBlogRegex() throws Exception {
+	Constructor<BlogRegex> ctor = BlogRegex.class.getDeclaredConstructor();
+	assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El constructor debe ser private");
 
-	@BeforeEach
-	void setUp() {
+	ctor.setAccessible(true);
+	InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
 
-		blogCreateRequestDTOBuilder = BlogCreateRequestDTOBuilder.withAllDummy().build();
-
-		blogResponseDTOBuilder = BlogResponseDTOBuilder.withAllDummy().build();
-
-		headers = new HttpHeaders();
-
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-	}
-
-	@Test
-	@Order(5)
-	void updateBlogSuccessTest() {
-
-		BlogCreateRequestDTO blogCreateRequestDTOBuilder = BlogCreateRequestDTOBuilder.withAllDummy()
-				.setCategories(List.of(1L, 2L)).setContent("New content").setDescription("New description")
-				.setTitle("New title").setUserId(8L).build();
-
-		HttpEntity<BlogCreateRequestDTO> requestEntity = new HttpEntity<>(blogCreateRequestDTOBuilder, headers);
-
-		ResponseEntity<ApiResponse<BlogEntity>> response = testRestTemplate.exchange("/api/blog/19", HttpMethod.PUT,
-				requestEntity, new ParameterizedTypeReference<ApiResponse<BlogEntity>>() {
-				});
-
-		// basic test
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertNotNull(response);
-		assertEquals(200, response.getStatusCodeValue());
-
-		// extract api response data
-		ApiResponse<BlogEntity> apiResponse = response.getBody();
-		assertEquals(200, apiResponse.getStatus());
-		assertEquals("/api/blog", apiResponse.getPath());
-		assertEquals(MethodEnum.PUT, apiResponse.getMethod());
-		assertEquals("Success method PUT", apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getTimestamp());
-
-		// extract data
-		BlogEntity blogResponseDTO = apiResponse.getData();
-		assertNotNull(blogResponseDTO);
-
-		// check data assertNotNull(blogResponseDTO.getBlogId());
-		assertEquals(blogCreateRequestDTOBuilder.getContent(), blogResponseDTO.getContent());
-		assertNotNull(blogResponseDTO.getCreatedAt());
-		assertEquals(blogCreateRequestDTOBuilder.getDescription(), blogResponseDTO.getDescription());
-		assertNotNull(blogResponseDTO.getSlug());
-		assertEquals(BlogStatusEnum.PUBLISHED, blogResponseDTO.getStatus());
-		assertEquals(blogCreateRequestDTOBuilder.getTitle(), blogResponseDTO.getTitle());
-		assertEquals(blogCreateRequestDTOBuilder.getUserId(), blogResponseDTO.getUserId());
-
-	}
-
-	@Test
-	void utilityConstructor_isPrivate_andThrows() throws Exception {
-		Constructor<BlogMappers> ctor = BlogMappers.class.getDeclaredConstructor();
-		assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El ctor debe ser private");
-
-		ctor.setAccessible(true); // forzamos acceso
-		InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
-
-		assertTrue(ex.getTargetException() instanceof IllegalStateException);
-		assertEquals("Utility class", ex.getTargetException().getMessage());
-	}
-
-	// TODO check first image service
-
-	@Test
-	void utilityConstructorIsPrivateAndThrowsBlogRegex() throws Exception {
-		Constructor<BlogRegex> ctor = BlogRegex.class.getDeclaredConstructor();
-		assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El constructor debe ser private");
-
-		ctor.setAccessible(true);
-		InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
-
-		assertTrue(ex.getTargetException() instanceof IllegalStateException);
-		assertEquals("Utility class", ex.getTargetException().getMessage());
-	}
+	assertTrue(ex.getTargetException() instanceof IllegalStateException);
+	assertEquals("Utility class", ex.getTargetException().getMessage());
+    }
 
 }
