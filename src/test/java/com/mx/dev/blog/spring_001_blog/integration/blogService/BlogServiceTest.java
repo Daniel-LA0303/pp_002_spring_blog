@@ -350,6 +350,12 @@ public class BlogServiceTest {
 	assertNotNull(apiResponse.getData());
 	assertNotNull(apiResponse.getTimestamp());
 
+	System.out.println("========== BUILDER ==========");
+	System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(builder));
+
+	System.out.println("========== RESPONSE ==========");
+	System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response.getBody()));
+
 	// check data blog
 	BlogPageResponseDTO blogPageResponseDTO = apiResponse.getData();
 
