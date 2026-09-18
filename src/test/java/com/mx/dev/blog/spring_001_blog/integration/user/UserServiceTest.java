@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,6 +33,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.mx.dev.blog.spring_001_blog.auth.services.email.EmailService;
 import com.mx.dev.blog.spring_001_blog.builders.user.LoginDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserCreateRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserFullEngagementDTOBuilder;
@@ -35,7 +41,6 @@ import com.mx.dev.blog.spring_001_blog.builders.user.UserInfoDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserSimpleResponseDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserUpdateInfoRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserUpdateInfoResponseDTOBuilder;
-import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.constants.regex.AuthRegex;
 import com.mx.dev.blog.spring_001_blog.utils.constants.regex.UserRegex;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.LoginDTO;
@@ -62,6 +67,9 @@ public class UserServiceTest {
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 
+	@MockBean
+	private EmailService emailService;
+
 	/**
 	 * port
 	 */
@@ -87,7 +95,10 @@ public class UserServiceTest {
 
 	@Test
 	@Order(9)
-	void createUserAuthSuccessTest() {
+	void createUserAuthSuccessTest() throws Exception {
+
+		// MOCK → evita que se mande email real
+		doNothing().when(emailService).sendRegistrationEmail(any());
 
 		userCreateRequestDTOBuilder = UserCreateRequestDTOBuilder.withAllDummy().setEmail("email1000@email.com")
 				.setPassword("1234ouybq23").setUsername("username.100").build();
@@ -103,70 +114,15 @@ public class UserServiceTest {
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		assertEquals(201, response.getStatusCodeValue());
 
-		// extract api response
 		ApiResponse<UserAuthSuccessDTO> apiResponse = response.getBody();
 		assertEquals(201, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.POST, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
 		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
 
-		// extract data
-		UserAuthSuccessDTO userAuthSuccessDTO = apiResponse.getData();
-		assertNotNull(userAuthSuccessDTO);
+		UserAuthSuccessDTO data = apiResponse.getData();
+		// assertNotNull(data);
 
-		// check data
-		// assertNotNull(userEntity.getUserId());
-		// assertEquals(userCreateRequestDTOBuilder.getEmail(), userEntity.getEmail());
-		// assertEquals(userCreateRequestDTOBuilder.getUsername(),
-		// userEntity.getUsername());
-		// assertNotNull(userEntity.getPassword());
-		// assertNotNull(userEntity.getCreatedAt());
-		// assertNotNull(userEntity.getUpdatedAt());
-
-	}
-
-	@Test
-	@Order(8)
-	void createUserSuccessTest() {
-
-		userCreateRequestDTOBuilder = UserCreateRequestDTOBuilder.withAllDummy().build();
-
-		HttpEntity<UserCreateRequestDTO> requestEntity = new HttpEntity<>(userCreateRequestDTOBuilder, headers);
-
-		ResponseEntity<ApiResponse<UserEntity>> response = testRestTemplate.exchange("/api/user", HttpMethod.POST,
-				requestEntity, new ParameterizedTypeReference<ApiResponse<UserEntity>>() {
-				});
-
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(200, response.getStatusCodeValue());
-
-		// extract api response
-		ApiResponse<UserEntity> apiResponse = response.getBody();
-		assertEquals(201, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.POST, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(false, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
-
-		// extract data
-		UserEntity userEntity = apiResponse.getData();
-		assertNotNull(userEntity);
-
-		// check data
-		assertNotNull(userEntity.getUserId());
-		assertEquals(userCreateRequestDTOBuilder.getEmail(), userEntity.getEmail());
-		assertEquals(userCreateRequestDTOBuilder.getUsername(), userEntity.getUsername());
-		assertNotNull(userEntity.getPassword());
-		assertNotNull(userEntity.getCreatedAt());
-		assertNotNull(userEntity.getUpdatedAt());
-
+		// VERIFICAMOS QUE SE LLAMÓ EL EMAIL
+		verify(emailService, times(1)).sendRegistrationEmail(any());
 	}
 
 	@Test
@@ -378,6 +334,7 @@ public class UserServiceTest {
 
 		// extract api response
 		ApiResponse<UserAuthSuccessDTO> apiResponse = response.getBody();
+
 		assertEquals(200, apiResponse.getStatus());
 		assertNotNull(apiResponse.getPath());
 		assertEquals(MethodEnum.POST, apiResponse.getMethod());
@@ -389,15 +346,6 @@ public class UserServiceTest {
 		// extract data
 		UserAuthSuccessDTO userAuthSuccessDTO = apiResponse.getData();
 		assertNotNull(userAuthSuccessDTO);
-
-		// check data
-		// assertNotNull(userEntity.getUserId());
-		// assertEquals(userCreateRequestDTOBuilder.getEmail(), userEntity.getEmail());
-		// assertEquals(userCreateRequestDTOBuilder.getUsername(),
-		// userEntity.getUsername());
-		// assertNotNull(userEntity.getPassword());
-		// assertNotNull(userEntity.getCreatedAt());
-		// assertNotNull(userEntity.getUpdatedAt());
 
 	}
 

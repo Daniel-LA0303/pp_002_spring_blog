@@ -1,7 +1,5 @@
 package com.mx.dev.blog.spring_001_blog.utils.dtos.user;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class UserUpdateInfoRequestDTO {
 
 	/**
@@ -55,13 +53,9 @@ public class UserUpdateInfoRequestDTO {
 	private String bio;
 
 	/**
-	 * user image
+	 * image
 	 */
-	private MultipartFile userImage;
-
-	/**
-	 * profile picture
-	 */
+	private String profilePicture;
 
 	/**
 	 * 
@@ -124,6 +118,15 @@ public class UserUpdateInfoRequestDTO {
 	}
 
 	/**
+	 * return value of the property profilePicture
+	 *
+	 * @return the profilePicture
+	 */
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	/**
 	 * return the value of the property pronouns
 	 *
 	 * @return the pronouns
@@ -139,15 +142,6 @@ public class UserUpdateInfoRequestDTO {
 	 */
 	public String getSkills() {
 		return skills;
-	}
-
-	/**
-	 * return the value of the property userImage
-	 *
-	 * @return the userImage
-	 */
-	public MultipartFile getUserImage() {
-		return userImage;
 	}
 
 	/**
@@ -223,6 +217,15 @@ public class UserUpdateInfoRequestDTO {
 	}
 
 	/**
+	 * set value of the property profilePicture
+	 *
+	 * @param profilePicture the profilePicture to set
+	 */
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
+	/**
 	 * set the value of the property pronouns
 	 *
 	 * @param pronouns the pronouns to set
@@ -238,15 +241,6 @@ public class UserUpdateInfoRequestDTO {
 	 */
 	public void setSkills(String skills) {
 		this.skills = skills;
-	}
-
-	/**
-	 * set the value of the property userImage
-	 *
-	 * @param userImage the userImage to set
-	 */
-	public void setUserImage(MultipartFile userImage) {
-		this.userImage = userImage;
 	}
 
 	/**

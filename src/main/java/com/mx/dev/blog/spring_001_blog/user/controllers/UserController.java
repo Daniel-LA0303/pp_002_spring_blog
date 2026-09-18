@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,15 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.services.UserService;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserResponse;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSearchChatDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSimpleResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoRequestDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserUpdateInfoResponseDTO;
@@ -33,7 +32,7 @@ import com.mx.dev.blog.spring_001_blog.utils.validators.UserValidator;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "http://localhost:5173", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT })
+//@CrossOrigin(origins = "http://localhost:5173", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT })
 public class UserController {
 
 	@Autowired
@@ -58,6 +57,11 @@ public class UserController {
 				false);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/v1/users")
+	public ResponseEntity<List<UserResponse>> getAllUsers(Authentication authentication) {
+		return ResponseEntity.ok(userService.finAllUsersExceptSelf(authentication));
 	}
 
 	/**
@@ -111,28 +115,21 @@ public class UserController {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
-	@PostMapping
-	public ResponseEntity<?> saveUser(@RequestBody UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
+	@GetMapping("/search/chat")
+	public ResponseEntity<List<UserSearchChatDTO>> searchUsersForChat(@RequestParam String query,
+			Authentication authentication) throws ServiceException {
 
-		userValidator.validate(userCreateRequestDTO);
+		// get email from token authentication
+		String email = authentication.getName();
 
-		UserEntity userEntity = userService.createUser(userCreateRequestDTO);
+		List<UserSearchChatDTO> results = userService.getUserSearchToCreateAChat(query, email);
 
-		ApiResponse<UserEntity> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(), "/api/user",
-				MethodEnum.POST, "Success method POST", userEntity, false);
-
-		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+		return ResponseEntity.ok(results);
 	}
 
-	@PutMapping(
-	// value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-	"/{userId}")
-	public ResponseEntity<?> updateUser(@PathVariable Long userId,
-			// @RequestPart("userData") UserUpdateInfoRequestDTO userData,
-			// @RequestPart(value = "userImage", required = false) MultipartFile userImage
-			@RequestBody UserUpdateInfoRequestDTO userData) throws ServiceException {
-
-		// userData.setUserImage(userImage);
+	@PutMapping("/{userId}")
+	public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UserUpdateInfoRequestDTO userData)
+			throws ServiceException {
 
 		userService.updateUserInfo(userData, userId);
 

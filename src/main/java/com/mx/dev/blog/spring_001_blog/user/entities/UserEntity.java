@@ -2,6 +2,7 @@ package com.mx.dev.blog.spring_001_blog.user.entities;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,11 +15,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.mx.dev.blog.spring_001_blog.chat.chat.entities.ChatEntity;
 
 @Entity
 @Table(name = "user_tbl")
 public class UserEntity {
+
+	private static final int LAST_ACTIVATE_INTERVAL = 5;
 
 	/**
 	 * id entity
@@ -46,10 +53,25 @@ public class UserEntity {
 	private String password;
 
 	/**
+	 * token to confirm
+	 */
+	@Column(name = "token")
+	private String token;
+
+	/**
+	 * confirm with a boolean
+	 */
+	@Column(name = "confirm")
+	private Boolean confirm;
+
+	/**
 	 * created at
 	 */
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
+
+	@Column(name = "last_seen")
+	private LocalDateTime lastSeen;
 
 	/**
 	 * updated at
@@ -60,6 +82,12 @@ public class UserEntity {
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "user_role_tbl", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<RoleEntity> roles = new HashSet<>();
+
+	@OneToMany(mappedBy = "sender")
+	private List<ChatEntity> chatsAsSender;
+
+	@OneToMany(mappedBy = "recipient")
+	private List<ChatEntity> chatsAsRecipient;
 
 	/**
 	 * 
@@ -72,19 +100,90 @@ public class UserEntity {
 	 * @param username
 	 * @param email
 	 * @param password
+	 * @param token
+	 * @param confirm
 	 * @param createdAt
+	 * @param lastSeen
 	 * @param updatedAt
 	 * @param roles
+	 * @param chatsAsSender
+	 * @param chatsAsRecipient
 	 */
-	public UserEntity(Long userId, String username, String email, String password, LocalDateTime createdAt,
-			LocalDateTime updatedAt, Set<RoleEntity> roles) {
+	public UserEntity(Long userId, String username, String email, String password, String token, Boolean confirm,
+			LocalDateTime createdAt, LocalDateTime lastSeen, LocalDateTime updatedAt, Set<RoleEntity> roles,
+			List<ChatEntity> chatsAsSender, List<ChatEntity> chatsAsRecipient) {
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.token = token;
+		this.confirm = confirm;
+		this.createdAt = createdAt;
+		this.lastSeen = lastSeen;
+		this.updatedAt = updatedAt;
+		this.roles = roles;
+		this.chatsAsSender = chatsAsSender;
+		this.chatsAsRecipient = chatsAsRecipient;
+	}
+
+	/**
+	 * @param userId
+	 * @param username
+	 * @param email
+	 * @param password
+	 * @param token
+	 * @param confirm
+	 * @param createdAt
+	 * @param updatedAt
+	 * @param roles
+	 */
+	public UserEntity(Long userId, String username, String email, String password, String token, Boolean confirm,
+			LocalDateTime createdAt, LocalDateTime updatedAt, Set<RoleEntity> roles) {
+		this.userId = userId;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.token = token;
+		this.confirm = confirm;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.roles = roles;
+	}
+
+	/**
+	 * return value of the property lastActivateInterval
+	 *
+	 * @return the lastActivateInterval
+	 */
+	public static int getLastActivateInterval() {
+		return LAST_ACTIVATE_INTERVAL;
+	}
+
+	/**
+	 * return value of the property chatsAsRecipient
+	 *
+	 * @return the chatsAsRecipient
+	 */
+	public List<ChatEntity> getChatsAsRecipient() {
+		return chatsAsRecipient;
+	}
+
+	/**
+	 * return value of the property chatsAsSender
+	 *
+	 * @return the chatsAsSender
+	 */
+	public List<ChatEntity> getChatsAsSender() {
+		return chatsAsSender;
+	}
+
+	/**
+	 * return value of the property confirm
+	 *
+	 * @return the confirm
+	 */
+	public Boolean getConfirm() {
+		return confirm;
 	}
 
 	/**
@@ -106,6 +205,15 @@ public class UserEntity {
 	}
 
 	/**
+	 * return value of the property lastSeen
+	 *
+	 * @return the lastSeen
+	 */
+	public LocalDateTime getLastSeen() {
+		return lastSeen;
+	}
+
+	/**
 	 * return the value of the property password
 	 *
 	 * @return the password
@@ -121,6 +229,15 @@ public class UserEntity {
 	 */
 	public Set<RoleEntity> getRoles() {
 		return roles;
+	}
+
+	/**
+	 * return value of the property token
+	 *
+	 * @return the token
+	 */
+	public String getToken() {
+		return token;
 	}
 
 	/**
@@ -150,6 +267,38 @@ public class UserEntity {
 		return username;
 	}
 
+	@Transient
+	public boolean isUserOnline() {
+		return lastSeen != null && lastSeen.isAfter(LocalDateTime.now().minusMinutes(LAST_ACTIVATE_INTERVAL));
+	}
+
+	/**
+	 * set value of the property chatsAsRecipient
+	 *
+	 * @param chatsAsRecipient the chatsAsRecipient to set
+	 */
+	public void setChatsAsRecipient(List<ChatEntity> chatsAsRecipient) {
+		this.chatsAsRecipient = chatsAsRecipient;
+	}
+
+	/**
+	 * set value of the property chatsAsSender
+	 *
+	 * @param chatsAsSender the chatsAsSender to set
+	 */
+	public void setChatsAsSender(List<ChatEntity> chatsAsSender) {
+		this.chatsAsSender = chatsAsSender;
+	}
+
+	/**
+	 * set value of the property confirm
+	 *
+	 * @param confirm the confirm to set
+	 */
+	public void setConfirm(Boolean confirm) {
+		this.confirm = confirm;
+	}
+
 	/**
 	 * set the value of the property createdAt
 	 *
@@ -169,6 +318,15 @@ public class UserEntity {
 	}
 
 	/**
+	 * set value of the property lastSeen
+	 *
+	 * @param lastSeen the lastSeen to set
+	 */
+	public void setLastSeen(LocalDateTime lastSeen) {
+		this.lastSeen = lastSeen;
+	}
+
+	/**
 	 * set the value of the property password
 	 *
 	 * @param password the password to set
@@ -184,6 +342,15 @@ public class UserEntity {
 	 */
 	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
+	}
+
+	/**
+	 * set value of the property token
+	 *
+	 * @param token the token to set
+	 */
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	/**

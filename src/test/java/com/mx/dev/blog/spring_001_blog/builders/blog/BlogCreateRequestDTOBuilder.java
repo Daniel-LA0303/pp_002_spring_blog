@@ -2,7 +2,7 @@ package com.mx.dev.blog.spring_001_blog.builders.blog;
 
 import java.util.List;
 
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogCreateRequestDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
 
 public class BlogCreateRequestDTOBuilder {
 

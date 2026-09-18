@@ -2,7 +2,7 @@ package com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.utils.valid
 
 import org.springframework.stereotype.Component;
 
-import com.mx.dev.blog.spring_001_blog.blog.services.BlogService;
+import com.mx.dev.blog.spring_001_blog.blog.services.blog.BlogService;
 import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 
 @Component

@@ -24,17 +24,17 @@ INSERT INTO role_tbl (role_name) VALUES ('ROLE_USER');
 INSERT INTO role_tbl (role_name) VALUES ('ROLE_ADMIN');
 
 -- Usuarios
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('luis', 'luis@example.com', '$2a$10$SznJ5S3jwxY/w9psYKnucOM9KQ7i3oP3tooVarcAQhU4BXciO0iAe', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('ana', 'ana@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('carlos', 'carlos@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('maria', 'maria@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('jose', 'jose@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('laura', 'laura@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('andres', 'andres@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('sofia', 'sofia@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('fernando', 'fernando@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('valeria', 'valeria@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO user_tbl (username, email, password, created_at, update_at) VALUES ('valeria2', 'valeri2a@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('luis', 'luis@example.com', '$2a$10$SznJ5S3jwxY/w9psYKnucOM9KQ7i3oP3tooVarcAQhU4BXciO0iAe', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('ana', 'ana@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('carlos', 'carlos@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('maria', 'maria@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('jose', 'jose@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('laura', 'laura@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('andres', 'andres@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('sofia', 'sofia@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('fernando', 'fernando@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('valeria', 'valeria@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
+INSERT INTO user_tbl (username, email, password, created_at, update_at, confirm, token) VALUES ('valeria2', 'valeri2a@example.com', 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true, NULL);
 
 -- Información de usuarios
 INSERT INTO user_info_tbl (profile_picture, bio, last_login, is_active, phone, direction, user_id, name, lastname, work, education, pronouns, website, city, skills) VALUES ('pic_luis.png', 'Apasionado por la tecnologia y el cafe.', CURRENT_TIMESTAMP, TRUE, '555-1001', 'Calle 1 #123', 1, 'Luis', 'Martinez', 'Desarrollador Backend', 'Ingenieria en Sistemas', 'el', 'http://luis.dev', 'CDMX', 'Java, Spring Boot, SQL');

@@ -4,16 +4,19 @@ import java.time.LocalDateTime;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
-import com.mx.dev.blog.spring_001_blog.blog.services.BlogService;
+import com.mx.dev.blog.spring_001_blog.blog.services.blog.BlogService;
 import com.mx.dev.blog.spring_001_blog.comment.entities.CommentEntity;
 import com.mx.dev.blog.spring_001_blog.comment.services.CommentService;
+import com.mx.dev.blog.spring_001_blog.notifiation.entities.NotificationEntity;
+import com.mx.dev.blog.spring_001_blog.notifiation.services.NotificationService;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationTargetType;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
 import com.mx.dev.blog.spring_001_blog.reply.entities.ReplyEntity;
 import com.mx.dev.blog.spring_001_blog.reply.repositories.ReplyRepository;
 import com.mx.dev.blog.spring_001_blog.reply.services.ReplyService;
@@ -28,19 +31,27 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 @Service
 public class ReplyServiceImpl implements ReplyService {
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-	@Autowired
-	private BlogService blogService;
+	private final BlogService blogService;
 
-	@Autowired
-	private CommentService commentService;
+	private final CommentService commentService;
 
-	@Autowired
-	private ReplyRepository replyRepository;
+	private final ReplyRepository replyRepository;
+
+	private final NotificationService notificationService;
+
+	public ReplyServiceImpl(UserService userService, BlogService blogService, CommentService commentService,
+			ReplyRepository replyRepository, NotificationService notificationService) {
+		this.userService = userService;
+		this.blogService = blogService;
+		this.commentService = commentService;
+		this.replyRepository = replyRepository;
+		this.notificationService = notificationService;
+	}
 
 	@Override
+	@Transactional
 	public ReplyCardDTO createReply(ReplyCreateRequestDTO replyCreateRequestDTO) throws ServiceException {
 
 		// 1. first we need validate if exists user
@@ -51,6 +62,26 @@ public class ReplyServiceImpl implements ReplyService {
 
 		// 3. check if comment exists
 		CommentEntity commentEntity = commentService.getCommentByIdOrThrow(replyCreateRequestDTO.getCommentId());
+
+		if (userEntity.getUserId() != commentEntity.getUserId()) {
+			// 4. build notification
+			NotificationEntity notification = new NotificationEntity();
+			notification.setContent(userEntity.getUsername() + " reply your comment " + commentEntity.getContent());
+			notification.setDelivered(false);
+			notification.setCreatedAt(LocalDateTime.now());
+			notification.setNotificationType(NotificationType.REPLY);
+			notification.setRead(false);
+			notification.setUserFromId(userEntity.getUserId());
+			notification.setUserToId(commentEntity.getUserId());
+			notification.setUpdatedAt(LocalDateTime.now());
+
+			// set type of notification in base of the type (blog, comment, follow etc)
+			notification.setTargetId(commentEntity.getCommentId());
+			notification.setTargetType(NotificationTargetType.REPLY);
+			notification.setTargetExtra(null);
+
+			notificationService.createNotificationStorage(notification);
+		}
 
 		// 4. build entity
 		ReplyEntity replyEntity = new ReplyEntity();

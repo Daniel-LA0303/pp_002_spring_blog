@@ -54,12 +54,6 @@ public class MediaEntity {
 	@Column(columnDefinition = "jsonb", name = "metadata")
 	private Map<String, Object> metadata;
 
-	@Column(name = "deleted")
-	private Boolean deleted;
-
-	@Column(name = "deleted_by")
-	private Long deletedBy;
-
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
@@ -84,8 +78,7 @@ public class MediaEntity {
 	 * @param createdAt
 	 */
 	public MediaEntity(Long mediaId, String ownerType, Long ownerId, String provider, String urlMedia, String category,
-			String typeFile, Double sizeFile, Map<String, Object> metadata, Boolean deleted, Long deletedBy,
-			LocalDateTime createdAt) {
+			String typeFile, Double sizeFile, Map<String, Object> metadata, LocalDateTime createdAt) {
 		this.mediaId = mediaId;
 		this.ownerType = ownerType;
 		this.ownerId = ownerId;
@@ -95,8 +88,6 @@ public class MediaEntity {
 		this.typeFile = typeFile;
 		this.sizeFile = sizeFile;
 		this.metadata = metadata;
-		this.deleted = deleted;
-		this.deletedBy = deletedBy;
 		this.createdAt = createdAt;
 	}
 
@@ -116,24 +107,6 @@ public class MediaEntity {
 	 */
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
-	}
-
-	/**
-	 * return value of the property deleted
-	 *
-	 * @return the deleted
-	 */
-	public Boolean getDeleted() {
-		return deleted;
-	}
-
-	/**
-	 * return value of the property deletedBy
-	 *
-	 * @return the deletedBy
-	 */
-	public Long getDeletedBy() {
-		return deletedBy;
 	}
 
 	/**
@@ -224,24 +197,6 @@ public class MediaEntity {
 	 */
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	/**
-	 * set value of the property deleted
-	 *
-	 * @param deleted the deleted to set
-	 */
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
-
-	/**
-	 * set value of the property deletedBy
-	 *
-	 * @param deletedBy the deletedBy to set
-	 */
-	public void setDeletedBy(Long deletedBy) {
-		this.deletedBy = deletedBy;
 	}
 
 	/**

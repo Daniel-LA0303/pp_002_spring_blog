@@ -2,11 +2,14 @@ package com.mx.dev.blog.spring_001_blog.utils.dtos.category;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CategorySmallInfoDTO {
 
 	/**
 	 * category id
 	 */
+	@JsonProperty("category_id")
 	private Long categroyId;
 
 	/**
@@ -27,6 +30,7 @@ public class CategorySmallInfoDTO {
 	/**
 	 * created at
 	 */
+	@JsonProperty("created_at")
 	private LocalDateTime createdAt;
 
 	/**

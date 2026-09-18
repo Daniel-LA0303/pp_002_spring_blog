@@ -4,6 +4,8 @@ import com.mx.dev.blog.spring_001_blog.cloudstorage.storageservices.entities.Med
 
 public interface MediaService {
 
+	MediaEntity getMediaById(Long id);
+
 	MediaEntity getMediaByOwnerTypeAndOwnerId(String ownerType, Long ownerId);
 
 	void saveMedia(MediaEntity mediaEntity);

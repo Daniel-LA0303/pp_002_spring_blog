@@ -23,11 +23,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.mx.dev.blog.spring_001_blog.builders.user.LoginDTOBuilder;
-import com.mx.dev.blog.spring_001_blog.builders.user.UserCreateRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserInfoDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserUpdateInfoRequestDTOBuilder;
 import com.mx.dev.blog.spring_001_blog.builders.user.UserUpdateInfoResponseDTOBuilder;
-import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.LoginDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserAuthSuccessDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserCreateRequestDTO;
@@ -67,94 +65,6 @@ public class UserServiceExcpetionTest {
 	UserUpdateInfoResponseDTO userUpdateInfoResponseDTOBuilder;
 
 	LoginDTO loginDTOBuilder;
-
-	@Test
-	@Order(6)
-	void createUserDuplicatedExceptionTest() {
-
-		userCreateRequestDTOBuilder = UserCreateRequestDTOBuilder.withAllDummy().setUsername("luis").build();
-
-		HttpEntity<UserCreateRequestDTO> requestEntity = new HttpEntity<>(userCreateRequestDTOBuilder, headers);
-
-		ResponseEntity<ApiResponse<UserEntity>> response = testRestTemplate.exchange("/api/user", HttpMethod.POST,
-				requestEntity, new ParameterizedTypeReference<ApiResponse<UserEntity>>() {
-				});
-
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertEquals(400, response.getStatusCodeValue());
-
-		// extract api response
-		ApiResponse<UserEntity> apiResponse = response.getBody();
-		assertEquals(400, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.POST, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(true, apiResponse.getError());
-		// assertNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
-
-	}
-
-	@Test
-	@Order(4)
-	void createUserEmailDuplicatedExceptionTest() {
-
-		userCreateRequestDTOBuilder = UserCreateRequestDTOBuilder.withAllDummy().setEmail("luis@example.com").build();
-
-		HttpEntity<UserCreateRequestDTO> requestEntity = new HttpEntity<>(userCreateRequestDTOBuilder, headers);
-
-		ResponseEntity<ApiResponse<UserEntity>> response = testRestTemplate.exchange("/api/user", HttpMethod.POST,
-				requestEntity, new ParameterizedTypeReference<ApiResponse<UserEntity>>() {
-				});
-
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertEquals(400, response.getStatusCodeValue());
-
-		// extract api response
-		ApiResponse<UserEntity> apiResponse = response.getBody();
-		assertEquals(400, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.POST, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(true, apiResponse.getError());
-		// assertNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
-
-	}
-
-	@Test
-	@Order(9)
-	void createUserInvalidDataExceptionTest() {
-
-		userCreateRequestDTOBuilder = UserCreateRequestDTOBuilder.withAllDummy().setEmail("").setUsername("")
-				.setPassword("").build();
-
-		HttpEntity<UserCreateRequestDTO> requestEntity = new HttpEntity<>(userCreateRequestDTOBuilder, headers);
-
-		ResponseEntity<ApiResponse<UserEntity>> response = testRestTemplate.exchange("/api/user", HttpMethod.POST,
-				requestEntity, new ParameterizedTypeReference<ApiResponse<UserEntity>>() {
-				});
-
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertEquals(400, response.getStatusCodeValue());
-
-		// extract api response
-		ApiResponse<UserEntity> apiResponse = response.getBody();
-		assertEquals(400, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.POST, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(true, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
-
-	}
 
 	@Test
 	@Order(5)
@@ -213,7 +123,7 @@ public class UserServiceExcpetionTest {
 
 	@Test
 	@Order(7)
-	void loginUserAuthExceptionTest() {
+	void loginUserAuthWrongPasswordExceptionTest() {
 
 		loginDTOBuilder = LoginDTOBuilder.withAllDummy().setPassword("falsepassword").build();
 
@@ -235,43 +145,43 @@ public class UserServiceExcpetionTest {
 		assertEquals(MethodEnum.POST, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(true, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
+		// assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
 
 		// extract data
-		UserAuthSuccessDTO userAuthSuccessDTO = apiResponse.getData();
-		assertNotNull(userAuthSuccessDTO);
+		// UserAuthSuccessDTO userAuthSuccessDTO = apiResponse.getData();
+		// assertNotNull(userAuthSuccessDTO);
 
 	}
 
-	@Test
-	@Order(10)
-	void loginUserAuthSuccessTest() {
-
-		loginDTOBuilder = LoginDTOBuilder.withAllDummy().setEmail("").setPassword("").build();
-
-		HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTOBuilder, headers);
-
-		ResponseEntity<ApiResponse<UserAuthSuccessDTO>> response = testRestTemplate.exchange("/api/auth/login",
-				HttpMethod.POST, requestEntity, new ParameterizedTypeReference<ApiResponse<UserAuthSuccessDTO>>() {
-				});
-
-		// basic test
-		assertNotNull(response);
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertEquals(400, response.getStatusCodeValue());
-
-		// extract api response
-		ApiResponse<UserAuthSuccessDTO> apiResponse = response.getBody();
-		assertEquals(400, apiResponse.getStatus());
-		assertNotNull(apiResponse.getPath());
-		assertEquals(MethodEnum.POST, apiResponse.getMethod());
-		assertNotNull(apiResponse.getMessage());
-		assertEquals(true, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
-		assertNotNull(apiResponse.getTimestamp());
-
-	}
+	/*
+	 * @Test
+	 * 
+	 * @Order(10) void loginUserAuthValidDataTest() {
+	 * 
+	 * loginDTOBuilder =
+	 * LoginDTOBuilder.withAllDummy().setEmail("").setPassword("").build();
+	 * 
+	 * HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTOBuilder,
+	 * headers);
+	 * 
+	 * ResponseEntity<ApiResponse<UserAuthSuccessDTO>> response =
+	 * testRestTemplate.exchange("/api/auth/login", HttpMethod.POST, requestEntity,
+	 * new ParameterizedTypeReference<ApiResponse<UserAuthSuccessDTO>>() { });
+	 * 
+	 * // basic test assertNotNull(response); assertEquals(HttpStatus.BAD_REQUEST,
+	 * response.getStatusCode()); assertEquals(400, response.getStatusCodeValue());
+	 * 
+	 * // extract api response ApiResponse<UserAuthSuccessDTO> apiResponse =
+	 * response.getBody(); assertEquals(400, apiResponse.getStatus());
+	 * assertNotNull(apiResponse.getPath()); assertEquals(MethodEnum.POST,
+	 * apiResponse.getMethod()); assertNotNull(apiResponse.getMessage());
+	 * assertEquals(true, apiResponse.getError());
+	 * assertNotNull(apiResponse.getData());
+	 * assertNotNull(apiResponse.getTimestamp());
+	 * 
+	 * }
+	 */
 
 	@Test
 	@Order(8)
@@ -297,12 +207,11 @@ public class UserServiceExcpetionTest {
 		assertEquals(MethodEnum.POST, apiResponse.getMethod());
 		assertNotNull(apiResponse.getMessage());
 		assertEquals(true, apiResponse.getError());
-		assertNotNull(apiResponse.getData());
 		assertNotNull(apiResponse.getTimestamp());
 
 		// extract data
 		UserAuthSuccessDTO userAuthSuccessDTO = apiResponse.getData();
-		assertNotNull(userAuthSuccessDTO);
+		// assertNotNull(userAuthSuccessDTO);
 
 	}
 

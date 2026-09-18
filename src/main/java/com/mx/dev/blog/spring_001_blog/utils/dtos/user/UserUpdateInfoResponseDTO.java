@@ -55,6 +55,7 @@ public class UserUpdateInfoResponseDTO {
 	/**
 	 * profile picture
 	 */
+	private String profilePicture;
 
 	/**
 	 * 
@@ -73,9 +74,10 @@ public class UserUpdateInfoResponseDTO {
 	 * @param city
 	 * @param skills
 	 * @param bio
+	 * @param profilePicture
 	 */
 	public UserUpdateInfoResponseDTO(String name, String lastName, String work, String education, String pronouns,
-			String website, String address, String city, String skills, String bio) {
+			String website, String address, String city, String skills, String bio, String profilePicture) {
 		this.name = name;
 		this.lastName = lastName;
 		this.work = work;
@@ -86,6 +88,7 @@ public class UserUpdateInfoResponseDTO {
 		this.city = city;
 		this.skills = skills;
 		this.bio = bio;
+		this.profilePicture = profilePicture;
 	}
 
 	/**
@@ -140,6 +143,15 @@ public class UserUpdateInfoResponseDTO {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * return value of the property profilePicture
+	 *
+	 * @return the profilePicture
+	 */
+	public String getProfilePicture() {
+		return profilePicture;
 	}
 
 	/**
@@ -230,6 +242,15 @@ public class UserUpdateInfoResponseDTO {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * set value of the property profilePicture
+	 *
+	 * @param profilePicture the profilePicture to set
+	 */
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 	/**

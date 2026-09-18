@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogInfoCardDTO;
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogResponseDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogInfoCardDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogResponseDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.category.CategorySmallInfoDTO;
 
 public class BlogMappers {
 
-    private BlogMappers() {
-        throw new IllegalStateException("Utility class");
-    }
+	private BlogMappers() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	public static BlogInfoCardDTO toBlogInfoCardDTO(BlogEntity blogEntity, String username) {
 		BlogInfoCardDTO dto = new BlogInfoCardDTO();

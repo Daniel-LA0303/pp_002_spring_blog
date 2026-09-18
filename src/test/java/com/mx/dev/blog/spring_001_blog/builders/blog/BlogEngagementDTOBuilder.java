@@ -1,6 +1,6 @@
 package com.mx.dev.blog.spring_001_blog.builders.blog;
 
-import com.mx.dev.blog.spring_001_blog.utils.dtos.blog.BlogEngagementDTO;
+import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO;
 
 public class BlogEngagementDTOBuilder {
 

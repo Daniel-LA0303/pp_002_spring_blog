@@ -44,6 +44,26 @@ public class CategoryFullInfoDTO {
 	 * created at
 	 */
 	private LocalDateTime createdAt;
+	
+	
+
+	/**
+	 * return the value of the property usersFollowersIds
+	 *
+	 * @return the usersFollowersIds
+	 */
+	public List<Long> getUsersFollowersIds() {
+		return usersFollowersIds;
+	}
+
+	/**
+	 * set the value of the property usersFollowersIds
+	 *
+	 * usersFollowersIds the usersFollowersIds to set
+	 */
+	public void setUsersFollowersIds(List<Long> usersFollowersIds) {
+		this.usersFollowersIds = usersFollowersIds;
+	}
 
 	/**
 	 * 

@@ -3,7 +3,6 @@ package com.mx.dev.blog.spring_001_blog.comment.services.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,10 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
-import com.mx.dev.blog.spring_001_blog.blog.services.BlogService;
+import com.mx.dev.blog.spring_001_blog.blog.services.blog.BlogService;
 import com.mx.dev.blog.spring_001_blog.comment.entities.CommentEntity;
 import com.mx.dev.blog.spring_001_blog.comment.repositories.CommentRepository;
 import com.mx.dev.blog.spring_001_blog.comment.services.CommentService;
+import com.mx.dev.blog.spring_001_blog.notifiation.entities.NotificationEntity;
+import com.mx.dev.blog.spring_001_blog.notifiation.services.NotificationService;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationTargetType;
+import com.mx.dev.blog.spring_001_blog.notifiation.utils.enums.NotificationType;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.user.entities.UserInfoEntity;
 import com.mx.dev.blog.spring_001_blog.user.repositories.UserInfoRepository;
@@ -28,20 +31,24 @@ import com.mx.dev.blog.spring_001_blog.utils.exceptions.ServiceException;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-	@Autowired
-	private CommentRepository commentRepository;
+	private final CommentRepository commentRepository;
 
-	// @Autowired
-	// private UserRepository userRepository;
+	private final UserInfoRepository userInfoRepository;
 
-	@Autowired
-	private UserInfoRepository userInfoRepository;
+	private final BlogService blogService;
 
-	@Autowired
-	private BlogService blogService;
+	private final UserService userService;
 
-	@Autowired
-	private UserService userService;
+	private final NotificationService notificationService;
+
+	public CommentServiceImpl(CommentRepository commentRepository, UserInfoRepository userInfoRepository,
+			BlogService blogService, UserService userService, NotificationService notificationService) {
+		this.commentRepository = commentRepository;
+		this.userInfoRepository = userInfoRepository;
+		this.blogService = blogService;
+		this.userService = userService;
+		this.notificationService = notificationService;
+	}
 
 	@Override
 	@Transactional
@@ -50,10 +57,10 @@ public class CommentServiceImpl implements CommentService {
 		// 1. first we check if blog exists
 		BlogEntity blogEntity = blogService.getBlogByIdOrThrow(commentCreateRequestDTO.getBlogId());
 
-		// 2.
+		// 2. check if user that comment exists
 		UserEntity userEntity = userService.getOneUserOrThrow(commentCreateRequestDTO.getUserId());
 
-		// 3.
+		// 3. build comment and save
 		CommentEntity commentEntity = new CommentEntity();
 		commentEntity.setBlogId(blogEntity.getBlogId());
 		commentEntity.setContent(commentCreateRequestDTO.getContent());
@@ -63,10 +70,30 @@ public class CommentServiceImpl implements CommentService {
 
 		commentEntity = commentRepository.save(commentEntity);
 
-		// 4.
+		// 4. search user info
 		UserInfoEntity userInfoEntity = userInfoRepository.findUserInfoByUserId(userEntity.getUserId()).orElse(null);
 
-		// 5.
+		if (commentCreateRequestDTO.getUserId() != blogEntity.getUserId()) {
+			// 5. build notification
+			NotificationEntity notification = new NotificationEntity();
+			notification.setContent(userEntity.getUsername() + " comment your post " + blogEntity.getTitle());
+			notification.setDelivered(false);
+			notification.setCreatedAt(LocalDateTime.now());
+			notification.setNotificationType(NotificationType.COMMENT);
+			notification.setRead(false);
+			notification.setUserFromId(userEntity.getUserId());
+			notification.setUserToId(blogEntity.getUserId());
+			notification.setUpdatedAt(LocalDateTime.now());
+
+			// set type of notification in base of the type (blog, comment, follow etc)
+			notification.setTargetId(blogEntity.getBlogId());
+			notification.setTargetType(NotificationTargetType.COMMENT);
+			notification.setTargetExtra(null);
+
+			notificationService.createNotificationStorage(notification);
+		}
+
+		// 6. return dto
 		return new CommentCardDTO(commentEntity.getCommentId(), userEntity.getUserId(), blogEntity.getBlogId(),
 				commentEntity.getContent(), userInfoEntity != null ? userInfoEntity.getProfilePicture() : null,
 				userEntity.getUsername(), commentEntity.getUpdatedAt());

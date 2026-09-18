@@ -17,6 +17,7 @@ import com.mx.dev.blog.spring_001_blog.user.entities.UserEntity;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserFullEngagementDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoDTO;
+import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSearchChatDTO;
 import com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserTopDTO;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
@@ -35,8 +36,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	@Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM UserEntity u WHERE u.username = :username")
 	boolean existsByUsername(@Param("username") String username);
 
+	@Query("SELECT u FROM UserEntity u WHERE u.email != :email")
+	List<UserEntity> findAllUsersExceptSelf(@Param("email") String email);
+
 	@Query("SELECT u FROM UserEntity u WHERE u.id IN :ids")
 	List<UserEntity> findByIds(@Param("ids") List<Long> ids);
+
+	// get a user by token
+	Optional<UserEntity> findByToken(String token);
 
 	// search
 	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO( "
@@ -84,6 +91,48 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			    GROUP BY u.userId, ui.bio, ui.work, ui.education, ui.profilePicture, ui.skills, ui.city, ui.website
 			""")
 	Optional<UserInfoDTO> findUserInfoById(@Param("userId") Long userId);
+
+	@Query("""
+			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO(
+			        u.userId,
+			        u.username,
+			        ui.profilePicture,
+			        ui.city,
+			        COUNT(DISTINCT b.blogId),
+			        COUNT(DISTINCT uf1.id.followerId),
+			        COUNT(DISTINCT uf2.id.followedId)
+			    )
+			    FROM UserFollowsEntity f
+			    JOIN UserEntity u ON u.userId = f.id.followedId
+			    JOIN UserInfoEntity ui ON u.userId = ui.userId
+			    LEFT JOIN BlogEntity b ON b.userId = u.userId AND b.status = 'PUBLISHED'
+			    LEFT JOIN UserFollowsEntity uf1 ON uf1.id.followedId = u.userId
+			    LEFT JOIN UserFollowsEntity uf2 ON uf2.id.followerId = u.userId
+			    WHERE f.id.followerId = :userId
+			    GROUP BY u.userId, u.username, ui.profilePicture, ui.city
+			""")
+	Page<UserInfoCardDTO> findUsersFollowedByUser(@Param("userId") Long userId, Pageable pageable);
+
+	@Query("""
+			    SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserInfoCardDTO(
+			        u.userId,
+			        u.username,
+			        ui.profilePicture,
+			        ui.city,
+			        COUNT(DISTINCT b.blogId),
+			        COUNT(DISTINCT uf1.id.followerId),
+			        COUNT(DISTINCT uf2.id.followedId)
+			    )
+			    FROM UserFollowsEntity f
+			    JOIN UserEntity u ON u.userId = f.id.followerId
+			    JOIN UserInfoEntity ui ON u.userId = ui.userId
+			    LEFT JOIN BlogEntity b ON b.userId = u.userId AND b.status = 'PUBLISHED'
+			    LEFT JOIN UserFollowsEntity uf1 ON uf1.id.followedId = u.userId
+			    LEFT JOIN UserFollowsEntity uf2 ON uf2.id.followerId = u.userId
+			    WHERE f.id.followedId = :userId
+			    GROUP BY u.userId, u.username, ui.profilePicture, ui.city
+			""")
+	Page<UserInfoCardDTO> findUsersWhoFollowUser(@Param("userId") Long userId, Pageable pageable);
 
 	@Query("""
 			    SELECT uf.id.followerId
@@ -153,5 +202,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	@Modifying
 	void insertUserFollow(@Param("followerId") Long followerId, @Param("followedId") Long followedId,
 			@Param("createdAt") LocalDateTime createdAt);
+
+	@Query("SELECT new com.mx.dev.blog.spring_001_blog.utils.dtos.user.UserSearchChatDTO(u.userId, u.username, ui.profilePicture) "
+			+ "FROM UserEntity u " + "LEFT JOIN UserInfoEntity ui ON u.userId = ui.userId "
+			+ "WHERE (u.username LIKE %:query% OR u.email LIKE %:query%) " + "AND u.email != :excludeUserId "
+			+ "ORDER BY u.username")
+	Page<UserSearchChatDTO> searchUsersForChat(@Param("query") String query,
+			@Param("excludeUserId") String excludeUserId, Pageable pageable);
 
 }
