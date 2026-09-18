@@ -415,10 +415,8 @@ public class BlogServiceTest {
 	UserInfoCardDTO userInfoCardDTO = blogPageResponseDTO.getUserInfoCardDTO();
 	assertEquals(builder.getUserInfoCardDTO().getUserId(), userInfoCardDTO.getUserId());
 	assertEquals(builder.getUserInfoCardDTO().getUsername(), userInfoCardDTO.getUsername());
-	// assertEquals(builder.getUserInfoCardDTO().getProfilePicture(),
-	// userInfoCardDTO.getProfilePicture());
-	// assertEquals(builder.getUserInfoCardDTO().getCity(),
-	// userInfoCardDTO.getCity());
+	assertEquals(builder.getUserInfoCardDTO().getProfilePicture(), userInfoCardDTO.getProfilePicture());
+	assertEquals(builder.getUserInfoCardDTO().getCity(), userInfoCardDTO.getCity());
 	assertEquals(builder.getUserInfoCardDTO().getBlogsByUser(), userInfoCardDTO.getBlogsByUser());
 	assertEquals(builder.getUserInfoCardDTO().getFollowers(), userInfoCardDTO.getFollowers());
 	assertEquals(builder.getUserInfoCardDTO().getFollowing(), userInfoCardDTO.getFollowing());
