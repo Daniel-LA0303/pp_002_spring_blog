@@ -85,7 +85,7 @@ public class BlogServiceTest {
     BlogResponseDTO blogResponseDTOBuilder;
 
     @Test
-    @Order(3)
+    @Order(2)
     void blogLikedSuccessTest() {
 
 	HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -137,7 +137,7 @@ public class BlogServiceTest {
     }
 
     @Test
-    @Order(4)
+    @Order(3)
     void blogUnLikedSuccessTest() {
 
 	HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -192,56 +192,8 @@ public class BlogServiceTest {
 
     }
 
-    /*
-     * @Test
-     * 
-     * @Order(5) void createBlogInvalidDataExceptionTest() {
-     * 
-     * BlogCreateRequestDTO blogCreateRequestDTOBuilder =
-     * BlogCreateRequestDTOBuilder.withAllDummy() .setCategories(List.of(1L,
-     * 2L)).setContent("new content").setDescription("new description")
-     * .setTitle("new title").setUserId(8L).build();
-     * 
-     * HttpEntity<BlogCreateRequestDTO> requestEntity = new
-     * HttpEntity<>(blogCreateRequestDTOBuilder, headers);
-     * 
-     * ResponseEntity<ApiResponse<BlogEntity>> response =
-     * testRestTemplate.exchange("/api/blog", HttpMethod.POST, requestEntity, new
-     * ParameterizedTypeReference<ApiResponse<BlogEntity>>() { });
-     * 
-     * // basic test assertEquals(HttpStatus.OK, response.getStatusCode());
-     * assertNotNull(response); assertEquals(200, response.getStatusCodeValue());
-     * 
-     * // extract api response data ApiResponse<BlogEntity> apiResponse =
-     * response.getBody(); assertEquals(201, apiResponse.getStatus());
-     * assertNotNull(apiResponse.getPath()); assertEquals(MethodEnum.POST,
-     * apiResponse.getMethod()); assertNotNull(apiResponse.getMessage());
-     * assertEquals(false, apiResponse.getError());
-     * assertNotNull(apiResponse.getTimestamp());
-     * 
-     * BlogEntity blogEntityResponse = apiResponse.getData();
-     * 
-     * assertNotNull(blogEntityResponse.getBlogId());
-     * assertEquals(blogCreateRequestDTOBuilder.getContent(),
-     * blogEntityResponse.getContent());
-     * assertEquals(blogCreateRequestDTOBuilder.getDescription(),
-     * blogEntityResponse.getDescription());
-     * assertEquals(blogCreateRequestDTOBuilder.getTitle(),
-     * blogEntityResponse.getTitle());
-     * assertEquals(blogCreateRequestDTOBuilder.getCategories().size(),
-     * blogEntityResponse.getCategories().size());
-     * assertEquals(blogCreateRequestDTOBuilder.getUserId(),
-     * blogEntityResponse.getUserId());
-     * assertNotNull(blogEntityResponse.getCreatedAt());
-     * assertNotNull(blogEntityResponse.getSlug());
-     * assertNotNull(blogEntityResponse.getUpdatedAt());
-     * assertEquals(BlogStatusEnum.PUBLISHED, blogEntityResponse.getStatus());
-     * 
-     * }
-     */
-
     @Test
-    @Order(2)
+    @Order(1)
     void deleteBlogSuccessTest() {
 
 	HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -269,7 +221,7 @@ public class BlogServiceTest {
     }
 
     @Test
-    @Order(9)
+    @Order(8)
     void getBlogPaginatedSuccessTest() {
 
 	ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
@@ -295,7 +247,7 @@ public class BlogServiceTest {
     }
 
     @Test
-    @Order(8)
+    @Order(6)
     void getBlogsByCategoryNameSuccessTest() {
 
 	ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
@@ -321,7 +273,7 @@ public class BlogServiceTest {
     }
 
     @Test
-    @Order(7)
+    @Order(5)
     void getBlogsPaginatedByUserSuccessTest() {
 
 	ResponseEntity<ApiResponse<PageDTO<BlogInfoCardDTO>>> response = testRestTemplate.exchange(
@@ -331,6 +283,7 @@ public class BlogServiceTest {
 
 	// basic test
 	assertNotNull(response);
+
 	/*
 	 * assertEquals(HttpStatus.OK, response.getStatusCode()); assertEquals(200,
 	 * response.getStatusCodeValue());
@@ -347,7 +300,7 @@ public class BlogServiceTest {
     }
 
     @Test
-    @Order(8)
+    @Order(7)
     void getHomePageInfoSuccessTest() {
 
 	ResponseEntity<ApiResponse<HomePageResponseDTO>> response = testRestTemplate.exchange(
@@ -415,10 +368,8 @@ public class BlogServiceTest {
 	UserInfoCardDTO userInfoCardDTO = blogPageResponseDTO.getUserInfoCardDTO();
 	assertEquals(builder.getUserInfoCardDTO().getUserId(), userInfoCardDTO.getUserId());
 	assertEquals(builder.getUserInfoCardDTO().getUsername(), userInfoCardDTO.getUsername());
-	// assertEquals(builder.getUserInfoCardDTO().getProfilePicture(),
-	// userInfoCardDTO.getProfilePicture());
-	// assertEquals(builder.getUserInfoCardDTO().getCity(),
-	// userInfoCardDTO.getCity());
+	assertEquals(builder.getUserInfoCardDTO().getProfilePicture(), userInfoCardDTO.getProfilePicture());
+	assertEquals(builder.getUserInfoCardDTO().getCity(), userInfoCardDTO.getCity());
 	assertEquals(builder.getUserInfoCardDTO().getBlogsByUser(), userInfoCardDTO.getBlogsByUser());
 	assertEquals(builder.getUserInfoCardDTO().getFollowers(), userInfoCardDTO.getFollowers());
 	assertEquals(builder.getUserInfoCardDTO().getFollowing(), userInfoCardDTO.getFollowing());
@@ -446,7 +397,7 @@ public class BlogServiceTest {
     }
 
     @Test
-    @Order(6)
+    @Order(4)
     void updateBlogSuccessTest() {
 
 	BlogCreateRequestDTO blogCreateRequestDTOBuilder = BlogCreateRequestDTOBuilder.withAllDummy()
@@ -489,28 +440,38 @@ public class BlogServiceTest {
     }
 
     @Test
+    @Order(12)
     void utilityConstructor_isPrivate_andThrows() throws Exception {
+
 	Constructor<BlogMappers> ctor = BlogMappers.class.getDeclaredConstructor();
+
 	assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El ctor debe ser private");
 
-	ctor.setAccessible(true); // forzamos acceso
+	ctor.setAccessible(true);
+
 	InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
 
 	assertTrue(ex.getTargetException() instanceof IllegalStateException);
+
 	assertEquals("Utility class", ex.getTargetException().getMessage());
     }
 
     // TODO check first image service
 
     @Test
+    @Order(13)
     void utilityConstructorIsPrivateAndThrowsBlogRegex() throws Exception {
+
 	Constructor<BlogRegex> ctor = BlogRegex.class.getDeclaredConstructor();
+
 	assertTrue(Modifier.isPrivate(ctor.getModifiers()), "El constructor debe ser private");
 
 	ctor.setAccessible(true);
+
 	InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
 
 	assertTrue(ex.getTargetException() instanceof IllegalStateException);
+
 	assertEquals("Utility class", ex.getTargetException().getMessage());
     }
 
