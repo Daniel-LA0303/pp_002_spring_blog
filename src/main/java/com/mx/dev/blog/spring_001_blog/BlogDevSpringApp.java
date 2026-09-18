@@ -1,5 +1,7 @@
 package com.mx.dev.blog.spring_001_blog;
 
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -28,22 +30,16 @@ public class BlogDevSpringApp {
 
 	Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
-	System.setProperty("DB_URL", dotenv.get("DB_URL"));
-	System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
-	System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+	List<String> keys = List.of("DB_URL", "DB_USERNAME", "DB_PASSWORD", "S3_ACCESS_KEY", "S3_SECRET_ACCESS_KEY",
+		"S3_REGION", "CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET", "MAILTRAP_HOST",
+		"MAILTRAP_PORT", "MAILTRAP_USER", "MAILTRAP_PASS");
 
-	System.setProperty("S3_ACCESS_KEY", dotenv.get("S3_ACCESS_KEY"));
-	System.setProperty("S3_SECRET_ACCESS_KEY", dotenv.get("S3_SECRET_ACCESS_KEY"));
-	System.setProperty("S3_REGION", dotenv.get("S3_REGION"));
-
-	System.setProperty("CLOUDINARY_CLOUD_NAME", dotenv.get("CLOUDINARY_CLOUD_NAME"));
-	System.setProperty("CLOUDINARY_API_KEY", dotenv.get("CLOUDINARY_API_KEY"));
-	System.setProperty("CLOUDINARY_API_SECRET", dotenv.get("CLOUDINARY_API_SECRET"));
-
-	System.setProperty("MAILTRAP_HOST", dotenv.get("MAILTRAP_HOST"));
-	System.setProperty("MAILTRAP_PORT", dotenv.get("MAILTRAP_PORT"));
-	System.setProperty("MAILTRAP_USER", dotenv.get("MAILTRAP_USER"));
-	System.setProperty("MAILTRAP_PASS", dotenv.get("MAILTRAP_PASS"));
+	for (String key : keys) {
+	    String value = dotenv.get(key);
+	    if (value != null) {
+		System.setProperty(key, value);
+	    }
+	}
 
 	SpringApplication.run(BlogDevSpringApp.class, args);
     }
