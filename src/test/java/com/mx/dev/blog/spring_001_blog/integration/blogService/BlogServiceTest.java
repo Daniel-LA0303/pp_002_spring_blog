@@ -28,6 +28,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mx.dev.blog.spring_001_blog.blog.entities.BlogEntity;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogCreateRequestDTO;
 import com.mx.dev.blog.spring_001_blog.blog.utils.dto.BlogEngagementDTO;
@@ -51,6 +53,9 @@ import com.mx.dev.blog.spring_001_blog.utils.response.ApiResponse;
 //@Sql(scripts = "/import.sql")
 @ActiveProfiles("test")
 public class BlogServiceTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * test rest template
@@ -369,7 +374,7 @@ public class BlogServiceTest {
 
     @Test
     @Order(9)
-    void getOneBlogSuccessTest() {
+    void getOneBlogSuccessTest() throws JsonProcessingException {
 
 	BlogPageResponseDTO builder = new BlogPageResponseDTOBuilder().withAllDummy().build();
 
@@ -382,6 +387,8 @@ public class BlogServiceTest {
 	assertEquals(HttpStatus.OK, response.getStatusCode());
 	assertEquals(200, response.getStatusCodeValue());
 
+	System.out.println("**********");
+	System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response.getBody()));
 	// extract api response
 	ApiResponse<BlogPageResponseDTO> apiResponse = response.getBody();
 	assertEquals(200, apiResponse.getStatus());
@@ -410,8 +417,7 @@ public class BlogServiceTest {
 	UserInfoCardDTO userInfoCardDTO = blogPageResponseDTO.getUserInfoCardDTO();
 	assertEquals(builder.getUserInfoCardDTO().getUserId(), userInfoCardDTO.getUserId());
 	assertEquals(builder.getUserInfoCardDTO().getUsername(), userInfoCardDTO.getUsername());
-	// assertEquals(builder.getUserInfoCardDTO().getProfilePicture(),
-	// userInfoCardDTO.getProfilePicture());
+	assertEquals(builder.getUserInfoCardDTO().getProfilePicture(), userInfoCardDTO.getProfilePicture());
 	assertEquals(builder.getUserInfoCardDTO().getCity(), userInfoCardDTO.getCity());
 	assertEquals(builder.getUserInfoCardDTO().getBlogsByUser(), userInfoCardDTO.getBlogsByUser());
 	assertEquals(builder.getUserInfoCardDTO().getFollowers(), userInfoCardDTO.getFollowers());
