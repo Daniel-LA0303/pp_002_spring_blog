@@ -37,100 +37,101 @@ import com.mx.dev.blog.spring_001_blog.utils.validators.UserValidator;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-	@Autowired
-	private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	private UserValidator userValidator = new UserValidator();
+    private UserValidator userValidator = new UserValidator();
 
-	private AuthLoginValidator authLoginValidator = new AuthLoginValidator();
+    private AuthLoginValidator authLoginValidator = new AuthLoginValidator();
 
-	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO loginDTO) throws ServiceException {
-		try {
-			authLoginValidator.validate(loginDTO);
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO loginDTO) throws ServiceException {
+	try {
+	    authLoginValidator.validate(loginDTO);
 
-			// 1. Validar si el usuario existe
-			Optional<UserEntity> userEntity = userRepository.findUserByEmail(loginDTO.getEmail());
-			if (!userEntity.isPresent()) {
-				Map<String, String> errorMap = new HashMap<>();
-				errorMap.put("email", "User not found");
+	    // 1. Validar si el usuario existe
+	    Optional<UserEntity> userEntity = userRepository.findUserByEmail(loginDTO.getEmail());
+	    if (!userEntity.isPresent()) {
+		Map<String, String> errorMap = new HashMap<>();
+		errorMap.put("email", "User not found");
 
-				ApiResponse<Map<String, String>> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
-						"/api/auth", MethodEnum.POST, "Email not found", errorMap, true);
+		ApiResponse<Map<String, String>> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
+			"/api/auth", MethodEnum.POST, "Email not found", errorMap, true);
 
-				return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-			}
+		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+	    }
 
-			// 2. Autenticar
-			Authentication authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+	    // 2. Autenticar
+	    Authentication authentication = authenticationManager
+		    .authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+	    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			// 3. Generar token
-			String token = jwtTokenProvider.generateToken(authentication);
+	    // 3. Generar token
+	    String token = jwtTokenProvider.generateToken(authentication);
 
-			UserAuthSuccessDTO userAuthLoginSuccessDTO = new UserAuthSuccessDTO(userEntity.get().getUserId(),
-					userEntity.get().getUsername(), userEntity.get().getEmail(), new JWTAuthResponseDto(token));
+	    UserAuthSuccessDTO userAuthLoginSuccessDTO = new UserAuthSuccessDTO(userEntity.get().getUserId(),
+		    userEntity.get().getUsername(), userEntity.get().getEmail(), new JWTAuthResponseDto(token));
 
-			ApiResponse<UserAuthSuccessDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
-					"/api/auth", MethodEnum.POST, "Success method POST", userAuthLoginSuccessDTO, false);
+	    ApiResponse<UserAuthSuccessDTO> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS.getHttpStatusCode(),
+		    "/api/auth", MethodEnum.POST, "Success method POST in auth controller", userAuthLoginSuccessDTO,
+		    false);
 
-			return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	    return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 
-		} catch (BadCredentialsException ex) {
-			Map<String, String> errorMap = new HashMap<>();
-			errorMap.put("password", "Invalid credentials");
+	} catch (BadCredentialsException ex) {
+	    Map<String, String> errorMap = new HashMap<>();
+	    errorMap.put("password", "Invalid credentials");
 
-			ApiResponse<Map<String, String>> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "/api/auth",
-					MethodEnum.POST, "Invalid password", errorMap, true);
+	    ApiResponse<Map<String, String>> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "/api/auth",
+		    MethodEnum.POST, "Invalid password", errorMap, true);
 
-			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-		}
+	    return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}
+    }
 
-	@PostMapping("/register")
-	public ResponseEntity<?> saveUser(@RequestBody UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
+    @PostMapping("/register")
+    public ResponseEntity<?> saveUser(@RequestBody UserCreateRequestDTO userCreateRequestDTO) throws ServiceException {
 
-		// Validaciones de los datos de entrada
-		// userValidator.validate(userCreateRequestDTO);
+	// Validaciones de los datos de entrada
+	// userValidator.validate(userCreateRequestDTO);
 
-		// Cifrar la contraseña del usuario
-		String pass = passwordEncoder.encode(userCreateRequestDTO.getPassword());
-		userCreateRequestDTO.setPassword(pass);
+	// Cifrar la contraseña del usuario
+	String pass = passwordEncoder.encode(userCreateRequestDTO.getPassword());
+	userCreateRequestDTO.setPassword(pass);
 
-		// Crear el usuario a través del servicio
-		UserEntity userEntity = userService.createUser(userCreateRequestDTO);
+	// Crear el usuario a través del servicio
+	UserEntity userEntity = userService.createUser(userCreateRequestDTO);
 
-		// Generar el token para el usuario registrado
-		String token = jwtTokenProvider.generateTokenForUser(userEntity);
+	// Generar el token para el usuario registrado
+	String token = jwtTokenProvider.generateTokenForUser(userEntity);
 
-		// Crear el DTO de respuesta con la información del usuario y el token generado
-		UserAuthSuccessDTO userAuthLoginSuccessDTO = new UserAuthSuccessDTO(userEntity.getUserId(),
-				userEntity.getUsername(), userEntity.getEmail(), new JWTAuthResponseDto(token) // Incluye el token
-																								// generado
-		);
+	// Crear el DTO de respuesta con la información del usuario y el token generado
+	UserAuthSuccessDTO userAuthLoginSuccessDTO = new UserAuthSuccessDTO(userEntity.getUserId(),
+		userEntity.getUsername(), userEntity.getEmail(), new JWTAuthResponseDto(token) // Incluye el token
+											       // generado
+	);
 
-		System.out.println("*******Login prepara salida de datos********");
+	System.out.println("*******Login prepara salida de datos********");
 
-		// Crear la respuesta API con el DTO del usuario registrado y el token
-		ApiResponse<UserAuthSuccessDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
-				"/api/user", MethodEnum.POST, "User successfully created and token generated", userAuthLoginSuccessDTO,
-				false);
+	// Crear la respuesta API con el DTO del usuario registrado y el token
+	ApiResponse<UserAuthSuccessDTO> apiResponse = new ApiResponse<>(ResponseStatus.CREATED.getHttpStatusCode(),
+		"/api/user", MethodEnum.POST, "User successfully created and token generated", userAuthLoginSuccessDTO,
+		false);
 
-		return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
-	}
+	return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+    }
 
 }
